@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Policial - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'police-blue': '#001d3d',
+                        'police-gold': '#ffc300',
+                        'neon-blue': '#00d4ff',
+                        'silver': '#e0e0e0',
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#0a0a0a',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #00d4ff; border-radius: 20px; }
+        body { color: #d1d1d1 !important; background-color: #000000 !important; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-item.active .accordion-content { max-height: 10000px; padding-bottom: 2rem; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+        .table-container { background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(255, 195, 0, 0.2); border-radius: 8px; overflow: hidden; margin-top: 1rem; }
+        th { background: rgba(0, 29, 61, 0.8); color: #ffc300; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 12px; }
+        td { padding: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.85rem; }
+        .fluxograma-box { border: 2px solid #ffc300; background: rgba(0, 29, 61, 0.5); padding: 15px; border-radius: 5px; text-align: center; font-family: 'Orbitron', sans-serif; font-weight: bold; color: #fff; }
+    </style>
+</head>
+<body class="bg-brand-black antialiased">
+
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/95 border-b border-police-blue/50 backdrop-blur-md">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="ac.png" alt='Adapta Logo' class='h-10 w-auto' />
+                <span class="font-orbitron text-white text-xl font-bold tracking-widest">ADAPTA CAPITAL</span>
+            </a>
+            <nav class="flex space-x-6">
+                <a href="index.html" class="text-white hover:text-neon-blue font-semibold uppercase text-[10px] tracking-widest transition-all">Início</a>
+                <a href="regras.html" class="text-neon-blue font-semibold uppercase text-[10px] tracking-widest transition-all">Regras</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4 max-w-5xl">
+            
+            <div class="mb-12">
+                <h1 class="font-orbitron text-3xl sm:text-5xl font-black text-white mb-4 tracking-tighter uppercase italic">
+                    👮 ESTATUTO <span class="text-police-gold">POLICIAL</span>
+                </h1>
+                <p class="text-lg text-gray-300 mb-10 font-medium">Regulamento Geral das Forças de Segurança - <span class="text-neon-blue font-bold">Adapta Capital</span>.</p>
+                
+                <div class="bg-police-blue/40 border-l-4 border-police-gold p-8 rounded-r-lg">
+                    <h2 class="font-orbitron text-police-gold font-bold text-lg mb-4 uppercase">⚠️ DIRETRIZ DISCIPLINAR</h2>
+                    <p class="text-gray-200 leading-relaxed text-sm sm:text-base italic">
+                        "O profissionalismo é a nossa maior arma. O descumprimento destas normas resulta em exoneração imediata e possível banimento da metrópole."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Accordion Group -->
+            <div class="space-y-6">
+                
+                <!-- 1. HIERARQUIA -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden active">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-police-blue/20 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🗣️ 1. Hierarquia e Autoridade</span>
+                        <svg class="accordion-icon w-6 h-6 text-police-gold transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-gray-300 border-t border-white/5 pt-6">
+                            <p><strong>1.1 —</strong> Ordens seguem a cadeia de comando; a palavra final é do oficial de maior patente.</p>
+                            <p><strong>1.2 —</strong> Insubordinação gera exoneração imediata.</p>
+                            <p><strong>1.3 —</strong> Alunos patrulham apenas com supervisão.</p>
+                            <p><strong>1.4 —</strong> Ausências > 48h devem ser justificadas sob pena de baixa.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. CONDUTA -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-police-blue/20 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">💡 2. Postura e Uso da Força</span>
+                        <svg class="accordion-icon w-6 h-6 text-police-gold transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-gray-300 border-t border-white/5 pt-6">
+                            <p><strong>2.1/2.2 —</strong> Conduta ética e respeitosa é obrigatória. Proibido uso de linguagem ofensiva.</p>
+                            <p><strong>2.4 —</strong> Tráfico ou desvio de apreensões resulta em banimento permanente.</p>
+                            <p><strong>2.5/2.6 —</strong> Proibido uso de farda ou ações táticas (a paisana) fora de serviço.</p>
+                            <p><strong>2.8 —</strong> Fogo permitido apenas em legítima defesa ou proteção de terceiros.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. PATRULHAMENTO -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-police-blue/20 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🚔 3. Patrulhamento e Comunicação</span>
+                        <svg class="accordion-icon w-6 h-6 text-police-gold transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-gray-300 border-t border-white/5 pt-6">
+                            <p><strong>3.1/3.3 —</strong> Obrigatório rádio (Código Q) e presença na call do Discord.</p>
+                            <p><strong>3.5/3.6 —</strong> Incursões em favelas: Permitidas das 06h às 20h com 2 VTRs. Proibidas das 20h às 06h.</p>
+                            <p><strong>3.14 —</strong> Somente itens ilícitos podem ser apreendidos (Drogas, Armas sem porte, Dinheiro sujo).</p>
+                            <div class="bg-red-900/20 p-4 border border-red-500/50 rounded">
+                                <p class="text-red-400 font-bold uppercase text-xs mb-2 italic">Regra de Disparo no Pneu:</p>
+                                <p class="text-xs">Permitido apenas se: Veículo capotar e seguir, jogar contra motos intencionalmente ou bater para furar bloqueios. Exige autorização de superior via rádio.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ESTRUTURA ORGANIZACIONAL (BASEADO NA IMAGEM image_765dd3.png) -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-police-blue/20 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🔗 Cadeia de Comando e Unidades</span>
+                        <svg class="accordion-icon w-6 h-6 text-police-gold transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6 text-center">
+                        <div class="flex flex-col items-center space-y-6 pt-6">
+                            <div class="fluxograma-box w-72">Comando Geral / Delegado Geral</div>
+                            <div class="w-1 h-8 bg-police-gold"></div>
+                            <div class="flex justify-center space-x-10">
+                                <div class="flex flex-col items-center">
+                                    <div class="fluxograma-box w-48">Corregedoria</div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="fluxograma-box w-48">Comandos das Unidades</div>
+                                    <div class="w-1 h-8 bg-police-gold"></div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-police-blue p-2 border border-white/20 rounded text-xs">PMESP</div>
+                                        <div class="bg-police-blue p-2 border border-white/20 rounded text-xs">PCSP</div>
+                                        <div class="bg-police-blue p-2 border border-white/20 rounded text-xs">GCM</div>
+                                        <div class="bg-police-blue p-2 border border-white/20 rounded text-xs">PRF</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABELAS DE PROMOÇÃO (image_760c37.jpg & image_760c1a.jpg) -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-police-blue/20 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">📈 Plano de Carreira e Promoções</span>
+                        <svg class="accordion-icon w-6 h-6 text-police-gold transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        
+                        <!-- PMESP -->
+                        <h3 class="text-police-gold font-orbitron text-sm mt-6 mb-2">TABELA POLÍCIA MILITAR</h3>
+                        <div class="table-container">
+                            <table class="w-full">
+                                <thead>
+                                    <tr><th>Patente</th><th>Tempo</th><th>Proporção</th><th>Critérios</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Soldado 2ª Cl</td><td>Inicial</td><td>---</td><td>TAF Aprovado</td></tr>
+                                    <tr><td>Soldado 1ª Cl</td><td>10 Dias</td><td>---</td><td>Participação Ativa</td></tr>
+                                    <tr><td>Cabo</td><td>10 Dias</td><td>1:2 Solds</td><td>Cursos Básicos</td></tr>
+                                    <tr><td>3º Sargento</td><td>15 Dias</td><td>1:2 Praças</td><td>70% Escalas</td></tr>
+                                    <tr><td>Oficiais</td><td>30 Dias+</td><td>1:2 Grad.</td><td>Liderança</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- PCSP -->
+                        <h3 class="text-neon-blue font-orbitron text-sm mt-8 mb-2">TABELA POLÍCIA CIVIL</h3>
+                        <div class="table-container">
+                            <table class="w-full">
+                                <thead>
+                                    <tr><th>Patente</th><th>Tempo</th><th>Atividade</th><th>Promoção</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Acadepol</td><td>Curso</td><td>Aprovação</td><td>Nomeação</td></tr>
+                                    <tr><td>Agente 3ª Cl</td><td>10 Dias</td><td>15 Prisões</td><td>Automática</td></tr>
+                                    <tr><td>Investigador</td><td>30 Dias</td><td>Histórico</td><td>Comando</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-20 text-center border-t border-white/10 pt-10">
+                <a href="regras.html" class="inline-block border border-police-gold text-police-gold font-orbitron font-bold py-3 px-10 rounded uppercase hover:bg-police-gold hover:text-black transition-all duration-300 tracking-widest text-[10px]">
+                    Retornar às Categorias
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-12 border-t border-white/5 text-center">
+        <p class="text-[9px] text-gray-500 uppercase tracking-[0.4em] font-orbitron">© 2026 Adapta Capital — Servir e Proteger</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('active');
+            
+            document.querySelectorAll('.accordion-item').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.accordion-icon').classList.remove('rotate-180');
+            });
+
+            if (!isOpen) {
+                item.classList.add('active');
+                button.querySelector('.accordion-icon').classList.add('rotate-180');
+            }
+        }
+    </script>
+</body>
+</html>

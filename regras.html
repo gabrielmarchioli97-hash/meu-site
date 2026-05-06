@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regras - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'neon-green': '#00ff6a',
+                        'silver': '#c0c0c0',
+                        'light-gray': '#a0a0a0',
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#111111',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #00ff6a; border-radius: 20px; border: 2px solid #0a0a0a; }
+        .rule-card:hover { border-color: #00ff6a; transform: translateY(-5px); box-shadow: 0 10px 20px -10px rgba(0, 255, 106, 0.3); }
+    </style>
+</head>
+<body class="bg-brand-black text-light-gray font-rajdhani antialiased">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-b border-white/5">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="ac.png" alt='Logo' class='h-10 w-auto' />
+                <span class="font-orbitron text-silver text-xl font-bold tracking-widest hidden sm:block">ADAPTA CAPITAL</span>
+            </a>
+            <nav class="flex items-center space-x-6">
+                <a href="index.html" class="text-silver hover:text-neon-green font-semibold transition-colors">Início</a>
+                <a href="index.html#loja" class="text-silver hover:text-neon-green font-semibold transition-colors">Loja</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <!-- Introdução -->
+            <div class="text-center mb-16">
+                <h1 class="font-orbitron text-4xl sm:text-5xl font-black text-silver mb-6 tracking-tighter">
+                    TERMOS E <span class="text-neon-green">REGRAS</span>
+                </h1>
+                <div class="space-y-6 text-lg text-light-gray leading-relaxed">
+                    <p>👋 <span class="text-white font-bold">Seja bem-vindo ao Adapta Capital.</span></p>
+                    <p>Nossa cidade é construída com consistência, organização e respeito ao RP sério. Mais do que um servidor, o Adapta é um ambiente sólido formado por narrativas marcantes e imersão profunda.</p>
+                    <p>Nesta página estão as diretrizes que sustentam nossa comunidade. Cumpri-las preserva a qualidade e o equilíbrio que nos define como referência.</p>
+                </div>
+            </div>
+
+            <!-- Card de Aviso Importante -->
+            <div class="bg-dark-gray/30 border-l-4 border-neon-green p-8 rounded-r-lg mb-16">
+                <h2 class="font-orbitron text-neon-green font-bold mb-2 flex items-center">
+                    <span class="mr-2">⚠️</span> IMPORTANTE
+                </h2>
+                <p class="text-silver">Ao ingressar no Adapta Capital RP, você declara estar de acordo com os termos estabelecidos neste documento. O acesso ao servidor implica a aceitação automática das normas aqui descritas para garantir uma convivência justa e segura.</p>
+            </div>
+
+            <!-- Categorias Grid -->
+            <div class="mb-12">
+                <h2 class="font-orbitron text-2xl text-silver font-bold mb-8 flex items-center">
+                    <span class="text-neon-green mr-3">📚</span> CATEGORIAS DE REGRAS
+                </h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Links mapeados conforme solicitado -->
+                    <a href="Termos de Compras.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">💰</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Termos de Compras</span>
+                    </a>
+
+                    <a href="Regras Gerais.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">📜</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Regras Gerais</span>
+                    </a>
+
+                    <a href="Código Penal.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">⚖️</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Código Penal</span>
+                    </a>
+
+                    <a href="Áreas Safes.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">🛡️</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Áreas Safes</span>
+                    </a>
+
+                    <a href="Regras Policiais.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">👮</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Regras Policiais</span>
+                    </a>
+
+                    <a href="Regras Ilegal.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">🔫</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Regras Ilegal</span>
+                    </a>
+
+                    <a href="Regras do Hospital.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">🏥</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Regras do Hospital</span>
+                    </a>
+
+                    <a href="Regras de Denúncias.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">📢</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Regras de Denúncias</span>
+                    </a>
+
+                    <a href="Regras de Telagem.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">🖥️</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Regras de Telagem</span>
+                    </a>
+
+                    <a href="Regras de Ações.html" class="rule-card bg-darker-gray border border-white/10 p-5 rounded-lg flex items-center space-x-4 transition-all duration-300">
+                        <span class="text-2xl">🎯</span>
+                        <span class="font-orbitron text-sm font-bold text-silver uppercase">Regras de Ações</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-10 border-t border-white/5">
+        <div class="container mx-auto px-4 text-center">
+            <img src="ac.png" alt='Adapta Capital' class='mx-auto h-10 w-auto opacity-50 mb-4' />
+            <p class="text-xs text-light-gray opacity-50 uppercase tracking-widest font-orbitron">Adapta Capital © 2026</p>
+        </div>
+    </footer>
+
+</body>
+</html>

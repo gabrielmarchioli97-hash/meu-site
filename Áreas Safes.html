@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zonas de Segurança - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'neon-green': '#00ff6a',
+                        'neon-blue': '#00d4ff',
+                        'silver': '#e0e0e0', /* Texto mais claro para leitura */
+                        'light-gray': '#d1d1d1', /* Texto mais claro para leitura */
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#111111',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #00d4ff; border-radius: 20px; }
+        
+        /* Garantia de cor global para evitar o erro de 'preto no preto' */
+        body { color: #d1d1d1 !important; background-color: #000000 !important; }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
+        .accordion-item.active .accordion-content { max-height: 2000px; padding-bottom: 2rem; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+        
+        .safe-tag {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            color: #00d4ff !important;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-brand-black antialiased">
+
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/95 border-b border-neon-blue/20 backdrop-blur-md">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="ac.png" alt='Adapta Logo' class='h-10 w-auto' />
+                <span class="font-orbitron text-white text-xl font-bold tracking-widest">ADAPTA CAPITAL</span>
+            </a>
+            <nav class="flex space-x-6">
+                <a href="index.html" class="text-white hover:text-neon-blue font-semibold uppercase text-[10px] tracking-widest transition-all">Início</a>
+                <a href="regras.html" class="text-neon-blue font-semibold uppercase text-[10px] tracking-widest transition-all">Regras</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4 max-w-4xl">
+            
+            <div class="mb-12">
+                <h1 class="font-orbitron text-3xl sm:text-5xl font-black text-white mb-4 tracking-tighter uppercase italic">
+                    🛡️ ÁREAS <span class="text-neon-blue">SAFES</span>
+                </h1>
+                <p class="text-lg text-gray-300 mb-10 font-medium">Protocolos de Segurança Máxima da <span class="text-neon-blue font-bold">Adapta Capital</span>.</p>
+                
+                <div class="bg-dark-gray border-l-4 border-neon-blue p-8 rounded-r-lg">
+                    <h2 class="font-orbitron text-neon-blue font-bold text-lg mb-4 uppercase">⚠️ NOTA DE SEGURANÇA</h2>
+                    <p class="text-gray-200 leading-relaxed text-sm sm:text-base italic">
+                        "As Safezones são perímetros de proteção absoluta. Nestas áreas, a integridade dos cidadãos é a prioridade. Infrações nestas zonas resultam em punições imediatas."
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <!-- ITEM 1 -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden active">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-neon-blue/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🚧 1. PROTOCOLO SAFEZONE</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-blue transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <p class="text-gray-300 text-base leading-relaxed border-t border-white/5 pt-6">
+                            Zonas onde hostilidades como disparos, sequestros ou perseguições são proibidas para garantir a segurança no atendimento médico e convívio social.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ITEM 2 -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-neon-blue/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">📍 2. COORDENADAS PROTEGIDAS</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-blue transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-white/5 pt-6 text-gray-200">
+                            <div class="flex items-center space-x-2"><span class="safe-tag">Safe</span> <span>Hospital e Garagens</span></div>
+                            <div class="flex items-center space-x-2"><span class="safe-tag">Safe</span> <span>Mecânicas Oficiais</span></div>
+                            <div class="flex items-center space-x-2"><span class="safe-tag">Safe</span> <span>Posto Graal</span></div>
+                            <div class="flex items-center space-x-2"><span class="safe-tag">Safe</span> <span>Praça Central</span></div>
+                            <div class="flex items-center space-x-2"><span class="safe-tag">Safe</span> <span>Sedes de Empregos</span></div>
+                            <div class="flex items-center space-x-2"><span class="safe-tag">Safe</span> <span>Favela da Cúpula</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ITEM 3 -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-neon-blue/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🚫 3. PROIBIÇÕES</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-blue transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <ul class="space-y-4 text-gray-300 text-sm sm:text-base border-t border-white/5 pt-6">
+                            <li><strong>3.1 —</strong> Proibido camperar por vantagens ilícitas.</li>
+                            <li><strong>3.2 —</strong> Proibido sequestrar, roubar ou atirar.</li>
+                            <li><strong>3.3 —</strong> Proibido arrastar jogadores para fora da zona segura.</li>
+                            <li><strong>3.4 —</strong> Proibida a fuga para dentro da Safe para evitar consequências de ações externas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center border-t border-white/10 pt-10">
+                <a href="regras.html" class="inline-block border border-neon-blue text-neon-blue font-orbitron font-bold py-3 px-10 rounded uppercase hover:bg-neon-blue hover:text-black transition-all duration-300 tracking-widest text-[10px]">
+                    Retornar às Categorias
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-12 border-t border-white/5 text-center">
+        <p class="text-[9px] text-gray-500 uppercase tracking-[0.4em] font-orbitron">© 2026 Adapta Capital — Integridade Absoluta</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('active');
+            document.querySelectorAll('.accordion-item').forEach(el => el.classList.remove('active'));
+            if (!isOpen) item.classList.add('active');
+        }
+    </script>
+</body>
+</html>

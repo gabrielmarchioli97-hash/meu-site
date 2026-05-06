@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Denúncias - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'alert-yellow': '#ffcc00',
+                        'alert-red': '#ff3333',
+                        'silver': '#e0e0e0',
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#0a0a0a',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    animation: {
+                        'scan': 'scan 3s linear infinite',
+                    },
+                    keyframes: {
+                        scan: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #ffcc00; border-radius: 20px; }
+        
+        body { color: #d1d1d1 !important; background-color: #000000 !important; }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-item.active .accordion-content { max-height: 5000px; padding-bottom: 2rem; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+
+        .report-card { background: rgba(255, 204, 0, 0.03); border: 1px solid rgba(255, 204, 0, 0.1); border-radius: 12px; }
+        .check-item { background: rgba(0, 255, 106, 0.05); border: 1px solid rgba(0, 255, 106, 0.2); padding: 12px; border-radius: 8px; font-size: 0.8rem; display: flex; align-items: center; }
+    </style>
+</head>
+<body class="bg-brand-black antialiased font-rajdhani">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/95 border-b border-alert-yellow/20 backdrop-blur-md">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="ac.png" alt='Adapta Logo' class='h-10 w-auto' />
+                <span class="font-orbitron text-white text-xl font-bold tracking-widest uppercase">Adapta Capital</span>
+            </a>
+            <nav class="flex space-x-6">
+                <a href="index.html" class="text-white hover:text-alert-yellow font-semibold uppercase text-[10px] tracking-widest transition-all">Início</a>
+                <a href="regras.html" class="text-alert-yellow font-semibold uppercase text-[10px] tracking-widest transition-all font-orbitron">Categorias</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4 max-w-4xl">
+            
+            <div class="mb-12">
+                <h1 class="font-orbitron text-3xl sm:text-5xl font-black text-white mb-4 tracking-tighter uppercase italic flex items-center">
+                    📢 CENTRAL DE <span class="text-alert-yellow ml-3">DENÚNCIAS</span>
+                </h1>
+                <p class="text-lg text-gray-400 mb-10 font-medium italic">Protocolos para Reporte de Infrações e Compliance - <span class="text-alert-yellow">Adapta Capital</span>.</p>
+                
+                <div class="report-card p-8 rounded-r-lg mb-8 relative overflow-hidden border-l-4 border-alert-yellow">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-alert-yellow/20 animate-scan -z-10"></div>
+                    <h2 class="font-orbitron text-alert-yellow font-bold text-lg mb-4 uppercase tracking-widest">⚠️ DIRETRIZ FUNDAMENTAL</h2>
+                    <p class="text-gray-200 leading-relaxed text-sm sm:text-base italic">
+                        "Priorizamos a resolução de conflitos dentro do Roleplay. Utilize a via administrativa apenas quando houver quebra clara de regras e impossibilidade de solução orgânica na cidade."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Accordion Group -->
+            <div class="space-y-4">
+                
+                <!-- 1. DETALHAMENTO -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden active">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-alert-yellow/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🔎 1. Detalhamento Técnico</span>
+                        <svg class="accordion-icon w-6 h-6 text-alert-yellow transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-gray-300 text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>1.1 — Relatório de Fatos:</strong> É obrigatória a descrição minuciosa contendo: O que ocorreu, envolvidos, infração cometida, data, horário e localização exata.</p>
+                            <p class="text-xs text-alert-yellow opacity-70">Nota: Denúncias vagas ou sem contexto serão arquivadas sem análise.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. PROVAS EM VÍDEO -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-alert-yellow/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🎥 2. Requisitos de Mídia</span>
+                        <svg class="accordion-icon w-6 h-6 text-alert-yellow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-gray-300 text-sm sm:text-base border-t border-white/5 pt-6">
+                            <p><strong>2.1 — Formato:</strong> Vídeo com no mínimo 2 minutos de duração, contendo áudio e vídeo originais do jogo. O uso do microfone in-game deve estar audível.</p>
+                            <p><strong>2.3 — Hospedagem:</strong> Links externos funcionais (YouTube, Streamable, Medal). Proibido envio de arquivos brutos no ticket.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. PRAZOS -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-alert-yellow/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🕒 3. Janela de Oportunidade</span>
+                        <svg class="accordion-icon w-6 h-6 text-alert-yellow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="bg-alert-yellow/10 p-6 border border-alert-yellow/30 text-center rounded">
+                            <p class="font-orbitron text-alert-yellow text-lg">PRAZO MÁXIMO</p>
+                            <p class="text-3xl font-black text-white">48 HORAS</p>
+                            <p class="text-[10px] uppercase mt-2 opacity-60 italic">Após este período, a denúncia será considerada expirada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. CALL EXTERNA -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-alert-yellow/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">📵 4. Proibição de Call Externa</span>
+                        <svg class="accordion-icon w-6 h-6 text-alert-yellow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6 border-t border-white/5 pt-6 text-red-400 text-sm">
+                        <p class="font-bold uppercase mb-2">🚫 PROIBIDO:</p>
+                        <p>Gravações contendo áudio de Discord, WhatsApp, TeamSpeak ou similares <strong>não são aceitas</strong>. O áudio deve ser puramente a captação in-game para garantir a imersão e validade da prova.</p>
+                    </div>
+                </div>
+
+                <!-- 5. SISTEMA DE ADVERTENCIAS -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-alert-yellow/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">📊 5. Sistema de Punições</span>
+                        <svg class="accordion-icon w-6 h-6 text-alert-yellow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/5 pt-6">
+                            <div class="p-4 bg-white/5 rounded border border-white/10"><p class="text-alert-yellow font-bold text-xs uppercase">ADV 1</p><p class="text-xs mt-1">Aviso Formal (Permanente)</p></div>
+                            <div class="p-4 bg-white/5 rounded border border-white/10"><p class="text-alert-yellow font-bold text-xs uppercase">ADV 2 & 3</p><p class="text-xs mt-1">Expiram em 30 dias se não houver reincidência.</p></div>
+                            <div class="p-4 bg-red-900/20 rounded border border-red-500/30"><p class="text-red-500 font-bold text-xs uppercase">ADV 4</p><p class="text-xs mt-1">Banimento Permanente da Metrópole.</p></div>
+                            <div class="p-4 bg-red-900/20 rounded border border-red-500/30"><p class="text-red-500 font-bold text-xs uppercase">Combat Log</p><p class="text-xs mt-1">ADV + Banimento Temporário de 3 Dias.</p></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Prejuízo Financeiro Modelo -->
+            <div class="mt-12 p-6 bg-dark-gray border border-white/5 rounded-lg">
+                <h3 class="font-orbitron text-silver text-sm font-bold mb-4 uppercase">💰 Ressarcimento de Prejuízos</h3>
+                <p class="text-xs text-gray-400 mb-4 italic">A análise de prejuízo só ocorre se solicitada no momento da abertura do ticket:</p>
+                <div class="bg-black/50 p-4 rounded font-mono text-[10px] text-neon-green border border-neon-green/20">
+                    "Perda de itens: Mochila (R$ 5.000), Pistola (R$ 40.000)..."
+                </div>
+            </div>
+
+            <!-- Checklist Section -->
+            <div class="mt-16">
+                <h3 class="font-orbitron text-white text-xl font-bold mb-6 flex items-center">
+                    <span class="text-green-500 mr-3">✅</span> CHECKLIST DE VALIDAÇÃO
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="check-item"><span class="text-green-500 mr-2">✔</span> Envolvimento direto comprovado</div>
+                    <div class="check-item"><span class="text-green-500 mr-2">✔</span> Vídeo > 2 minutos</div>
+                    <div class="check-item"><span class="text-green-500 mr-2">✔</span> Áudio in-game capturado</div>
+                    <div class="check-item"><span class="text-green-500 mr-2">✔</span> Zero áudio de Call Externa</div>
+                    <div class="check-item"><span class="text-green-500 mr-2">✔</span> Ticket aberto em até 48h</div>
+                    <div class="check-item"><span class="text-green-500 mr-2">✔</span> Link funcional (YouTube/Medal)</div>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <a href="regras.html" class="inline-block border border-alert-yellow text-alert-yellow font-orbitron font-bold py-3 px-10 rounded uppercase hover:bg-alert-yellow hover:text-black transition-all duration-300 tracking-widest text-[10px]">
+                    Retornar às Categorias
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-12 border-t border-white/5 text-center">
+        <p class="text-[9px] text-gray-600 uppercase tracking-[0.4em] font-orbitron">© 2026 Adapta Capital — Justiça e Transparência</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('active');
+            
+            document.querySelectorAll('.accordion-item').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.accordion-icon').classList.remove('rotate-180');
+            });
+
+            if (!isOpen) {
+                item.classList.add('active');
+                button.querySelector('.accordion-icon').classList.add('rotate-180');
+            }
+        }
+    </script>
+</body>
+</html>

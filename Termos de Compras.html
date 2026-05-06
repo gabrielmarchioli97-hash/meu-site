@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termos de Aquisição - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'neon-green': '#00ff6a',
+                        'silver': '#c0c0c0',
+                        'light-gray': '#a0a0a0',
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#111111',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #00ff6a; border-radius: 20px; border: 2px solid #0a0a0a; }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 2000px;
+            padding-bottom: 2rem;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-brand-black text-light-gray font-rajdhani antialiased">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/5">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="ac.png" alt='Adapta Logo' class='h-10 w-auto' />
+                <span class="font-orbitron text-silver text-xl font-bold tracking-widest hidden sm:block">ADAPTA CAPITAL</span>
+            </a>
+            <nav class="flex items-center space-x-8">
+                <a href="index.html" class="text-silver hover:text-neon-green font-semibold transition-all">INÍCIO</a>
+                <a href="regras.html" class="text-silver hover:text-neon-green font-semibold transition-all">REGRAS</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4 max-w-4xl">
+            
+            <!-- Intro -->
+            <div class="mb-12">
+                <h1 class="font-orbitron text-3xl sm:text-5xl font-black text-silver mb-4 tracking-tighter uppercase">
+                    💳 Termos de <span class="text-neon-green">Compras</span>
+                </h1>
+                <p class="text-lg text-light-gray leading-relaxed mb-8">
+                    Diretrizes e normas fundamentais para aquisições na loja oficial da <span class="text-white font-bold text-neon-green">Adapta Capital RP</span>.
+                </p>
+                
+                <div class="bg-dark-gray/40 border-l-4 border-neon-green p-6 rounded-r-lg space-y-4">
+                    <h2 class="font-orbitron text-neon-green font-bold text-lg uppercase">⚠️ DECLARAÇÃO IMPORTANTE</h2>
+                    <p class="text-silver italic leading-relaxed">
+                        Ao realizar transações em nosso ambiente virtual, o Usuário declara ser maior de idade ou estar devidamente assistido por seus responsáveis. A conclusão da compra implica na aceitação automática e integral destas normas e das políticas da nossa comunidade. Caso discorde de qualquer cláusula, não finalize o processo de aquisição.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Accordion Group -->
+            <div class="space-y-4" id="terms-accordion">
+                
+                <!-- 1. OBJETO -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider text-base sm:text-lg">🏯 1. OBJETO E SERVIÇOS</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>1.1.</strong> Estes Termos regem a disponibilização de benefícios digitais para a <strong>Adapta Capital RP</strong>, abrangendo vantagens competitivas (VIPs), moedas virtuais, assinaturas e itens cosméticos.</p>
+                            <p><strong>1.2.</strong> A precisão dos dados fornecidos é de inteira responsabilidade do Usuário. Informações divergentes podem ocasionar atrasos ou impossibilidade técnica na entrega dos produtos.</p>
+                            <p><strong>1.3.</strong> A aquisição concede o direito de uso dos itens escolhidos mediante compensação financeira. O contrato é formalizado na confirmação do pagamento.</p>
+                            <p><strong>1.4. Entrega:</strong> O processo é automático após a confirmação bancária. Casos que exijam ativação manual serão acordados com a equipe administrativa.</p>
+                            <p><strong>1.5. Validade:</strong> Planos temporários expiram na data prevista. Benefícios "permanentes" vigoram até o próximo <em>wipe</em> (reset de temporada), sendo esta uma característica intrínseca à natureza do jogo.</p>
+                            <p><strong>1.6. Balanceamento:</strong> Atributos de veículos ou itens podem ser alterados sem aviso prévio pela administração para garantir a justiça e harmonia da jogabilidade.</p>
+                            <p><strong>1.7. Natureza Digital:</strong> Todos os itens são intangíveis e exclusivos do jogo, sem qualquer valor monetário real ou possibilidade de conversão em espécie.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. MODIFICAÇÕES -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider text-base sm:text-lg">📖 2. MODIFICAÇÕES DOS TERMOS</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>2.1.</strong> A <strong>Adapta Capital</strong> pode alterar estes termos a qualquer momento por razões operacionais ou legais. Mudanças vigoram imediatamente. Discordâncias devem ser enviadas ao suporte em até 24h, interrompendo o uso do serviço.</p>
+                            <p><strong>2.2.</strong> Alterações não retroagem sobre compras já liquidadas, aplicando-se apenas a transações futuras.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. PRIVACIDADE -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider text-base sm:text-lg">🔐 3. SEGURANÇA E PRIVACIDADE</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>3.1.</strong> Empregamos medidas robustas para proteger seus dados, embora nenhum sistema seja invulnerável a ataques de terceiros fora de nossa infraestrutura.</p>
+                            <p><strong>3.2.</strong> Autoriza-se o compartilhamento de dados estritamente necessários com gateways de pagamento (MercadoPago, PayPal) para processamento da compra.</p>
+                            <p><strong>3.3.</strong> Questões sobre a LGPD podem ser tratadas diretamente em nossos canais oficiais de suporte.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. OBRIGAÇÕES -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider text-base sm:text-lg">✅ 4. OBRIGAÇÕES DO USUÁRIO</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>4.1.</strong> O Usuário deve manter cadastro completo e atualizado, acompanhando todas as comunicações enviadas pela loja.</p>
+                            <p><strong>4.2.</strong> O uso de identidade falsa ou dados de terceiros é proibido e pode acarretar no cancelamento da compra e punições administrativas.</p>
+                            <p><strong>4.3.</strong> A segurança do login e senha é responsabilidade exclusiva do usuário.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. USO INDEVIDO -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider text-base sm:text-lg">⛔ 5. VIOLAÇÕES E USO INDEVIDO</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>5.1.</strong> É proibida qualquer tentativa de fraude, exploração de bugs ou uso de softwares de terceiros (hacks/cheats) para interferir no servidor.</p>
+                            <p><strong>5.2.</strong> Violações técnicas ou de conduta serão sancionadas, podendo o infrator ser responsabilizado civil e penalmente por danos à imagem da empresa.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. SANÇÕES -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider text-base sm:text-lg">🚫 6. REGIME DE SANÇÕES</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>6.1.</strong> Descumprir estas normas ou as regras de Roleplay da cidade sujeita o Usuário a: advertências, suspensões ou banimento definitivo (incluindo perda dos benefícios adquiridos).</p>
+                            <p><strong>6.2.</strong> Em caso de expulsão da comunidade por má conduta, não haverá ressarcimento de valores pagos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. REEMBOLSO -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider text-base sm:text-lg">💲 7. CANCELAMENTO E REEMBOLSO</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>7.1. Arrependimento:</strong> Seguindo o CDC, o prazo de desistência é de 7 dias, desde que o produto digital <strong>não tenha sido usufruído</strong> in-game.</p>
+                            <p><strong>7.2.</strong> Fora do prazo legal, todas as vendas são finais. Casos excepcionais de falhas técnicas comprovadas serão analisados individualmente.</p>
+                            <p><strong>7.3.</strong> Punções e banimentos por má conduta anulam qualquer possibilidade de devolução de valores.</p>
+                            <p><strong>7.4. Chargeback:</strong> O estorno unilateral via operadora sem contato prévio é considerado má-fé e fraude, resultando em banimento permanente imediato.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. ASSINATURAS -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider text-base sm:text-lg">♻️ 8. ASSINATURAS RECORRENTES</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>8.1.</strong> Planos como o VIP Mensal possuem renovação automática até que o cancelamento seja solicitado.</p>
+                            <p><strong>8.2.</strong> O cancelamento é responsabilidade do Usuário e deve ser feito com 5 dias de antecedência do novo ciclo.</p>
+                            <p><strong>8.3.</strong> Pagamentos já processados por falta de cancelamento prévio não serão reembolsados.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Rodapé Aceite -->
+            <div class="mt-16 text-center border-t border-neon-green/20 pt-12">
+                <p class="text-silver mb-8 text-lg font-rajdhani italic">
+                    "Ao prosseguir, você confirma a leitura e o aceite integral de todos os termos da <span class="text-neon-green font-bold uppercase">Adapta Capital</span>."
+                </p>
+                <a href="index.html#loja" class="inline-block bg-neon-green text-brand-black font-orbitron font-bold py-4 px-12 rounded shadow-lg shadow-neon-green/20 hover:scale-105 transition-all uppercase tracking-widest">
+                    VOLTAR PARA A LOJA
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-12 border-t border-white/5">
+        <div class="container mx-auto px-4 text-center">
+            <img src="ac.png" alt='Adapta' class='mx-auto h-10 w-auto opacity-40 mb-6' />
+            <p class="text-xs text-light-gray opacity-50 uppercase tracking-widest font-orbitron">
+                © 2026 Adapta Capital RP - Todos os direitos reservados
+            </p>
+            <p class="text-[10px] text-light-gray opacity-30 mt-2 font-rajdhani uppercase tracking-tighter">
+                Documento sujeito a atualizações sem aviso prévio
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('active');
+            
+            // Fecha todos os outros para ficar limpo
+            document.querySelectorAll('.accordion-item').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Abre o atual se estava fechado
+            if (!isOpen) {
+                item.classList.add('active');
+            }
+        }
+    </script>
+
+</body>
+</html>

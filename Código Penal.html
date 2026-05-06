@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código Penal - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'neon-green': '#00ff6a',
+                        'neon-red': '#ff003c',
+                        'silver': '#c0c0c0',
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#111111',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #00ff6a; border-radius: 20px; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-item.active .accordion-content { max-height: 15000px; padding-bottom: 2rem; }
+        .no-fianca { color: #ff003c; font-weight: bold; font-size: 0.65rem; text-transform: uppercase; border: 1px solid rgba(255, 0, 60, 0.5); padding: 1px 4px; border-radius: 3px; background: rgba(255, 0, 60, 0.1); }
+        .valor-multa { background: rgba(255, 0, 60, 0.1); border: 1px solid #ff003c; color: #ff003c; padding: 4px 10px; border-radius: 4px; font-weight: 800; text-shadow: 0 0 8px rgba(255, 0, 60, 0.5); box-shadow: inset 0 0 5px rgba(255, 0, 60, 0.2), 0 0 10px rgba(255, 0, 60, 0.1); display: inline-block; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; }
+    </style>
+</head>
+<body class="bg-brand-black text-light-gray font-rajdhani antialiased">
+
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-neon-green/10">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3 group">
+                <img src="ac.png" alt='Adapta Logo' class='h-10 w-auto group-hover:scale-110 transition-transform' />
+                <span class="font-orbitron text-silver text-xl font-bold tracking-widest">ADAPTA CAPITAL</span>
+            </a>
+            <nav class="flex space-x-6">
+                <a href="index.html" class="text-silver hover:text-neon-green font-semibold transition-all uppercase text-[10px] tracking-[0.2em]">Início</a>
+                <a href="regras.html" class="text-neon-green font-semibold transition-all uppercase text-[10px] tracking-[0.2em]">Categorias</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4 max-w-5xl">
+            
+            <div class="mb-12">
+                <h1 class="font-orbitron text-4xl sm:text-6xl font-black text-silver mb-4 tracking-tighter uppercase italic">⚖️ CÓDIGO <span class="text-neon-green">PENAL</span></h1>
+                <p class="text-lg text-gray-400 mb-10 font-medium">Legislação Criminal Oficial - <span class="text-white">Adapta Capital</span></p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 text-center font-orbitron">
+                    <div class="bg-darker-gray p-6 rounded-lg border border-white/5"><span class="block text-4xl text-neon-green font-black">59</span><span class="text-[10px] uppercase tracking-[0.3em] text-gray-500">Artigos</span></div>
+                    <div class="bg-darker-gray p-6 rounded-lg border border-white/5"><span class="block text-4xl text-silver font-black">17</span><span class="text-[10px] uppercase tracking-[0.3em] text-gray-500">Infrações</span></div>
+                    <div class="bg-darker-gray p-6 rounded-lg border border-white/5"><span class="block text-4xl text-neon-red font-black">42</span><span class="text-[10px] uppercase tracking-[0.3em] text-gray-500">Crimes</span></div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- INFRAÇÕES -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-xl overflow-hidden active">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-neon-green/5 hover:bg-neon-green/10 transition-all">
+                        <span class="font-orbitron text-neon-green font-bold uppercase tracking-widest text-lg">🚗 Infrações e Multas (17 Artigos)</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="overflow-x-auto px-6">
+                            <table class="w-full text-left border-collapse">
+                                <tbody class="text-sm text-silver font-rajdhani">
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 218</td> <td class="py-4 px-2"><strong>Alta Velocidade</strong>: Limite 120 km/h (Cidade) / 90 km/h (Caminhão)</td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 1.500</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 175</td> <td class="py-4 px-2"><strong>Direção Perigosa</strong>: Uso negligente ou imprudente</td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 3.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 181</td> <td class="py-4 px-2"><strong>Estacionar em local proibido</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 2.500</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 01</td> <td class="py-4 px-2"><strong>Pouso em local proibido</strong>: Aeronaves fora de designação</td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 30.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 02</td> <td class="py-4 px-2"><strong>Manobra imprudente com aeronave</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 25.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 24</td> <td class="py-4 px-2"><strong>Veículo Abandonado</strong> em local indevido</td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 1.750</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 186</td> <td class="py-4 px-2"><strong>Trafegar na contra-mão</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 2.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 225</td> <td class="py-4 px-2"><strong>Praticar corrida ilegal (Racha)</strong>: Suspensão de CNH</td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 5.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 244-A</td> <td class="py-4 px-2"><strong>Conduzir motocicleta sem capacete</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 1.750</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 230</td> <td class="py-4 px-2"><strong>Veículo com taxas atrasadas</strong>: Sujeito a apreensão</td> <td class="py-4 px-2 text-right"><span class="valor-multa">CONSULTAR</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 162</td> <td class="py-4 px-2"><strong>Dirigir sem habilitação</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">CONSULTAR</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 180-A</td> <td class="py-4 px-2"><strong>Falta de combustível em vias públicas</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 6.780</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 244-B</td> <td class="py-4 px-2"><strong>Malabarismo com motocicleta (Grau)</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 1.900</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 200-B</td> <td class="py-4 px-2"><strong>Uso indevido de acessórios militares</strong> (Coldres/Coletes)</td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 5.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 200-C</td> <td class="py-4 px-2"><strong>Ocultação facial em prédios públicos</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 5.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 311</td> <td class="py-4 px-2"><strong>Clonagem de placas veiculares</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 5.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 font-bold text-neon-green font-orbitron">Art. 210</td> <td class="py-4 px-2"><strong>Ultrapassar blitz policial sem autorização</strong></td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 3.470</span></td> </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CRIMES -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-xl overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-white/5 transition-all group">
+                        <span class="font-orbitron text-neon-red font-bold uppercase tracking-widest text-lg">⛓️ Crimes e Prisões (42 Artigos)</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-red transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="overflow-x-auto px-6">
+                            <table class="w-full text-left border-collapse">
+                                <tbody class="text-sm text-silver font-rajdhani">
+                                    <!-- LISTA COMPLETA DOS 42 CRIMES -->
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 135</td> <td class="py-4 px-2"><strong>Omissão de Socorro</strong></td> <td class="py-4 px-2">15 Meses</td> <td class="py-4 px-2 text-right"><span class="valor-multa">R$ 4.000</span></td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 121</td> <td class="py-4 px-2"><strong>Homicídio Doloso</strong> <span class="no-fianca">Sem Fiança</span></td> <td class="py-4 px-2">30 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 121-A</td> <td class="py-4 px-2"><strong>Homicídio (Agente Público)</strong> <span class="no-fianca">Sem Fiança</span></td> <td class="py-4 px-2">40 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 121-B</td> <td class="py-4 px-2"><strong>Homicídio Culposo</strong> <span class="no-fianca">Sem Fiança</span></td> <td class="py-4 px-2">10 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 129</td> <td class="py-4 px-2"><strong>Lesão Corporal</strong></td> <td class="py-4 px-2">15 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 138/139/140</td> <td class="py-4 px-2"><strong>Calúnia / Difamação / Injúria</strong></td> <td class="py-4 px-2">10 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 147</td> <td class="py-4 px-2"><strong>Ameaça Grave</strong></td> <td class="py-4 px-2">15 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 148</td> <td class="py-4 px-2"><strong>Sequestro e Cárcere Privado</strong></td> <td class="py-4 px-2">20 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 150</td> <td class="py-4 px-2"><strong>Violação de Domicílio</strong></td> <td class="py-4 px-2">07 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 155/157</td> <td class="py-4 px-2"><strong>Furto / Roubo</strong></td> <td class="py-4 px-2">10/20 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 157-B</td> <td class="py-4 px-2"><strong>Latrocínio</strong> <span class="no-fianca">Sem Fiança</span></td> <td class="py-4 px-2">60 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 171</td> <td class="py-4 px-2"><strong>Estelionato / Fraude</strong></td> <td class="py-4 px-2">12 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 180</td> <td class="py-4 px-2"><strong>Receptação de bem ilícito</strong></td> <td class="py-4 px-2">10 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 121-C</td> <td class="py-4 px-2"><strong>Feminicídio</strong> <span class="no-fianca">Sem Fiança</span></td> <td class="py-4 px-2">50 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 200-A</td> <td class="py-4 px-2"><strong>Uso de Uniforme Policial por Civis</strong></td> <td class="py-4 px-2">50 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 201</td> <td class="py-4 px-2"><strong>Porte de Produtos Ilícitos</strong></td> <td class="py-4 px-2">13 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 286/288</td> <td class="py-4 px-2"><strong>Apologia / Associação Criminosa</strong></td> <td class="py-4 px-2">08/15 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 289</td> <td class="py-4 px-2"><strong>Portar Dinheiro Marcado (Sujo)</strong></td> <td class="py-4 px-2">18 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 299</td> <td class="py-4 px-2"><strong>Falsidade Ideológica</strong></td> <td class="py-4 px-2">10 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 330/331</td> <td class="py-4 px-2"><strong>Desobediência / Desacato</strong></td> <td class="py-4 px-2">10/12 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 333/333-A</td> <td class="py-4 px-2"><strong>Corrupção Passiva / Suborno</strong></td> <td class="py-4 px-2">20/15 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 339/342</td> <td class="py-4 px-2"><strong>Denunciação Caluniosa / Falso Testemunho</strong></td> <td class="py-4 px-2">12 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 351</td> <td class="py-4 px-2"><strong>Fuga ou Facilitação de Fuga</strong></td> <td class="py-4 px-2">12 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 355/357</td> <td class="py-4 px-2"><strong>Abuso de Autoridade / Obstrução de Justiça</strong></td> <td class="py-4 px-2">30/12 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 12/16</td> <td class="py-4 px-2"><strong>Porte Ilegal de Arma (Classe 1 e 2)</strong></td> <td class="py-4 px-2">13/15 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 17/18</td> <td class="py-4 px-2"><strong>Tráfico de Munições e Armas</strong></td> <td class="py-4 px-2">08/20 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 33</td> <td class="py-4 px-2"><strong>Tráfico de Entorpecentes</strong></td> <td class="py-4 px-2">10 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 13260</td> <td class="py-4 px-2"><strong>Terrorismo Generalizado</strong> <span class="no-fianca">Sem Fiança</span></td> <td class="py-4 px-2">100 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 215</td> <td class="py-4 px-2"><strong>Importunação Sexual</strong> <span class="no-fianca">Sem Fiança</span></td> <td class="py-4 px-2">40 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                    <tr class="border-b border-white/5"> <td class="py-4 px-2 text-neon-red font-orbitron">Art. 126</td> <td class="py-4 px-2"><strong>Desmonte Ilegal de Veículos</strong></td> <td class="py-4 px-2">10 Meses</td> <td class="py-4 px-2 text-right text-gray-600">N/A</td> </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 pt-10 border-t border-white/5 text-center">
+                <a href="regras.html" class="inline-block bg-transparent border border-white/10 text-gray-500 font-orbitron font-bold py-4 px-12 rounded uppercase hover:border-neon-green hover:text-neon-green transition-all duration-300 tracking-[0.3em] text-[10px]">Voltar para Regras</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-12 border-t border-white/5 text-center">
+        <img src="ac.png" alt='Adapta' class='mx-auto h-8 opacity-20 mb-4' />
+        <p class="text-[9px] text-gray-600 uppercase tracking-[0.4em] font-orbitron">© 2026 Adapta Capital — Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('active');
+            const icon = button.querySelector('.accordion-icon');
+            item.classList.toggle('active');
+            if (item.classList.contains('active')) { icon.classList.add('rotate-180'); } 
+            else { icon.classList.remove('rotate-180'); }
+        }
+    </script>
+</body>
+</html>

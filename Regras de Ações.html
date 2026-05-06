@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo de Ações - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'action-orange': '#ff5e00',
+                        'action-red': '#cc0000',
+                        'silver': '#e0e0e0',
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#080808',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #ff5e00; border-radius: 20px; }
+        
+        body { color: #d1d1d1 !important; background-color: #000000 !important; }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-item.active .accordion-content { max-height: 5000px; padding-bottom: 2rem; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+
+        .action-card { background: rgba(255, 94, 0, 0.03); border: 1px solid rgba(255, 94, 0, 0.1); border-radius: 12px; }
+        .value-box { background: rgba(255, 94, 0, 0.1); border: 1px solid #ff5e00; color: #ff5e00; padding: 10px; border-radius: 4px; font-weight: 800; text-align: center; font-family: 'Orbitron', sans-serif; }
+    </style>
+</head>
+<body class="bg-brand-black antialiased font-rajdhani">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/95 border-b border-action-orange/20 backdrop-blur-md">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="ac.png" alt='Adapta Logo' class='h-10 w-auto' />
+                <span class="font-orbitron text-white text-xl font-bold tracking-widest uppercase">Adapta Capital</span>
+            </a>
+            <nav class="flex space-x-6">
+                <a href="index.html" class="text-white hover:text-action-orange font-semibold uppercase text-[10px] tracking-widest transition-all">Início</a>
+                <a href="regras.html" class="text-action-orange font-semibold uppercase text-[10px] tracking-widest transition-all font-orbitron">Categorias</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4 max-w-4xl">
+            
+            <div class="mb-12">
+                <h1 class="font-orbitron text-3xl sm:text-5xl font-black text-white mb-4 tracking-tighter uppercase italic flex items-center">
+                    🎯 DIRETRIZES DE <span class="text-action-orange ml-3">AÇÕES</span>
+                </h1>
+                <p class="text-lg text-gray-400 mb-10 font-medium italic">Protocolo de Operações de Alto Risco e Conflitos - <span class="text-action-orange">Adapta Capital</span>.</p>
+                
+                <div class="action-card p-8 rounded-r-lg mb-8 relative overflow-hidden border-l-4 border-action-orange">
+                    <h2 class="font-orbitron text-action-orange font-bold text-lg mb-4 uppercase tracking-widest">⚠️ AVISO CRÍTICO</h2>
+                    <p class="text-gray-200 leading-relaxed text-sm sm:text-base italic">
+                        "Este protocolo rege sequestros, negociações e invasões. O descumprimento sujeita os envolvidos a sanções administrativas severas, incluindo o banimento permanente."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Accordion Group -->
+            <div class="space-y-4">
+                
+                <!-- 1. NEGOCIAÇÕES -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden active">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-action-orange/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🔗 1. Sequestros e Negociações</span>
+                        <svg class="accordion-icon w-6 h-6 text-action-orange transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-6 text-gray-300 text-base border-t border-white/5 pt-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-4 bg-white/5 rounded border border-white/10">
+                                    <p class="text-[10px] text-action-orange uppercase font-bold mb-2">Duração Máxima</p>
+                                    <p class="font-orbitron text-xl">2h30 MINUTOS</p>
+                                </div>
+                                <div class="p-4 bg-white/5 rounded border border-white/10">
+                                    <p class="text-[10px] text-action-orange uppercase font-bold mb-2">Horário Proibido</p>
+                                    <p class="font-orbitron text-xl">17h00 ÀS 18h00</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3 text-sm">
+                                <p><strong>1.1 — Comunicação:</strong> Negociações exclusivas via rádio in-game. Proibido uso de Discord/WhatsApp.</p>
+                                <p><strong>1.7 — Teto de Resgate (Suja):</strong> Cidadão: <span class="text-white">R$ 100.000</span> | Autoridades: <span class="text-white">R$ 200.000</span>.</p>
+                                <p><strong>1.12 — Imunidade:</strong> Proibido sequestro de Médicos, Repórteres, Bombeiros e Mecânicos em serviço.</p>
+                            </div>
+
+                            <div class="bg-action-orange/10 p-4 border border-action-orange/30 rounded">
+                                <p class="text-action-orange font-bold text-xs uppercase mb-2">✔️ Itens Negociáveis:</p>
+                                <p class="text-[10px] leading-relaxed uppercase tracking-widest">Veículos de fuga (não blipadas) • Coletes (3/refém) • Troca de negociador • Fuga limpa • Suprimentos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. AÇÕES DE RUA -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-action-orange/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🔫 2. Conflitos e Combate</span>
+                        <svg class="accordion-icon w-6 h-6 text-action-orange transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-gray-300 text-sm border-t border-white/5 pt-6">
+                            <p><strong>2.1 — Comandos:</strong> Proibido /deitar, /jobs ou /dormir para obter vantagem tática.</p>
+                            <p><strong>2.2 — Mecânicas:</strong> Proibido cancelar reload ou utilizar skins de anão/modificadas.</p>
+                            <p><strong>2.4 — Logística:</strong> Ações de rua devem terminar na rua. Proibida a fuga para Safezones.</p>
+                            <p><strong>2.8 — Pós-Combate:</strong> Jogadores reanimados devem remover vestimentas da facção e não retornam para a ação.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. GUERRAS -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-action-orange/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">💣 3. Guerras e Facções</span>
+                        <svg class="accordion-icon w-6 h-6 text-action-orange transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="grid grid-cols-2 gap-4 border-t border-white/5 pt-6">
+                            <div class="value-box"><p class="text-[9px] uppercase opacity-60">Membros Mínimo</p> 15</div>
+                            <div class="value-box"><p class="text-[9px] uppercase opacity-60">Membros Máximo</p> 30</div>
+                            <div class="col-span-2 text-xs text-gray-400 italic text-center">
+                                Guerras devem ser acordadas previamente e exigir equilíbrio numérico.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. COBRANÇAS -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-action-orange/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">💀 4. Revanches e Cobranças</span>
+                        <svg class="accordion-icon w-6 h-6 text-action-orange transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/5 pt-6">
+                            <div class="p-4 bg-action-red/10 border border-action-red/30 rounded">
+                                <p class="text-[9px] uppercase font-bold text-white mb-1">Prazo pós-ação</p>
+                                <p class="font-orbitron text-lg">12 HORAS</p>
+                            </div>
+                            <div class="p-4 bg-action-red/10 border border-action-red/30 rounded">
+                                <p class="text-[9px] uppercase font-bold text-white mb-1">Outros motivos</p>
+                                <p class="font-orbitron text-lg">24 HORAS</p>
+                            </div>
+                            <p class="col-span-full text-xs text-center text-action-orange font-bold uppercase tracking-widest">Obrigatória autorização da Staff via Ticket.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Gravação Obrigatória -->
+            <div class="mt-16 p-8 bg-black border-2 border-action-orange/30 rounded-2xl text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-action-orange/5 animate-pulse"></div>
+                <h3 class="font-orbitron text-white text-xl font-black mb-4">🎥 ARQUIVAMENTO OBRIGATÓRIO</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    É obrigatório manter os clipes de todas as ações disponíveis por no mínimo <strong>07 dias corridos</strong>. A ausência de gravação em caso de denúncia resultará em punição imediata.
+                </p>
+            </div>
+
+            <div class="mt-20 text-center">
+                <a href="regras.html" class="inline-block border border-action-orange text-action-orange font-orbitron font-bold py-3 px-10 rounded uppercase hover:bg-action-orange hover:text-black transition-all duration-300 tracking-widest text-[10px]">
+                    Retornar às Categorias
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-12 border-t border-white/5 text-center">
+        <p class="text-[9px] text-gray-600 uppercase tracking-[0.4em] font-orbitron">© 2026 Adapta Capital — Fairplay e Honra</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('active');
+            
+            document.querySelectorAll('.accordion-item').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.accordion-icon').classList.remove('rotate-180');
+            });
+
+            if (!isOpen) {
+                item.classList.add('active');
+                button.querySelector('.accordion-icon').classList.add('rotate-180');
+            }
+        }
+    </script>
+</body>
+</html>

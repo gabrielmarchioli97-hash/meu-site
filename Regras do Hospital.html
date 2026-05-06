@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Médico - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'med-cyan': '#00f2ff',
+                        'med-blue': '#005f73',
+                        'neon-green': '#00ff6a',
+                        'silver': '#e0e0e0',
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#0a0a0a',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    animation: {
+                        'heartbeat': 'heartbeat 1.5s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        heartbeat: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
+                            '10%': { transform: 'scale(1.1)', opacity: '1' },
+                            '20%': { transform: 'scale(1)', opacity: '0.8' },
+                            '30%': { transform: 'scale(1.1)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #00f2ff; border-radius: 20px; }
+        
+        body { color: #d1d1d1 !important; background-color: #000000 !important; }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-item.active .accordion-content { max-height: 3000px; padding-bottom: 2rem; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+
+        .clinical-card { background: rgba(0, 242, 255, 0.03); border: 1px solid rgba(0, 242, 255, 0.1); border-radius: 12px; }
+        .pulse-icon { color: #00f2ff; animation: heartbeat 2s infinite; }
+    </style>
+</head>
+<body class="bg-brand-black antialiased font-rajdhani">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/95 border-b border-med-cyan/20 backdrop-blur-md">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3 group">
+                <img src="ac.png" alt='Adapta Logo' class='h-10 w-auto group-hover:scale-110 transition-transform' />
+                <span class="font-orbitron text-white text-xl font-bold tracking-widest">ADAPTA CAPITAL</span>
+            </a>
+            <nav class="flex space-x-6">
+                <a href="index.html" class="text-white hover:text-med-cyan font-semibold uppercase text-[10px] tracking-widest transition-all">Início</a>
+                <a href="regras.html" class="text-med-cyan font-semibold uppercase text-[10px] tracking-widest transition-all font-orbitron">Categorias</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4 max-w-4xl">
+            
+            <div class="mb-12">
+                <h1 class="font-orbitron text-3xl sm:text-5xl font-black text-white mb-4 tracking-tighter uppercase italic flex items-center">
+                    🏥 PROTOCOLO <span class="text-med-cyan ml-3">HOSPITALAR</span>
+                    <span class="ml-4 pulse-icon">●</span>
+                </h1>
+                <p class="text-lg text-gray-400 mb-10 font-medium italic">Normas de Conduta Clínica e Atendimento de Emergência - <span class="text-med-cyan">Unidade Central Adapta</span>.</p>
+                
+                <div class="clinical-card p-8 rounded-r-lg mb-8 relative overflow-hidden border-l-4 border-med-cyan">
+                    <h2 class="font-orbitron text-med-cyan font-bold text-lg mb-4 uppercase tracking-widest">⚠️ AVISO IMPORTANTE</h2>
+                    <p class="text-gray-200 leading-relaxed text-sm sm:text-base italic">
+                        "O Roleplay médico é um pilar da imersão na Adapta Capital. O desrespeito aos profissionais de saúde ou a recusa de condutas clínicas resultará em advertências graves ou expulsão da cidade."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Accordion Group -->
+            <div class="space-y-4">
+                
+                <!-- 1. ATENDIMENTO -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden active">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-med-cyan/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🚑 1. Resgate e Encaminhamento</span>
+                        <svg class="accordion-icon w-6 h-6 text-med-cyan transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-gray-300 text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>1.1 — Remoção Médica:</strong> Em casos de ferimentos graves ou solicitação do paciente, o transporte até o hospital é obrigatório. Recusar este encaminhamento é considerado <strong>Anti-RP</strong>.</p>
+                            <div class="bg-med-cyan/5 p-4 rounded border border-med-cyan/20">
+                                <p class="text-med-cyan font-bold text-xs uppercase mb-1">💡 Nota Clínica:</p>
+                                <p class="text-xs">Ferimentos por arma de fogo, quedas de altura ou acidentes veiculares graves exigem obrigatoriamente a condução hospitalar para exames detalhados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. ZONAS DE RISCO -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-med-cyan/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🛡️ 2. Segurança dos Agentes de Saúde</span>
+                        <svg class="accordion-icon w-6 h-6 text-med-cyan transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-gray-300 text-sm sm:text-base border-t border-white/5 pt-6">
+                            <p><strong>2.1 — Atuação em Favelas:</strong> Profissionais podem atuar livremente em zonas de risco quando não houver conflitos ativos.</p>
+                            <p><strong>2.2 — Imunidade:</strong> É terminantemente proibido assaltar, sequestrar ou matar médicos e bombeiros em serviço fardados. Infrações geram banimento imediato.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. CONDUTA NO HOSPITAL -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-med-cyan/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🏥 3. Normas Internas</span>
+                        <svg class="accordion-icon w-6 h-6 text-med-cyan transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <ul class="space-y-4 text-gray-300 text-sm sm:text-base border-t border-white/5 pt-6">
+                            <li><strong>3.1 — Respeito ao Tempo:</strong> O RP médico exige tempo para avaliações. Se você está com pressa, não utilize o hospital.</li>
+                            <li><strong>3.2 — Ordem Pública:</strong> Tumultos, bagunça ou desrespeito nas dependências médicas geram multas pesadas.</li>
+                            <li><strong>3.3 — Autoridade Médica:</strong> A palavra do profissional de saúde é soberana no diagnóstico e tempo de observação.</li>
+                            <li><strong>3.4 — Visual:</strong> Proibida a entrada com máscaras ou capacetes em qualquer ala hospitalar.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4. OBRIGATORIEDADE -->
+                <div class="accordion-item bg-darker-gray border border-white/10 rounded-lg overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left bg-white/5 hover:bg-med-cyan/10 transition-all text-white">
+                        <span class="font-orbitron font-bold uppercase tracking-widest">🩺 4. Imersão Clínica Obrigatória</span>
+                        <svg class="accordion-icon w-6 h-6 text-med-cyan transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6 text-gray-300 border-t border-white/5 pt-6">
+                        <p>É obrigatório seguir todas as etapas do RP conduzido pelo profissional. Pular etapas ou correr direto para a área de cura mecânica sem interação prévia é considerado quebra de imersão (Anti-RP).</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Prohibited Behaviors Grid -->
+            <div class="mt-16">
+                <h3 class="font-orbitron text-white text-xl font-bold mb-6 flex items-center">
+                    <span class="text-red-500 mr-3">🚫</span> COMPORTAMENTOS VETADOS
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-4 bg-red-900/10 border border-red-500/20 rounded text-xs uppercase tracking-widest text-red-400">Ignorar o médico / Auto-cura</div>
+                    <div class="p-4 bg-red-900/10 border border-red-500/20 rounded text-xs uppercase tracking-widest text-red-400">Desrespeito aos profissionais</div>
+                    <div class="p-4 bg-red-900/10 border border-red-500/20 rounded text-xs uppercase tracking-widest text-red-400">Tumulto em áreas clínicas</div>
+                    <div class="p-4 bg-red-900/10 border border-red-500/20 rounded text-xs uppercase tracking-widest text-red-400">Ocultação facial (Máscaras)</div>
+                </div>
+            </div>
+
+            <div class="mt-20 p-8 bg-med-cyan/5 border border-med-cyan/10 rounded-xl text-center">
+                <p class="text-gray-400 text-sm leading-relaxed italic">
+                    "O Hospital é um espaço de evolução. Valorize o esforço dos profissionais com paciência e envolvimento. Juntos, elevamos o nível do Roleplay na Adapta Capital."
+                </p>
+            </div>
+
+            <div class="mt-12 text-center">
+                <a href="regras.html" class="inline-block border border-med-cyan text-med-cyan font-orbitron font-bold py-3 px-10 rounded uppercase hover:bg-med-cyan hover:text-black transition-all duration-300 tracking-widest text-[10px]">
+                    Retornar às Categorias
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-12 border-t border-white/5 text-center">
+        <p class="text-[9px] text-gray-600 uppercase tracking-[0.4em] font-orbitron">© 2026 Adapta Capital — Saúde e Integridade</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('active');
+            
+            document.querySelectorAll('.accordion-item').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.accordion-icon').classList.remove('rotate-180');
+            });
+
+            if (!isOpen) {
+                item.classList.add('active');
+                button.querySelector('.accordion-icon').classList.add('rotate-180');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -9,17 +9,40 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* For Webkit-based browsers (Chrome, Safari) */
-        ::-webkit-scrollbar {
-            width: 8px;
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #00ff6a; border-radius: 20px; border: 2px solid #0a0a0a; }
+
+        /* Animação da Linha Cometa Neon nas Bordas */
+        .comet-line { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        .comet { position: absolute; width: 150px; height: 2px; background: linear-gradient(90deg, transparent, #00ff6a); box-shadow: 0 0 15px #00ff6a; animation: comet-move 10s linear infinite; }
+
+        @keyframes comet-move {
+            0% { top: 0; left: -150px; width: 150px; height: 2px; }
+            25% { top: 0; left: 100%; width: 150px; height: 2px; }
+            26% { top: 0; left: 100%; width: 2px; height: 150px; }
+            50% { top: 100%; left: 100%; width: 2px; height: 150px; }
+            51% { top: 100%; left: 100%; width: 150px; height: 2px; }
+            75% { top: 100%; left: -150px; width: 150px; height: 2px; }
+            76% { top: 100%; left: 0; width: 2px; height: 150px; }
+            100% { top: -150px; left: 0; width: 2px; height: 150px; }
         }
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
+
+        /* Efeito de Brilho que contorna o logo (drop-shadow detecta transparência) */
+        .logo-glow-effect {
+            animation: neon-contour 3s infinite ease-in-out;
+            filter: drop-shadow(0 0 5px rgba(0, 255, 106, 0.6));
         }
-        ::-webkit-scrollbar-thumb {
-            background-color: #00ff6a;
-            border-radius: 20px;
-            border: 2px solid #0a0a0a;
+
+        @keyframes neon-contour {
+            0%, 100% {
+                filter: drop-shadow(0 0 5px #00ff6a) drop-shadow(0 0 10px #00ff6a);
+                transform: scale(1);
+            }
+            50% {
+                filter: drop-shadow(0 0 15px #00ff6a) drop-shadow(0 0 25px #00ff6a);
+                transform: scale(1.05);
+            }
         }
     </style>
     <script>
@@ -30,197 +53,103 @@
                         'brand-black': '#000000',
                         'neon-green': '#00ff6a',
                         'silver': '#c0c0c0',
-                        'light-gray': '#a0a0a0',
-                        'dark-gray': '#1a1a1a',
                         'darker-gray': '#111111',
                     },
                     fontFamily: {
                         orbitron: ['Orbitron', 'sans-serif'],
                         rajdhani: ['Rajdhani', 'sans-serif'],
-                    },
-                    keyframes: {
-                        'pulse-glow': {
-                            '0%, 100%': { 
-                                boxShadow: '0 0 5px #00ff6a, 0 0 10px #00ff6a, 0 0 15px #00ff6a',
-                                transform: 'scale(1)'
-                            },
-                            '50%': { 
-                                boxShadow: '0 0 15px #00ff6a, 0 0 30px #00ff6a, 0 0 45px #00ff6a',
-                                transform: 'scale(1.02)'
-                            },
-                        },
-                        'subtle-glow': {
-                           '0%, 100%': { filter: 'drop-shadow(0 0 2px #00ff6a)' },
-                           '50%': { filter: 'drop-shadow(0 0 4px #00ff6a)' },
-                        }
-                    },
-                    animation: {
-                        'pulse-glow': 'pulse-glow 3s infinite ease-in-out',
-                        'subtle-glow': 'subtle-glow 2s infinite ease-in-out',
-                    },
+                    }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-brand-black text-light-gray font-rajdhani antialiased overflow-x-hidden">
+<body class="bg-brand-black text-gray-300 font-rajdhani antialiased overflow-x-hidden">
+
+    <!-- Efeito Cometa -->
+    <div class="comet-line"><div class="comet"></div></div>
 
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="header">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="#inicio" class="flex items-center space-x-3">
-                     <img src="ac.png" alt='Adapta Capital Logo' class='h-10 w-auto hover:opacity-80 transition-opacity' />
-                    <span class="font-orbitron text-silver text-xl font-bold tracking-widest hidden sm:block">ADAPTA CAPITAL</span>
-                </a>
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#inicio" class="text-silver hover:text-neon-green font-semibold text-lg tracking-wider transition-colors duration-300">Início</a>
-                    <a href="#loja" class="text-silver hover:text-neon-green font-semibold text-lg tracking-wider transition-colors duration-300">Loja</a>
-                    <a href="#duvidas" class="text-silver hover:text-neon-green font-semibold text-lg tracking-wider transition-colors duration-300">Dúvidas</a>
-                    <a href="#regras" class="text-silver hover:text-neon-green font-semibold text-lg tracking-wider transition-colors duration-300">Regras</a>
-                </nav>
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-silver focus:outline-none">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </div>
-            </div>
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="#inicio" class="flex items-center space-x-3">
+                <img src="ac.png" alt='Adapta' class='h-10 w-auto transition-transform hover:scale-110' />
+                <span class="font-orbitron text-white text-xl font-bold tracking-widest hidden sm:block">ADAPTA CAPITAL</span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#inicio" class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Início</a>
+                <a href="#loja" class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Loja</a>
+                <a href="#duvidas" class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Dúvidas</a>
+                <a href="regras.html" class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Regras</a>
+            </nav>
+            <div class="md:hidden"><button id="mobile-btn" class="text-neon-green"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button></div>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-black/80 backdrop-blur-sm">
-            <a href="#inicio" class="block text-silver text-center py-4 text-lg font-semibold hover:bg-neon-green hover:text-black transition-colors duration-300">Início</a>
-            <a href="#loja" class="block text-silver text-center py-4 text-lg font-semibold hover:bg-neon-green hover:text-black transition-colors duration-300">Loja</a>
-            <a href="#duvidas" class="block text-silver text-center py-4 text-lg font-semibold hover:bg-neon-green hover:text-black transition-colors duration-300">Dúvidas</a>
-            <a href="#regras" class="block text-silver text-center py-4 text-lg font-semibold hover:bg-neon-green hover:text-black transition-colors duration-300">Regras</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-black/95 text-center py-6 border-b border-white/5">
+            <a href="#inicio" class="block py-3 text-silver">Início</a>
+            <a href="#loja" class="block py-3 text-silver">Loja</a>
+            <a href="#duvidas" class="block py-3 text-silver">Dúvidas</a>
+            <a href="regras.html" class="block py-3 text-silver">Regras</a>
         </div>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section id="inicio" class="min-h-screen flex items-center justify-center relative overflow-hidden bg-brand-black">
+        <section id="inicio" class="min-h-screen flex items-center justify-center relative bg-brand-black">
             <div class="absolute inset-0 z-0">
-                <img src="11PN.png" alt='Immersive gaming background' class='w-full h-full object-cover opacity-40' />
-                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/50 to-transparent"></div>
+                <img src="11PN.png" alt='BG' class='w-full h-full object-cover opacity-40' />
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black"></div>
             </div>
             <div class="relative z-10 text-center px-4">
-                <img src="ac.png"  alt='Adapta Capital Main Logo' class='mx-auto h-28 sm:h-36 lg:h-48 w-auto mb-8 animate-subtle-glow' />
-                <h1 class="font-orbitron text-3xl sm:text-4xl lg:text-5xl font-extrabold text-silver tracking-widest uppercase mb-4" style="text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);">
-                    Adapta Capital
-                </h1>
-                <p class="text-lg sm:text-xl lg:text-2xl max-w-4xl mx-auto font-rajdhani text-light-gray mb-12">
-                    Onde sua nova vida evolui e cada escolha define seu destino.
-                </p>
-                <div class="group">
-                     <button onclick="window.open('https://discord.gg/utxY9y7vZ')" class="bg-neon-green text-brand-black font-orbitron font-bold text-lg sm:text-xl uppercase py-4 px-10 rounded-lg shadow-lg animate-pulse-glow transition-all duration-300 ease-in-out">
-                        Jogar Agora
-                    </button>
-                    <p class="text-light-gray mt-4 max-w-lg mx-auto opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-sm">Clique aqui para iniciar sua jornada no simulador de vida real mais imersivo da atualidade. Junte-se a uma comunidade vibrante e construa seu legado agora mesmo.</p>
-                </div>
+                <img src="ac.png" alt='Logo' class='mx-auto h-32 w-auto mb-8 logo-glow-effect' />
+                <h1 class="font-orbitron text-4xl sm:text-6xl font-black text-white tracking-tighter uppercase mb-4">ADAPTA CAPITAL</h1>
+                <p class="text-lg max-w-2xl mx-auto text-gray-400 mb-12 italic">A evolução do Roleplay. Sua história, suas regras, seu destino.</p>
+                <button onclick="window.open('https://discord.gg/utxY9y7vZ')" class="bg-neon-green text-black font-orbitron font-black py-4 px-12 rounded shadow-[0_0_20px_#00ff6a] uppercase tracking-widest hover:scale-105 transition-transform">Jogar Agora</button>
             </div>
         </section>
 
         <!-- Loja Section -->
-        <section id="loja" class="py-20 sm:py-28 relative bg-darker-gray overflow-hidden">
-             <img src='https://opal.google/board/blobs/12fd4f59-3a02-4607-b7fe-5af5f52ef594' alt='Abstract background art' class='absolute top-0 left-0 w-full h-full object-cover opacity-5 z-0' />
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="text-center mb-16">
-                    <h2 class="font-orbitron text-4xl sm:text-5xl font-bold text-silver uppercase tracking-wider" style="text-shadow: 0 0 15px rgba(0, 255, 106, 0.3);">Loja (Coins)</h2>
-                    <div class="w-24 h-1 bg-neon-green mx-auto mt-4 rounded"></div>
-                </div>
-
-                <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 text-center">
-                    <div>
-                        <h3 class="font-orbitron text-xl font-bold text-silver mb-2">Planos VIP (via Coins)</h3>
-                        <p>Use suas Coins para adquirir planos VIP que oferecem salários diferenciados, vagas preferenciais na fila e acesso a comandos exclusivos.</p>
-                    </div>
-                    <div>
-                        <h3 class="font-orbitron text-xl font-bold text-silver mb-2">Compra de Veículos (via Coins)</h3>
-                        <p>Adquira veículos importados e de luxo via Coins para se destacar nas ruas de Adapta Capital. Temos uma vasta seleção de modelos.</p>
-                    </div>
-                    <div class="md:col-span-2 lg:col-span-1">
-                        <h3 class="font-orbitron text-xl font-bold text-silver mb-2">Compra de Itens (via Coins)</h3>
-                        <p>Utilize suas Coins para itens de personalização, utilitários e recursos extras para facilitar sua progressão no Roleplay.</p>
-                    </div>
-                </div>
-                <div class="text-center max-w-3xl mx-auto mb-16 bg-dark-gray/50 p-6 rounded-lg border border-neon-green/20">
-                     <h3 class="font-orbitron text-xl font-bold text-silver mb-2">Como Comprar</h3>
-                     <p>Você pode adquirir a moeda COINS diretamente através deste site. Com as Coins em sua conta, visite nossa loja vip física localizada no Píer dentro do jogo, onde você poderá visualizar os itens antes de efetuar a compra do seu produto com as Coins.</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-                    <div class="bg-black/30 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-neon-green/50 hover:border-neon-green hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-green/10">
-                        <img src="BRONZE.png" alt='VIP Bronze Coins Card' class='w-full h-auto' />
-                    </div>
-                    <div class="bg-black/30 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-neon-green/50 hover:border-neon-green hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-green/10">
-                        <img src="PRATA.png" alt='VIP Prata Coins Card' class='w-full h-auto' />
-                    </div>
-                    <div class="bg-black/30 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-neon-green/50 hover:border-neon-green hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-green/10">
-                        <img src="OURO.png"  alt='VIP Ouro Coins Card' class='w-full h-auto' />
-                    </div>
-                    <div class="bg-black/30 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-neon-green/50 hover:border-neon-green hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-green/10">
-                        <img src="DIAMANTE.png" alt='VIP Diamante Coins Card' class='w-full h-auto' />
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Divider -->
-        <div class="h-48 bg-brand-black relative overflow-hidden">
-             <img src='https://opal.google/board/blobs/2bdcacfc-f706-41cb-9dec-635bce87b51c' alt='Abstract background' class='w-full h-full object-cover opacity-20' />
-             <div class="absolute inset-0 bg-gradient-to-b from-darker-gray to-brand-black"></div>
-        </div>
-
-        <!-- Dúvidas Frequentes Section -->
-        <section id="duvidas" class="py-20 sm:py-28 bg-brand-black relative">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="text-center mb-16">
-                    <div class="flex justify-center items-center gap-4">
-                        <h2 class="font-orbitron text-4xl sm:text-5xl font-bold text-silver uppercase tracking-wider" style="text-shadow: 0 0 15px rgba(0, 255, 106, 0.3);">Dúvidas Frequentes</h2>
-                    </div>
-                    <div class="w-24 h-1 bg-neon-green mx-auto mt-4 rounded"></div>
-                </div>
-                <div class="max-w-4xl mx-auto space-y-4 accordion-container">
-                    <!-- FAQ Items will be injected by JS -->
+        <section id="loja" class="py-24 bg-darker-gray">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="font-orbitron text-4xl font-bold text-white mb-4 uppercase">LOJA VIP</h2>
+                <div class="w-20 h-1 bg-neon-green mx-auto mb-16"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="border border-white/10 rounded-lg overflow-hidden hover:border-neon-green transition-colors"><img src="BRONZE.png" alt='Bronze' /></div>
+                    <div class="border border-white/10 rounded-lg overflow-hidden hover:border-neon-green transition-colors"><img src="PRATA.png" alt='Prata' /></div>
+                    <div class="border border-white/10 rounded-lg overflow-hidden hover:border-neon-green transition-colors"><img src="OURO.png" alt='Ouro' /></div>
+                    <div class="border border-white/10 rounded-lg overflow-hidden hover:border-neon-green transition-colors"><img src="DIAMANTE.png" alt='Diamante' /></div>
                 </div>
             </div>
         </section>
 
-        <!-- Regras Section -->
-        <section id="regras" class="py-20 sm:py-28 bg-darker-gray relative">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="text-center mb-16">
-                     <div class="flex justify-center items-center gap-4">
-                        <h2 class="font-orbitron text-4xl sm:text-5xl font-bold text-silver uppercase tracking-wider" style="text-shadow: 0 0 15px rgba(0, 255, 106, 0.3);">Regras</h2>
-                    </div>
-                    <div class="w-24 h-1 bg-neon-green mx-auto mt-4 rounded"></div>
-                </div>
-                <div class="max-w-4xl mx-auto space-y-4 accordion-container">
-                    <!-- Rules Items will be injected by JS -->
-                </div>
+        <!-- Dúvidas Frequentes -->
+        <section id="duvidas" class="py-24 bg-brand-black">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <h2 class="font-orbitron text-3xl font-bold text-center text-white mb-16 uppercase">Dúvidas Frequentes</h2>
+                <div id="faq-container" class="space-y-4"></div>
             </div>
         </section>
-        
-        <!-- Divider -->
-        <div class="h-48 bg-darker-gray relative overflow-hidden">
-             <img src='https://opal.google/board/blobs/c4ba1fe0-4ecf-48cd-8f8f-1826495351f4' alt='Abstract background' class='w-full h-full object-cover opacity-20' />
-             <div class="absolute inset-0 bg-gradient-to-b from-darker-gray to-brand-black"></div>
-        </div>
-
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-brand-black py-10">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-light-gray space-y-4">
-            <img src="ac.png" alt='Adapta Capital' class='mx-auto h-12 w-auto opacity-70' />
-            <p class="font-bold text-silver">CNPJ: 00.000.000/0001-00</p>
-            <p class="max-w-3xl mx-auto text-sm">
-                Este servidor é uma comunidade independente e não possui qualquer tipo de afiliação, vínculo ou patrocínio com a Rockstar Games ou Take-Two Interactive. Todos os direitos de modificação pertencem aos seus respectivos desenvolvedores.
-            </p>
+    <!-- Footer Final -->
+    <footer class="bg-brand-black py-16 border-t border-white/5">
+        <div class="container mx-auto px-4 text-center space-y-10">
+            
+            <!-- Logo Final com Neon de Contorno -->
+            <div class="flex justify-center items-center py-6">
+                <img src="ac.png" alt='Adapta Capital' class='h-24 w-auto logo-glow-effect' />
+            </div>
+
+            <div class="space-y-4">
+                <p class="font-orbitron font-bold text-neon-green tracking-widest text-lg">CNPJ: 00.000.000/0001-00</p>
+                <p class="max-w-4xl mx-auto text-[10px] sm:text-xs leading-relaxed text-gray-500 uppercase tracking-tighter">
+                    Este servidor é uma comunidade independente e não possui qualquer tipo de afiliação, vínculo ou patrocínio com a Rockstar Games ou Take-Two Interactive. Todos os direitos de modificação pertencem aos seus respectivos desenvolvedores.
+                </p>
+            </div>
+            <p class="text-[9px] text-gray-700 tracking-[0.5em] uppercase">© 2026 Adapta Capital - Excelência em Roleplay</p>
         </div>
     </footer>
 
     <script>
-        // Data for Accordions
         const faqData = [
             { question: "Requisitos de Idade", answer: "A idade mínima exigida é de 16 anos. Além disso, exigimos que todos os jogadores demonstrem maturidade e conhecimento profundo das regras de Roleplay para garantir a qualidade da convivência." },
             { question: "Status da Whitelist", answer: "Operamos com um sistema de Whitelist ativa que inclui uma entrevista obrigatória. Esse processo é fundamental para uma melhor organização e filtragem de jogadores, garantindo a integridade do Roleplay." },
@@ -230,95 +159,35 @@
             { question: "Duração da Temporada", answer: "Cada temporada em Adapta Capital tem uma duração planejada de 7 a 8 meses, permitindo que as histórias e a economia se desenvolvam de forma orgânica e recompensadora." }
         ];
 
-        const rulesData = [
-            { question: "Regras do Discord", answer: "É obrigatório manter o nome de usuário condizente com o do jogo. Respeito mútuo é fundamental em todos os canais de texto e voz. É proibido o envio de links suspeitos, spam ou qualquer tipo de discurso de ódio." },
-            { question: "Regras de Personagem", answer: "Seu personagem deve possuir um nome e sobrenome realistas. É proibido criar personagens para fins de deboche ou que façam alusão a figuras públicas controversas. Sua história deve ser coerente com o ambiente do servidor." },
-            { question: "Regras Gerais", answer: "O uso de programas de terceiros, hacks ou a exploração de bugs para benefício próprio é estritamente proibido. Respeite as zonas seguras e a integridade dos outros jogadores." },
-            { question: "Metagaming", answer: "É proibido utilizar informações obtidas fora do jogo (como conversas em redes sociais ou lives) para influenciar as decisões ou ações do seu personagem dentro do servidor." },
-            { question: "RDM (Random Deathmatch)", answer: "Matar ou agredir outros jogadores sem uma interação prévia de Roleplay ou um motivo plausível dentro da história é considerado uma falta grave." },
-            { question: "Combat Logging", answer: "Sair do servidor ou desconectar-se propositalmente para evitar uma abordagem policial, um assalto ou qualquer situação de conflito resultará em punição severa." },
-            { question: "Perma Death (PD)", answer: "A morte definitiva do personagem ocorre apenas em eventos específicos ou quando o jogador decide encerrar a jornada daquele personagem de forma narrativa, resultando na perda de bens e progresso associados." },
-            { question: "Amor à Vida (Fear RP)", answer: "Você deve agir como se sua vida fosse única. Em situações onde você está sob ameaça direta, como uma arma apontada para sua cabeça, você deve render-se e valorizar a integridade do seu personagem." },
-            { question: "Power RP", answer: "É proibido realizar ações que seriam impossíveis na vida real (como pular de prédios com um veículo e continuar dirigindo) ou forçar situações onde o outro jogador não tenha nenhuma chance de reação." },
-            { question: "Dark RP e Assédio", answer: "Temas extremamente pesados como assédio, tortura excessiva, crimes de ódio ou qualquer comportamento que promova desconforto extremo são proibidos e geram banimento imediato. Mantemos um ambiente seguro e respeitoso para todos." },
-            { question: "Regras para Facções", answer: "Grupos criminosos devem seguir as diretrizes de número máximo de membros e respeitar as áreas de atuação. Conflitos entre facções devem ter fundamentação narrativa." },
-            { question: "Regras de Veículos", answer: "A condução deve ser realista. O uso de veículos esportivos em terrenos off-road ou a utilização de carros para capotar propositalmente será punido como Non-RP Drive." }
-        ];
-
-        // Accordion Logic
-        function createAccordionItem(item) {
-            return `
-                <div class="accordion-item bg-dark-gray/50 border border-neon-green/20 rounded-lg overflow-hidden">
-                    <button class="accordion-header w-full flex justify-between items-center text-left p-5 font-orbitron text-silver font-semibold text-lg hover:bg-dark-gray transition-colors duration-300">
-                        <span>${item.question}</span>
-                        <svg class="accordion-icon w-6 h-6 text-neon-green transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('faq-container');
+            container.innerHTML = faqData.map(item => `
+                <div class="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
+                    <button class="w-full flex justify-between p-5 text-left font-orbitron text-silver hover:bg-neon-green/5 transition-all">
+                        <span class="text-xs sm:text-sm tracking-widest">${item.question}</span>
+                        <span class="text-neon-green font-bold">+</span>
                     </button>
-                    <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                        <p class="p-5 pt-0 text-light-gray">${item.answer}</p>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300">
+                        <p class="p-5 pt-0 text-[11px] sm:text-xs text-gray-400 italic leading-relaxed uppercase tracking-tighter">${item.answer}</p>
                     </div>
                 </div>
-            `;
-        }
+            `).join('');
 
-        function initAccordions(selector, data) {
-            const container = document.querySelector(selector);
-            if (!container) return;
-            container.innerHTML = data.map(createAccordionItem).join('');
-            
-            container.querySelectorAll('.accordion-header').forEach(button => {
-                button.addEventListener('click', () => {
-                    const item = button.parentElement;
-                    const content = item.querySelector('.accordion-content');
-                    const icon = button.querySelector('.accordion-icon');
-                    
-                    // Close other items
-                    container.querySelectorAll('.accordion-item').forEach(otherItem => {
-                        if (otherItem !== item && otherItem.classList.contains('active')) {
-                            otherItem.classList.remove('active');
-                            otherItem.querySelector('.accordion-content').style.maxHeight = '0px';
-                            otherItem.querySelector('.accordion-icon').classList.remove('rotate-180');
-                        }
-                    });
-
-                    // Toggle current item
-                    item.classList.toggle('active');
-                    if (item.classList.contains('active')) {
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                        icon.classList.add('rotate-180');
-                    } else {
-                        content.style.maxHeight = '0px';
-                        icon.classList.remove('rotate-180');
-                    }
+            container.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const content = btn.nextElementSibling;
+                    const isOpen = content.style.maxHeight !== '0px' && content.style.maxHeight !== '';
+                    content.style.maxHeight = isOpen ? '0px' : content.scrollHeight + 'px';
+                    btn.querySelector('span:last-child').textContent = isOpen ? '+' : '-';
                 });
             });
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            initAccordions('#duvidas .accordion-container', faqData);
-            initAccordions('#regras .accordion-container', rulesData);
 
-            // Header scroll effect
-            const header = document.getElementById('header');
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('bg-black/80', 'backdrop-blur-sm', 'shadow-lg', 'shadow-neon-green/10');
-                } else {
-                    header.classList.remove('bg-black/80', 'backdrop-blur-sm', 'shadow-lg', 'shadow-neon-green/10');
-                }
+                document.getElementById('header').classList.toggle('bg-black/90', window.scrollY > 50);
             });
 
-            // Mobile menu toggle
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            // Close mobile menu on link click
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                });
+            document.getElementById('mobile-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
             });
         });
     </script>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diretrizes Gerais - Adapta Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'neon-green': '#00ff6a',
+                        'silver': '#c0c0c0',
+                        'light-gray': '#a0a0a0',
+                        'dark-gray': '#1a1a1a',
+                        'darker-gray': '#111111',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    animation: {
+                        'glow-slow': 'glow 4s infinite ease-in-out',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%, 100%': { opacity: 0.3 },
+                            '50%': { opacity: 0.7 },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background-color: #00ff6a; border-radius: 20px; border: 2px solid #0a0a0a; }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 3000px;
+            padding-bottom: 2rem;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .glass-card {
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 106, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-brand-black text-light-gray font-rajdhani antialiased">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/90 border-b border-neon-green/10">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3 group">
+                <img src="ac.png" alt='Adapta Logo' class='h-10 w-auto group-hover:scale-110 transition-transform' />
+                <span class="font-orbitron text-silver text-xl font-bold tracking-widest">ADAPTA CAPITAL</span>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-silver hover:text-neon-green font-semibold tracking-widest text-xs uppercase transition-all">Início</a>
+                <a href="regras.html" class="text-neon-green font-semibold tracking-widest text-xs uppercase">Regras</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20 relative">
+        <!-- Elemento Decorativo de Fundo -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-neon-green/5 blur-[120px] rounded-full -z-10 animate-glow-slow"></div>
+
+        <div class="container mx-auto px-4 max-w-4xl">
+            
+            <!-- Título e Acordo -->
+            <div class="mb-12 text-center md:text-left">
+                <h1 class="font-orbitron text-4xl sm:text-6xl font-black text-silver mb-4 tracking-tighter uppercase">
+                    📜 REGRAS <span class="text-neon-green">GERAIS</span>
+                </h1>
+                <p class="text-lg text-light-gray mb-8">Fundamentos para a evolução do Roleplay e convivência em nossa metrópole.</p>
+                
+                <div class="glass-card p-8 rounded-lg border-l-4 border-neon-green relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-2 opacity-10">
+                        <svg class="w-20 h-20 text-neon-green" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    </div>
+                    <h2 class="font-orbitron text-neon-green font-bold text-lg mb-4 uppercase">⚠️ DECLARAÇÃO DE CONCORDÂNCIA</h2>
+                    <div class="space-y-4 text-silver leading-relaxed text-sm sm:text-base">
+                        <p>Ao ingressar na <strong>Adapta Capital</strong>, você aceita estas normas e autoriza o uso de sua imagem/voz para conteúdos das nossas mídias oficiais.</p>
+                        <p>Cada cidadão é responsável por seus atos, devendo respeitar as leis vigentes. Reiteramos que o ambiente de simulação é destinado a maiores de 18 anos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Group -->
+            <div class="space-y-4" id="rules-accordion">
+                
+                <!-- 1. CÓDIGO DE CONDUTA -->
+                <div class="accordion-item glass-card rounded-lg overflow-hidden transition-all duration-300">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-neon-green/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider">📖 REGRAS GERAIS</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-sm sm:text-base leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>1. Tolerância Zero:</strong> Proibida qualquer forma de discriminação, discurso de ódio, racismo ou homofobia.</p>
+                            <p><strong>2. Propriedade Digital:</strong> Itens são exclusivos do servidor. Saídas ou banimentos não geram reembolso ou transferências de bens.</p>
+                            <p><strong>3. Comércio Externo:</strong> Estritamente proibida a venda de bens ou contas fora dos sistemas oficiais da cidade.</p>
+                            <p><strong>4. Imersão Contínua:</strong> Jamais saia do personagem. Proibido citar termos como "deuses", "bíblia" ou nomes da equipe administrativa.</p>
+                            <p><strong>5. Falhas Gravíssimas:</strong> Proibido Metagaming, RDM, VDM, Combat Logging e falta de amor à vida.</p>
+                            <p><strong>6. Reporte de Bugs:</strong> Ocultar bugs da administração resulta em banimento permanente. Utilize o suporte.</p>
+                            <p><strong>7. Bom Senso:</strong> A diretriz máxima. Reflita se suas ações condizem com a realidade antes de executá-las.</p>
+                            <p><strong>8. Assaltos:</strong> Permitidos apenas para <strong>VEÍCULOS</strong> entre 20h00 e 06h00 (in-game). Proibido contra veículos de serviço legal.</p>
+                            <p><strong>9. Integridade Profissional:</strong> Proibida corrupção em cargos legais (Polícia, Médicos, Mecânicos, etc.).</p>
+                            <p><strong>10. Chamados Falsos:</strong> Proibido usar sistemas de serviço (Uber, iFood) para emboscadas ou sequestros.</p>
+                            <p><strong>11. Esquecimento:</strong> Ao ser nocauteado, você esquece todo o ocorrido da ação atual.</p>
+                            <p><strong>12. Vantagens Técnicas:</strong> Proibido o uso de modificadores visuais (Citizens) que removam props, noite ou águas para ganho de vantagem.</p>
+                            <p><strong>13. Alianças Externas:</strong> Proibidas coalizões entre organizações ilegais ou ilegais/legais sem autorização administrativa.</p>
+                            <p><strong>14. Outros Proibidos:</strong> Roleplays de suicídio, golpes financeiros e música sem o sistema oficial da cidade.</p>
+                            <p><strong>15. Logística:</strong> iFood exige motos; Uber exige carros de 4 portas.</p>
+                            <p><strong>16. Segurança de Redes:</strong> Proibido o uso de termos que prejudiquem criadores de conteúdo (lives).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. PERSONAGENS -->
+                <div class="accordion-item glass-card rounded-lg overflow-hidden transition-all duration-300">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-neon-green/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider">🧑🏻 REGRAS DE PERSONAGENS</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-sm leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>1. Identidade:</strong> Nomes devem ser realistas. Proibido o uso de marcas ou nomes de duplo sentido.</p>
+                            <p><strong>2. Independência:</strong> Seus personagens extras não podem possuir vínculos narrativos ou financeiros entre si.</p>
+                            <p><strong>3. Histórico:</strong> Advertências são aplicadas à conta, afetando todos os seus personagens.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. MORTE PERMANENTE -->
+                <div class="accordion-item glass-card rounded-lg overflow-hidden transition-all duration-300">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-neon-green/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider">💀 PD (MORTE PERMANENTE)</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-sm leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>1. PD Facção:</strong> Ocorre ao ser expulso violentamente de uma organização; o esquecimento de vínculos com o grupo é total.</p>
+                            <p><strong>2. PD Administrativo:</strong> Aplicado em quebras graves de regras ou total desrespeito à vida (Anti-Amor à Vida).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. MANUTENÇÃO -->
+                <div class="accordion-item glass-card rounded-lg overflow-hidden transition-all duration-300">
+                    <button onclick="toggleAccordion(this)" class="w-full p-6 flex justify-between items-center text-left hover:bg-neon-green/5 transition-all">
+                        <span class="font-orbitron text-silver font-bold uppercase tracking-wider">🏠 MANUTENÇÃO E PROPRIEDADES</span>
+                        <svg class="accordion-icon w-6 h-6 text-neon-green transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6">
+                        <div class="space-y-4 text-light-gray text-sm leading-relaxed border-t border-white/5 pt-6">
+                            <p><strong>1. Atividade:</strong> A posse de casas e lojas exige manutenção semanal ativa com dinheiro do jogo.</p>
+                            <p><strong>2. Estoque:</strong> Lojas devem manter mínimo de 30% de estoque semanal.</p>
+                            <p><strong>3. Inatividade:</strong> Proprietários ausentes por mais de 15 dias perdem o imóvel automaticamente, sem direito a estorno.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- Seção de Aviso Final com Neon Pulsante -->
+<div class="mt-12 mb-10">
+    <div class="relative group">
+        <!-- Camada de Brilho Pulsante (Animação) -->
+        <div class="absolute -inset-1 bg-red-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+        
+        <!-- Quadro do Alerta -->
+        <div class="relative px-8 py-6 bg-black border border-red-900/50 rounded-lg leading-none flex items-center">
+            <div class="space-y-4 w-full text-center">
+                <h3 class="font-orbitron text-red-500 font-black text-xl tracking-tighter uppercase">
+                    🚨 ALERTA DE CONDUTA (DISCORD)
+                </h3>
+                <p class="text-gray-400 text-sm sm:text-base leading-relaxed font-rajdhani">
+                    Violações nas diretrizes do nosso canal de comunicação resultarão em restrições imediatas, incluindo silenciamento temporário, banimento de canais específicos e advertências na conta global do cidadão.
+                </p>
+                <div class="pt-2 border-t border-red-900/20">
+                    <p class="text-red-400/80 text-xs sm:text-sm font-bold uppercase tracking-widest">
+                        O Discord é o espelho da nossa cidade. Respeito, ordem e imersão são inegociáveis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- Botão de Retorno -->
+            <div class="mt-16 text-center border-t border-neon-green/10 pt-10">
+                <a href="regras.html" class="inline-block bg-transparent border border-neon-green text-neon-green font-orbitron font-bold py-3 px-10 rounded uppercase hover:bg-neon-green hover:text-brand-black transition-all duration-300 tracking-widest text-sm">
+                    Voltar às Categorias
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-darker-gray py-12 border-t border-white/5 text-center">
+        <img src="ac.png" alt='Adapta' class='mx-auto h-8 opacity-30 mb-4' />
+        <p class="text-[10px] text-light-gray opacity-30 uppercase tracking-[0.3em] font-orbitron">© 2026 Adapta Capital RP - Excelência em Simulação</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('active');
+            
+            document.querySelectorAll('.accordion-item').forEach(el => el.classList.remove('active'));
+
+            if (!isOpen) {
+                item.classList.add('active');
+            }
+        }
+    </script>
+
+</body>
+</html>
