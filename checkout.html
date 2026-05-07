@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADAPTA CAPITAL | SECURE CHECKOUT</title>
+    <link rel="icon" type="image/png" href="ac.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon: #00ff6a; --discord: #5865F2; }
+        body { background-color: #000; color: #fff; font-family: 'Rajdhani', sans-serif; }
+
+        .bg-grid {
+            background-image:
+                linear-gradient(to right, rgba(0,255,106,.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,255,106,.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .glass-panel {
+            background: rgba(5,5,5,.95);
+            border: 2px solid rgba(0,255,106,.1);
+            box-shadow: 0 0 80px rgba(0,0,0,1);
+            backdrop-filter: blur(20px);
+        }
+
+        .val-btn {
+            background: rgba(255,255,255,.02);
+            border: 1px solid rgba(255,255,255,.05);
+            font-size: 1.25rem;
+            transition: all .3s ease;
+        }
+        .val-btn.selected {
+            border-color: var(--neon);
+            background: rgba(0,255,106,.15);
+            box-shadow: 0 0 25px rgba(0,255,106,.2);
+            color: var(--neon);
+            transform: scale(1.1);
+        }
+
+        #display-img {
+            filter: drop-shadow(0 0 30px rgba(0,255,106,.3));
+            transition: transform .5s cubic-bezier(.175,.885,.32,1.275);
+        }
+
+        #qrcode img { margin: 0 auto; border: 15px solid #fff; border-radius: 8px; }
+
+        .discord-btn {
+            background-color: var(--discord);
+            transition: all .3s ease;
+        }
+        .discord-btn:hover {
+            box-shadow: 0 0 20px rgba(88,101,243,.5);
+            transform: translateY(-2px);
+        }
+
+        .fade-up { animation: fadeUp .8s forwards; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .copy-btn { cursor: pointer; transition: color .2s; }
+        .copy-btn:hover { color: var(--neon); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+        .badge-ok  { background: rgba(0,255,106,.15); color: var(--neon); border: 1px solid var(--neon); }
+        .badge-err { background: rgba(255,50,50,.15);  color: #ff5555;     border: 1px solid #ff5555; }
+    </style>
+</head>
+<body class="min-h-screen bg-grid flex items-center justify-center p-4">
+
+<div class="container max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-8">
+
+    <!-- Imagem do pacote -->
+    <div class="lg:col-span-5 text-center fade-up">
+        <img id="display-img" src="25.png" alt="Pacote"
+             class="w-80 h-80 sm:w-[420px] sm:h-[420px] object-contain mx-auto">
+        <div class="mt-4">
+            <h2 id="package-title"
+                class="font-orbitron text-5xl font-black text-white italic uppercase tracking-tighter">
+                R$ 0,00
+            </h2>
+            <p class="text-neon-green font-bold tracking-[.5em] uppercase text-sm mt-2"
+               style="color: var(--neon)">
+                Protocolo de Cripto-Ativos
+            </p>
+        </div>
+    </div>
+
+    <!-- Painel principal -->
+    <div class="lg:col-span-7 glass-panel p-10 rounded-[2.5rem] space-y-8 relative fade-up"
+         style="animation-delay:.2s">
+
+        <!-- ── ETAPA 1: Autenticação ── -->
+        <div id="step-auth" class="space-y-6 text-center">
+            <div class="inline-flex p-4 rounded-full bg-white/5 mb-4">
+                <svg class="w-12 h-12 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.947 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.946 2.419-2.157 2.419z"/>
+                </svg>
+            </div>
+            <h3 class="font-orbitron text-2xl font-bold uppercase">Autenticação Necessária</h3>
+            <p class="text-gray-500 text-sm">
+                Vincule seu Discord para associar o pagamento à sua conta e garantir o crédito automático.
+            </p>
+
+            <!-- Botão que redireciona para o backend OAuth2 -->
+            <a href="/auth/discord"
+               class="discord-btn w-full py-5 rounded-2xl font-orbitron font-black uppercase tracking-widest
+                      flex items-center justify-center gap-3 no-underline text-white">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.947 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.946 2.419-2.157 2.419z"/>
+                </svg>
+                Conectar com Discord
+            </a>
+
+            <div id="auth-error" class="hidden text-red-400 text-xs font-bold pt-2">
+                ⚠️ Falha na autenticação. Tente novamente.
+            </div>
+        </div>
+
+        <!-- ── ETAPA 2: Checkout ── -->
+        <div id="step-checkout" class="hidden space-y-8">
+
+            <!-- Badge do usuário autenticado -->
+            <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
+                <img id="user-avatar"
+                     class="w-12 h-12 rounded-full border-2"
+                     style="border-color: var(--neon)"
+                     src="" alt="Avatar">
+                <div>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Usuário Autenticado</p>
+                    <p id="user-name" class="font-orbitron text-sm text-white uppercase"></p>
+                    <p id="user-tag"  class="text-xs text-gray-500"></p>
+                </div>
+                <span class="status-badge badge-ok ml-auto">✓ Verificado</span>
+            </div>
+
+            <!-- Seleção de valor -->
+            <div class="grid grid-cols-3 gap-4">
+                <button onclick="updateSelection(25,  event)" class="val-btn py-6 rounded-2xl font-orbitron font-black">25</button>
+                <button onclick="updateSelection(50,  event)" class="val-btn py-6 rounded-2xl font-orbitron font-black">50</button>
+                <button onclick="updateSelection(100, event)" class="val-btn py-6 rounded-2xl font-orbitron font-black">100</button>
+                <button onclick="updateSelection(200, event)" class="val-btn py-6 rounded-2xl font-orbitron font-black">200</button>
+                <button onclick="updateSelection(300, event)" class="val-btn py-6 rounded-2xl font-orbitron font-black">300</button>
+                <button onclick="updateSelection(500, event)" class="val-btn py-6 rounded-2xl font-orbitron font-black">500</button>
+            </div>
+
+            <!-- ID do jogo -->
+            <input type="text" id="player-id"
+                   placeholder="CONFIRME SEU ID DO JOGO"
+                   class="w-full bg-black border-2 border-white/5 p-6 rounded-2xl text-center
+                          font-orbitron text-2xl text-white outline-none transition-all"
+                   style="focus-within:border-color: var(--neon)">
+
+            <!-- Gerar PIX -->
+            <button id="gen-btn" onclick="generatePix()"
+                    class="w-full bg-white text-black font-orbitron font-black py-6 rounded-2xl
+                           uppercase tracking-[.3em] hover:bg-neon-green transition-all shadow-2xl">
+                Gerar Carga PIX
+            </button>
+
+            <!-- Área do QR Code -->
+            <div id="qr-area" class="hidden space-y-6 pt-6 border-t border-white/10">
+                <div id="qrcode"></div>
+
+                <!-- Copia e Cola PIX -->
+                <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-2">PIX Copia e Cola</p>
+                    <div class="flex items-center gap-2">
+                        <p id="pix-text"
+                           class="font-mono text-xs text-green-400 break-all flex-1 select-all"></p>
+                        <button onclick="copyPix()"
+                                class="copy-btn text-gray-400 shrink-0 p-1"
+                                title="Copiar">
+                            📋
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-xs text-gray-500 mb-1">FAVORECIDO</p>
+                    <p class="font-bold text-lg">GABRIEL CARDOSO MARCHIOLI</p>
+                    <p class="font-orbitron" style="color: var(--neon)">CNPJ: 66.621.726/0001-50</p>
+                </div>
+
+                <button onclick="window.open('https://discord.gg/utxY9y7vZ')"
+                        class="w-full font-orbitron font-black py-5 rounded-2xl uppercase text-xs
+                               tracking-widest text-black"
+                        style="background: var(--neon)">
+                    Validar no Suporte Discord
+                </button>
+
+                <div id="log-status" class="text-center text-[10px] text-gray-600 uppercase tracking-widest"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ── Estado global ──────────────────────────────────────────────────────────
+    let currentVal = 0;
+    let pixPayload  = "";
+    let discordUser = {};
+
+    // ── Lê parâmetros da URL (retorno do callback OAuth2) ─────────────────────
+    (function init() {
+        const p = new URLSearchParams(window.location.search);
+
+        if (p.get("auth") === "error") {
+            document.getElementById("auth-error").classList.remove("hidden");
+            return;
+        }
+
+        if (p.get("auth") === "ok") {
+            discordUser = {
+                id:       p.get("id"),
+                username: p.get("username"),
+                tag:      p.get("tag"),
+                avatar:   p.get("avatar"),
+            };
+
+            // Remove params da URL sem reload
+            window.history.replaceState({}, "", window.location.pathname);
+
+            showCheckout();
+        }
+    })();
+
+    function showCheckout() {
+        document.getElementById("step-auth").classList.add("hidden");
+        document.getElementById("step-checkout").classList.remove("hidden");
+
+        document.getElementById("user-name").innerText   = discordUser.username || "Usuário";
+        document.getElementById("user-tag").innerText    = discordUser.tag || "";
+        document.getElementById("user-avatar").src       = discordUser.avatar || "";
+    }
+
+    // ── Seleção de valor ──────────────────────────────────────────────────────
+    function updateSelection(val, e) {
+        currentVal = val;
+        document.querySelectorAll(".val-btn").forEach(b => b.classList.remove("selected"));
+        e.currentTarget.classList.add("selected");
+
+        const img = document.getElementById("display-img");
+        img.style.transform = "scale(.8) rotate(-10deg)";
+        setTimeout(() => {
+            img.src = val + ".png";
+            img.style.transform = "scale(1) rotate(0deg)";
+            document.getElementById("package-title").innerText = "R$ " + val + ",00";
+        }, 300);
+
+        document.getElementById("qr-area").classList.add("hidden");
+        document.getElementById("gen-btn").classList.remove("hidden");
+    }
+
+    // ── Gerador de CRC16 para PIX ─────────────────────────────────────────────
+    function crc16(data) {
+        let crc = 0xFFFF;
+        for (let i = 0; i < data.length; i++) {
+            crc ^= data.charCodeAt(i) << 8;
+            for (let j = 0; j < 8; j++) {
+                crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+            }
+        }
+        return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, "0");
+    }
+
+    // ── Gera QR Code e registra o log ────────────────────────────────────────
+    async function generatePix() {
+        const playerId = document.getElementById("player-id").value.trim();
+
+        if (currentVal === 0 || !playerId) {
+            alert("Selecione um valor e informe seu ID do jogo!");
+            return;
+        }
+
+        if (!discordUser.id) {
+            alert("Autenticação Discord necessária!");
+            return;
+        }
+
+        const f = (id, v) => id + v.length.toString().padStart(2, "0") + v;
+        const cnpj   = "66621726000150";
+        const nome   = "GABRIEL CARDOSO MARCHIOLI";
+        const cidade = "PRAIA GRANDE";
+
+        let base = "000201"
+            + f("26", "0014BR.GOV.BCB.PIX" + f("01", cnpj))
+            + "520400005303986"
+            + f("54", currentVal.toFixed(2))
+            + "5802BR"
+            + f("59", nome)
+            + f("60", cidade)
+            + f("62", f("05", "ID" + playerId))
+            + "6304";
+
+        pixPayload = base + crc16(base);
+
+        // Renderiza QR Code
+        document.getElementById("qrcode").innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), {
+            text: pixPayload, width: 250, height: 250
+        });
+
+        document.getElementById("pix-text").innerText = pixPayload;
+        document.getElementById("qr-area").classList.remove("hidden");
+        document.getElementById("gen-btn").classList.add("hidden");
+
+        // ── Registra log no servidor ──────────────────────────────────────────
+        try {
+            const res = await fetch("/api/log-payment", {
+                method:  "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    discord_id:  discordUser.id,
+                    discord_tag: discordUser.tag,
+                    avatar:      discordUser.avatar,
+                    valor:       currentVal,
+                    player_id:   playerId,
+                    payload_pix: pixPayload,
+                }),
+            });
+            const data = await res.json();
+            if (data.ok) {
+                document.getElementById("log-status").innerText =
+                    `✓ Pagamento registrado — Log #${data.log_id}`;
+            }
+        } catch {
+            document.getElementById("log-status").innerText =
+                "⚠ Não foi possível registrar o log. Contate o suporte.";
+        }
+    }
+
+    // ── Copia payload PIX ─────────────────────────────────────────────────────
+    function copyPix() {
+        navigator.clipboard.writeText(pixPayload).then(() => {
+            const btn = document.querySelector(".copy-btn");
+            btn.innerText = "✅";
+            setTimeout(() => btn.innerText = "📋", 2000);
+        });
+    }
+
+    // Focus style no input
+    document.addEventListener("DOMContentLoaded", () => {
+        const inp = document.getElementById("player-id");
+        if (inp) {
+            inp.addEventListener("focus",  () => inp.style.borderColor = "var(--neon)");
+            inp.addEventListener("blur",   () => inp.style.borderColor = "rgba(255,255,255,.05)");
+        }
+    });
+</script>
+</body>
+</html>
