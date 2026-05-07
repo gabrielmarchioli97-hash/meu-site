@@ -13,7 +13,15 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
 
-// ── Serve arquivos estáticos da raiz do projeto ───────────────────────────────
+// ── Redireciona domínio raiz para www ────────────────────────────────────────
+app.use((req, res, next) => {
+  const host = req.headers.host || "";
+  if (!host.startsWith("www.") && !host.includes("railway.app") && !host.includes("localhost")) {
+    return res.redirect(301, `https://www.${host}${req.url}`);
+  }
+  next();
+});
+
 app.use(express.static(path.join(__dirname)));
 
 const DISCORD_CLIENT_ID     = process.env.DISCORD_CLIENT_ID;
@@ -34,7 +42,7 @@ function writeLog(entry) {
   fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
 }
 
-// ── Página checkout ───────────────────────────────────────────────────────────
+// ── Checkout ──────────────────────────────────────────────────────────────────
 app.get("/checkout", (req, res) => {
   res.sendFile(path.join(__dirname, "checkout.html"));
 });
@@ -105,7 +113,6 @@ app.post("/api/log-payment", (req, res) => {
   if (!discord_id || !valor || !player_id) {
     return res.status(400).json({ error: "Campos obrigatórios ausentes" });
   }
-
   const entry = {
     id:          Date.now(),
     timestamp:   new Date().toISOString(),
@@ -117,13 +124,12 @@ app.post("/api/log-payment", (req, res) => {
     player_id,
     payload_pix,
   };
-
   writeLog(entry);
   console.log(`[PIX] ${discord_tag} | R$ ${valor} | ID: ${player_id}`);
   res.json({ ok: true, log_id: entry.id });
 });
 
-// ── Admin logs ────────────────────────────────────────────────────────────────
+// ── Admin ─────────────────────────────────────────────────────────────────────
 app.get("/api/admin/logs", (req, res) => {
   if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
   res.json(readLogs());
@@ -140,5 +146,5 @@ app.patch("/api/admin/logs/:id", (req, res) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`✅ ADAPTA CAPITAL rodando na porta ${PORT}`));
