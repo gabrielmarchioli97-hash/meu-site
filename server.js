@@ -1,19 +1,19 @@
 /**
  * ADAPTA CAPITAL — Backend Server
- * Discord OAuth2 + PIX Payment Logger
+ * Discord OAuth2 + PIX + Mercado Pago Checkout Pro
  */
 
 const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
+const cors    = require("cors");
+const path    = require("path");
+const fs      = require("fs");
 require("dotenv").config();
 
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
 
-// ── Redireciona domínio raiz para www ────────────────────────────────────────
+// ── Redireciona domínio raiz para www ─────────────────────────────────────────
 app.use((req, res, next) => {
   const host = req.headers.host || "";
   if (!host.startsWith("www.") && !host.includes("railway.app") && !host.includes("localhost")) {
@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname)));
 const DISCORD_CLIENT_ID     = process.env.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI          = process.env.REDIRECT_URI;
+const MP_ACCESS_TOKEN       = process.env.MP_ACCESS_TOKEN;
 const LOG_FILE              = path.join(__dirname, "pagamentos.json");
 
 if (!fs.existsSync(LOG_FILE)) fs.writeFileSync(LOG_FILE, JSON.stringify([], null, 2));
@@ -35,161 +36,155 @@ function readLogs() {
   try { return JSON.parse(fs.readFileSync(LOG_FILE, "utf8")); }
   catch { return []; }
 }
-
 function writeLog(entry) {
   const logs = readLogs();
   logs.unshift(entry);
   fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
 }
 
-// ── Checkout ──────────────────────────────────────────────────────────────────
-app.get("/produto", (req, res) => {
-  res.sendFile(path.join(__dirname, "produto.html"));
-});
-
-app.get("/checkout", (req, res) => {
-  res.sendFile(path.join(__dirname, "checkout.html"));
-});
-
-app.get("/termos", (req, res) => {
-  res.sendFile(path.join(__dirname, "termos.html"));
-});
+// ── Páginas ───────────────────────────────────────────────────────────────────
+app.get("/produto",  (req, res) => res.sendFile(path.join(__dirname, "produto.html")));
+app.get("/checkout", (req, res) => res.sendFile(path.join(__dirname, "checkout.html")));
+app.get("/termos",   (req, res) => res.sendFile(path.join(__dirname, "termos.html")));
 
 // ── Auth Discord ──────────────────────────────────────────────────────────────
 app.get("/auth/discord", (req, res) => {
-  // Salva carrinho no state para sobreviver ao redirect do OAuth
-  const state = JSON.stringify({
-    product: req.query.product || "",
-    qty:     req.query.qty     || "1",
-    total:   req.query.total   || "",
-  });
-
   const params = new URLSearchParams({
     client_id:     DISCORD_CLIENT_ID,
     redirect_uri:  REDIRECT_URI,
     response_type: "code",
     scope:         "identify",
-    state:         Buffer.from(state).toString("base64"),
   });
   res.redirect(`https://discord.com/oauth2/authorize?${params}`);
 });
 
-// ── Callback Discord ──────────────────────────────────────────────────────────
 app.get("/callback", async (req, res) => {
   const { code, error } = req.query;
-  const state = req.query.state || "";
-  let cart = { product: "", qty: "1", total: "" };
-  try { cart = JSON.parse(Buffer.from(state, "base64").toString()); } catch(e) {}
-  const cartQuery = cart.product ? `&product=${cart.product}&qty=${cart.qty}&total=${cart.total}` : "";
-
-  if (error || !code) return res.redirect("/checkout?auth=error" + cartQuery);
-
+  if (error || !code) return res.redirect("/checkout?auth=error");
   try {
     const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
-        client_id:     DISCORD_CLIENT_ID,
-        client_secret: DISCORD_CLIENT_SECRET,
-        grant_type:    "authorization_code",
-        code,
-        redirect_uri:  REDIRECT_URI,
+        client_id: DISCORD_CLIENT_ID, client_secret: DISCORD_CLIENT_SECRET,
+        grant_type: "authorization_code", code, redirect_uri: REDIRECT_URI,
       }),
     });
-
     const tokenData = await tokenRes.json();
     if (!tokenData.access_token) throw new Error("Token inválido");
-
     const userRes = await fetch("https://discord.com/api/users/@me", {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
     const user = await userRes.json();
-
     const avatar = user.avatar
       ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
       : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.id) % 5}.png`;
-
     const tag = user.discriminator && user.discriminator !== "0"
-      ? `${user.username}#${user.discriminator}`
-      : user.username;
-
+      ? `${user.username}#${user.discriminator}` : user.username;
     const params = new URLSearchParams({
-      auth:     "ok",
-      id:       user.id,
-      username: user.global_name || user.username,
-      tag,
-      avatar,
+      auth: "ok", id: user.id,
+      username: user.global_name || user.username, tag, avatar,
     });
-
-    res.redirect(`/checkout?${params}${cartQuery}`);
+    res.redirect(`/checkout?${params}`);
   } catch (err) {
     console.error("[OAuth2 Error]", err);
     res.redirect("/checkout?auth=error");
   }
 });
 
-// ── Notificação Discord Webhook ───────────────────────────────────────────────
-async function notifyDiscord(entry) {
-  const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-  if (!webhookUrl) return;
+// ── Mercado Pago — Gera preferência de pagamento ──────────────────────────────
+app.post("/api/mp/criar-preferencia", async (req, res) => {
+  const { valor, player_id, discord_tag, discord_id, qty, product } = req.body;
 
-  const dataBR = new Date(entry.timestamp).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-
-  const embed = {
-    embeds: [{
-      title: "💸 Novo Pedido PIX — Adapta Capital",
-      color: 0x00ff6a,
-      thumbnail: entry.avatar ? { url: entry.avatar } : undefined,
-      fields: [
-        { name: "👤 Jogador",       value: `\`${entry.discord_tag || "—"}\``,        inline: true  },
-        { name: "🆔 Discord ID",    value: `\`${entry.discord_id}\``,                inline: true  },
-        { name: "🎮 ID no Servidor",value: `\`${entry.player_id}\``,                 inline: true  },
-        { name: "💰 Valor",         value: `**R$ ${entry.valor_brl.toFixed(2)}**`,   inline: true  },
-        { name: "📋 Status",        value: `\`${entry.status}\``,                    inline: true  },
-        { name: "🕐 Horário",       value: dataBR,                                   inline: true  },
-        { name: "📦 Log ID",        value: `\`#${entry.id}\``,                       inline: false },
-        { name: "📲 Payload PIX",   value: `\`\`\`${entry.payload_pix.substring(0, 200)}\`\`\``, inline: false },
-      ],
-      footer: { text: "Adapta Capital · GTA RP" },
-      timestamp: entry.timestamp,
-    }],
-  };
-
-  try {
-    await fetch(webhookUrl, {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify(embed),
-    });
-    console.log(`[Webhook] Notificação enviada para Discord — #${entry.id}`);
-  } catch (err) {
-    console.error("[Webhook Error]", err.message);
-  }
-}
-
-// ── Log de pagamento ──────────────────────────────────────────────────────────
-app.post("/api/log-payment", async (req, res) => {
-  const { discord_id, discord_tag, avatar, valor, player_id, payload_pix } = req.body;
-  if (!discord_id || !valor || !player_id) {
+  if (!valor || !player_id) {
     return res.status(400).json({ error: "Campos obrigatórios ausentes" });
   }
+
+  try {
+    const body = {
+      items: [{
+        id:          `coins-${product}`,
+        title:       `${product} Coins Adapta Capital`,
+        description: `${qty}x pacote de ${product} Coins para ID ${player_id}`,
+        quantity:    1,
+        currency_id: "BRL",
+        unit_price:  parseFloat(valor),
+      }],
+      payer: {
+        name: discord_tag || "Jogador",
+      },
+      external_reference: `${discord_id || "guest"}_${player_id}_${Date.now()}`,
+      back_urls: {
+        success: `${process.env.FRONTEND_URL || "https://www.adaptacapital.com.br"}/checkout?mp=success&player_id=${player_id}`,
+        failure: `${process.env.FRONTEND_URL || "https://www.adaptacapital.com.br"}/checkout?mp=failure`,
+        pending: `${process.env.FRONTEND_URL || "https://www.adaptacapital.com.br"}/checkout?mp=pending`,
+      },
+      auto_return:        "approved",
+      statement_descriptor: "ADAPTA CAPITAL",
+      notification_url:  `${process.env.FRONTEND_URL || "https://www.adaptacapital.com.br"}/api/mp/webhook`,
+    };
+
+    const mpRes = await fetch("https://api.mercadopago.com/checkout/preferences", {
+      method:  "POST",
+      headers: {
+        "Content-Type":  "application/json",
+        "Authorization": `Bearer ${MP_ACCESS_TOKEN}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    const mpData = await mpRes.json();
+    if (!mpData.id) throw new Error(JSON.stringify(mpData));
+
+    console.log(`[MP] Preferência criada: ${mpData.id} | R$ ${valor} | ID: ${player_id}`);
+    res.json({ init_point: mpData.init_point, id: mpData.id });
+
+  } catch (err) {
+    console.error("[MP Error]", err);
+    res.status(500).json({ error: "Erro ao criar preferência MP" });
+  }
+});
+
+// ── Mercado Pago — Webhook de notificação ─────────────────────────────────────
+app.post("/api/mp/webhook", async (req, res) => {
+  const { type, data } = req.body;
+  if (type === "payment" && data?.id) {
+    try {
+      const payRes = await fetch(`https://api.mercadopago.com/v1/payments/${data.id}`, {
+        headers: { "Authorization": `Bearer ${MP_ACCESS_TOKEN}` },
+      });
+      const payment = await payRes.json();
+      if (payment.status === "approved") {
+        const ref = payment.external_reference || "";
+        const [discord_id, player_id] = ref.split("_");
+        writeLog({
+          id:          Date.now(),
+          timestamp:   new Date().toISOString(),
+          status:      "CONFIRMADO",
+          metodo:      "MERCADO_PAGO",
+          discord_id,
+          player_id,
+          valor_brl:   payment.transaction_amount,
+          mp_id:       data.id,
+        });
+        console.log(`[MP Webhook] Pagamento aprovado: R$ ${payment.transaction_amount} | ID: ${player_id}`);
+      }
+    } catch (e) { console.error("[MP Webhook Error]", e); }
+  }
+  res.sendStatus(200);
+});
+
+// ── Log PIX ───────────────────────────────────────────────────────────────────
+app.post("/api/log-payment", (req, res) => {
+  const { discord_id, discord_tag, avatar, valor, player_id, payload_pix } = req.body;
+  if (!discord_id || !valor || !player_id) return res.status(400).json({ error: "Campos obrigatórios ausentes" });
   const entry = {
-    id:          Date.now(),
-    timestamp:   new Date().toISOString(),
-    status:      "AGUARDANDO",
-    discord_id,
-    discord_tag,
-    avatar,
-    valor_brl:   parseFloat(valor),
-    player_id,
-    payload_pix,
+    id: Date.now(), timestamp: new Date().toISOString(), status: "AGUARDANDO",
+    metodo: "PIX", discord_id, discord_tag, avatar,
+    valor_brl: parseFloat(valor), player_id, payload_pix,
   };
   writeLog(entry);
   console.log(`[PIX] ${discord_tag} | R$ ${valor} | ID: ${player_id}`);
-
-  // Dispara notificação no Discord (assíncrono, não bloqueia resposta)
-  notifyDiscord(entry).catch(() => {});
-
   res.json({ ok: true, log_id: entry.id });
 });
 
@@ -198,49 +193,15 @@ app.get("/api/admin/logs", (req, res) => {
   if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
   res.json(readLogs());
 });
-
-app.patch("/api/admin/logs/:id", async (req, res) => {
+app.patch("/api/admin/logs/:id", (req, res) => {
   if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
   const logs = readLogs();
   const idx = logs.findIndex(l => l.id === parseInt(req.params.id));
   if (idx === -1) return res.status(404).json({ error: "Não encontrado" });
-
-  const oldStatus = logs[idx].status;
-  logs[idx].status = req.body.status || oldStatus;
+  logs[idx].status = req.body.status || logs[idx].status;
   fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
-
-  // Notifica Discord quando status muda para PAGO
-  if (req.body.status === "PAGO" && oldStatus !== "PAGO") {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (webhookUrl) {
-      const entry = logs[idx];
-      const embed = {
-        embeds: [{
-          title: "✅ Pagamento Confirmado — Adapta Capital",
-          color: 0x00ff6a,
-          thumbnail: entry.avatar ? { url: entry.avatar } : undefined,
-          fields: [
-            { name: "👤 Jogador",        value: `\`${entry.discord_tag || "—"}\``,      inline: true },
-            { name: "🎮 ID no Servidor", value: `\`${entry.player_id}\``,                inline: true },
-            { name: "💰 Valor",          value: `**R$ ${entry.valor_brl.toFixed(2)}**`, inline: true },
-            { name: "📦 Log ID",         value: `\`#${entry.id}\``,                     inline: true },
-          ],
-          footer: { text: "Adapta Capital · GTA RP" },
-          timestamp: new Date().toISOString(),
-        }],
-      };
-      fetch(webhookUrl, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(embed),
-      }).catch(err => console.error("[Webhook PAGO Error]", err.message));
-    }
-  }
-
   res.json(logs[idx]);
 });
 
-
-// ── Start ─────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`✅ ADAPTA CAPITAL rodando na porta ${PORT}`));
