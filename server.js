@@ -1,233 +1,640 @@
-/**
- * ADAPTA CAPITAL — Backend Server
- * Discord OAuth2 + PIX Payment Logger
- */
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADAPTA CAPITAL — CHECKOUT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root { --neon:#00ff6a; --neon-dim:rgba(0,255,106,0.12); --neon-glow:rgba(0,255,106,0.35); --bg:#030303; --panel:rgba(10,10,12,0.92); }
+    *{box-sizing:border-box;}
+    body{background:var(--bg);color:#fff;font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,106,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,106,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+    .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+    .comet{position:fixed;background:linear-gradient(90deg,transparent,var(--neon));box-shadow:0 0 10px var(--neon);animation:comet-fly 12s linear infinite;pointer-events:none;z-index:2;}
+    @keyframes comet-fly{0%{top:0;left:-200px;width:150px;height:2px}24%{top:0;left:100%;width:150px;height:2px}25%{top:0;left:100%;width:2px;height:150px}49%{top:100%;left:100%;width:2px;height:150px}50%{top:100%;left:100%;width:150px;height:2px}74%{top:100%;left:-200px;width:150px;height:2px}75%{top:100%;left:0;width:2px;height:150px}100%{top:-200px;left:0;width:2px;height:150px}}
+    .glass{background:var(--panel);border:1px solid rgba(0,255,106,0.07);backdrop-filter:blur(30px);border-radius:1.5rem;}
 
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
-require("dotenv").config();
+    /* Payment method buttons */
+    .method-btn{background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.06);border-radius:1rem;padding:1rem 1.2rem;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all 0.3s;width:100%;text-align:left;position:relative;overflow:hidden;}
+    .method-btn::before{content:'';position:absolute;inset:0;background:rgba(0,255,106,0.04);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+    .method-btn:hover{border-color:rgba(0,255,106,0.25);}
+    .method-btn:hover::before{transform:scaleX(1);}
+    .method-btn.active{border-color:var(--neon);background:rgba(0,255,106,0.05);box-shadow:0 0 24px rgba(0,255,106,0.1);}
+    .method-btn.active::before{transform:scaleX(1);}
+    .method-radio{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s;margin-left:auto;}
+    .method-btn.active .method-radio{border-color:var(--neon);}
+    .method-radio-dot{width:8px;height:8px;border-radius:50%;background:var(--neon);transform:scale(0);transition:transform 0.3s;}
+    .method-btn.active .method-radio-dot{transform:scale(1);}
+    .method-icon{width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;}
 
-const app = express();
-app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
+    .field{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:14px 16px;width:100%;color:#fff;font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:600;outline:none;transition:border-color 0.3s;}
+    .field:focus{border-color:rgba(0,255,106,0.4);background:rgba(0,255,106,0.02);}
+    .field::placeholder{color:rgba(255,255,255,0.18);font-weight:400;}
 
-// ── Redireciona domínio raiz para www ────────────────────────────────────────
-app.use((req, res, next) => {
-  const host = req.headers.host || "";
-  if (!host.startsWith("www.") && !host.includes("railway.app") && !host.includes("localhost")) {
-    return res.redirect(301, `https://www.${host}${req.url}`);
-  }
-  next();
-});
+    .btn-discord{background:#5865F2;border:none;border-radius:0.75rem;width:100%;height:54px;color:#fff;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.3s;}
+    .btn-discord:hover{box-shadow:0 0 30px rgba(88,101,242,0.5);transform:translateY(-2px);}
 
-app.use(express.static(path.join(__dirname)));
+    .btn-pay{background:rgba(0,66,28,0.9);color:var(--neon);border:1px solid rgba(0,255,106,0.25);border-radius:9999px;width:100%;height:68px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:0.85rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.4s;position:relative;overflow:hidden;}
+    .btn-pay::before{content:'';position:absolute;inset:0;background:var(--neon);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
+    .btn-pay:hover::before{transform:scaleX(1);}
+    .btn-pay:hover{color:#000;box-shadow:0 0 50px var(--neon-glow);transform:translateY(-3px);}
+    .btn-pay:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+    .btn-pay:disabled::before{display:none;}
+    .btn-pay span{position:relative;z-index:1;}
 
-const DISCORD_CLIENT_ID     = process.env.DISCORD_CLIENT_ID;
-const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
-const REDIRECT_URI          = process.env.REDIRECT_URI;
-const LOG_FILE              = path.join(__dirname, "pagamentos.json");
+    .badge{background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2);color:var(--neon);border-radius:9999px;font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;}
+    .order-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .order-row:last-child{border-bottom:none;}
+    .tag{background:rgba(0,255,106,0.08);border:1px solid rgba(0,255,106,0.15);color:var(--neon);border-radius:6px;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:2px 8px;}
+    #qrcode img{margin:0 auto;border:12px solid #fff;border-radius:8px;}
+    .or-div{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,0.2);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;}
+    .or-div::before,.or-div::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06);}
+    .user-card{background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.15);border-radius:1rem;padding:1rem;display:flex;align-items:center;gap:12px;}
+    .fade-in{animation:fadeIn 0.5s ease forwards;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
 
-if (!fs.existsSync(LOG_FILE)) fs.writeFileSync(LOG_FILE, JSON.stringify([], null, 2));
+    /* Payment sections */
+    .pay-section{display:none;}
+    .pay-section.active{display:block;animation:fadeIn 0.4s ease forwards;}
 
-function readLogs() {
-  try { return JSON.parse(fs.readFileSync(LOG_FILE, "utf8")); }
-  catch { return []; }
-}
+    /* Terms checkbox */
+    .terms-wrap{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:1rem 1.2rem;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:all 0.3s;}
+    .terms-wrap:hover{border-color:rgba(0,255,106,0.2);background:rgba(0,255,106,0.02);}
+    .terms-wrap.accepted{border-color:rgba(0,255,106,0.3);background:rgba(0,255,106,0.04);}
+    .custom-cb{width:20px;height:20px;border-radius:5px;border:2px solid rgba(255,255,255,0.15);background:transparent;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.3s;}
+    .custom-cb.checked{background:var(--neon);border-color:var(--neon);}
+    #terms-cb{display:none;}
 
-function writeLog(entry) {
-  const logs = readLogs();
-  logs.unshift(entry);
-  fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
-}
+    /* MP / PayPal card form */
+    .card-field{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:0.65rem;padding:13px 14px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:0.95rem;font-weight:600;outline:none;transition:border-color 0.3s;width:100%;}
+    .card-field:focus{border-color:rgba(0,255,106,0.35);}
+    .card-field::placeholder{color:rgba(255,255,255,0.18);font-weight:400;}
+    .card-label{font-size:0.65rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:5px;display:block;}
 
-// ── Checkout ──────────────────────────────────────────────────────────────────
-app.get("/produto", (req, res) => {
-  res.sendFile(path.join(__dirname, "produto.html"));
-});
+    /* Info notice */
+    .notice{background:rgba(255,200,0,0.05);border:1px solid rgba(255,200,0,0.15);border-radius:0.75rem;padding:0.875rem 1rem;font-size:0.75rem;color:rgba(255,200,0,0.8);display:flex;align-items:flex-start;gap:10px;}
+  </style>
+</head>
+<body>
+  <div class="orb" style="width:500px;height:500px;background:rgba(0,255,106,0.04);top:-15%;left:-10%"></div>
+  <div class="orb" style="width:400px;height:400px;background:rgba(0,255,106,0.03);bottom:-10%;right:-5%"></div>
+  <div class="comet"></div>
 
-app.get("/checkout", (req, res) => {
-  res.sendFile(path.join(__dirname, "checkout.html"));
-});
+  <!-- Header -->
+  <header class="relative z-10 w-full px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
+    <a href="/produto" class="flex items-center gap-3">
+      <img src="ac.png" alt="AC" class="h-9 w-auto">
+      <div>
+        <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm tracking-widest">ADAPTA CAPITAL</p>
+        <p class="text-[8px] text-gray-600 tracking-[0.4em] uppercase">Secure Checkout</p>
+      </div>
+    </a>
+    <div class="badge"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> Pagamento Seguro</div>
+  </header>
 
-app.get("/termos", (req, res) => {
-  res.sendFile(path.join(__dirname, "termos.html"));
-});
+  <!-- Breadcrumb -->
+  <div class="relative z-10 max-w-7xl mx-auto px-6 mb-8">
+    <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-600">
+      <a href="/" class="hover:text-white transition-colors">Início</a>
+      <i data-lucide="chevron-right" class="w-3 h-3"></i>
+      <a href="/produto" class="hover:text-white transition-colors">Loja</a>
+      <i data-lucide="chevron-right" class="w-3 h-3"></i>
+      <span style="color:var(--neon)">Checkout</span>
+    </div>
+  </div>
 
-// ── Auth Discord ──────────────────────────────────────────────────────────────
-app.get("/auth/discord", (req, res) => {
-  const params = new URLSearchParams({
-    client_id:     DISCORD_CLIENT_ID,
-    redirect_uri:  REDIRECT_URI,
-    response_type: "code",
-    scope:         "identify",
-  });
-  res.redirect(`https://discord.com/oauth2/authorize?${params}`);
-});
+  <!-- Main -->
+  <main class="relative z-10 max-w-7xl mx-auto px-6 pb-20">
+    <div class="grid lg:grid-cols-12 gap-8">
 
-// ── Callback Discord ──────────────────────────────────────────────────────────
-app.get("/callback", async (req, res) => {
-  const { code, error } = req.query;
-  if (error || !code) return res.redirect("/checkout?auth=error");
+      <!-- LEFT COLUMN -->
+      <div class="lg:col-span-7 space-y-6">
 
-  try {
-    const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        client_id:     DISCORD_CLIENT_ID,
-        client_secret: DISCORD_CLIENT_SECRET,
-        grant_type:    "authorization_code",
-        code,
-        redirect_uri:  REDIRECT_URI,
-      }),
-    });
+        <!-- ── IDENTIFICAÇÃO ── -->
+        <div class="glass p-6">
+          <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
+            <i data-lucide="user" class="w-4 h-4" style="color:var(--neon)"></i> Identificação
+          </h3>
 
-    const tokenData = await tokenRes.json();
-    if (!tokenData.access_token) throw new Error("Token inválido");
+          <!-- Não logado -->
+          <div id="auth-block">
+            <p class="text-gray-500 text-sm mb-4">Conecte-se ao Discord para associar o pagamento à sua conta automaticamente.</p>
+            <a href="/auth/discord" class="btn-discord" onclick="saveCartBeforeAuth()">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+              Entrar com Discord
+            </a>
+            <div class="or-div my-4">ou</div>
+            <input class="field" id="nick-input" placeholder="Continuar com seu Nickname no jogo" />
+            <p id="auth-error" class="hidden text-red-400 text-xs font-bold mt-2">⚠️ Falha na autenticação Discord. Tente novamente.</p>
+          </div>
 
-    const userRes = await fetch("https://discord.com/api/users/@me", {
-      headers: { Authorization: `Bearer ${tokenData.access_token}` },
-    });
-    const user = await userRes.json();
+          <!-- Logado -->
+          <div id="user-block" class="hidden">
+            <div class="user-card">
+              <img id="user-avatar" src="" class="w-12 h-12 rounded-full border-2 border-green-500/30" alt="">
+              <div>
+                <p id="user-name" class="text-white font-black text-base"></p>
+                <p id="user-tag" class="text-gray-500 text-xs font-bold"></p>
+              </div>
+              <div class="ml-auto tag">Discord ✓</div>
+            </div>
+          </div>
+        </div>
 
-    const avatar = user.avatar
-      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-      : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.id) % 5}.png`;
+        <!-- ── ID DO JOGO ── -->
+        <div class="glass p-6">
+          <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
+            <i data-lucide="gamepad-2" class="w-4 h-4" style="color:var(--neon)"></i> ID no Servidor
+          </h3>
+          <input class="field" id="player-id" placeholder="Digite seu ID no GTA RP (ex: 1234)" type="number" min="1"/>
+          <p class="text-gray-600 text-xs mt-2">Seu ID aparece no HUD enquanto está conectado ao servidor.</p>
+        </div>
 
-    const tag = user.discriminator && user.discriminator !== "0"
-      ? `${user.username}#${user.discriminator}`
-      : user.username;
+        <!-- ── MÉTODO DE PAGAMENTO ── -->
+        <div class="glass p-6">
+          <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
+            <i data-lucide="credit-card" class="w-4 h-4" style="color:var(--neon)"></i> Método de Pagamento
+          </h3>
 
-    const params = new URLSearchParams({
-      auth:     "ok",
-      id:       user.id,
-      username: user.global_name || user.username,
-      tag,
-      avatar,
-    });
+          <div class="space-y-3 mb-6">
 
-    res.redirect(`/checkout?${params}`);
-  } catch (err) {
-    console.error("[OAuth2 Error]", err);
-    res.redirect("/checkout?auth=error");
-  }
-});
+            <!-- PIX -->
+            <button class="method-btn active" onclick="selectMethod('pix', this)" id="btn-pix">
+              <div class="method-icon">
+                <img src="https://cdn.centralcart.io/public/gateway-icons/icon-pix.svg" class="h-6 w-auto" alt="PIX">
+              </div>
+              <div class="relative z-10">
+                <p class="text-white font-black text-sm">PIX</p>
+                <p class="text-gray-500 text-[10px] uppercase tracking-widest">Instantâneo · Sem taxas</p>
+              </div>
+              <div class="method-radio relative z-10 ml-auto"><div class="method-radio-dot"></div></div>
+            </button>
 
-// ── Notificação Discord Webhook ───────────────────────────────────────────────
-async function notifyDiscord(entry) {
-  const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-  if (!webhookUrl) return;
+            <!-- Mercado Pago -->
+            <button class="method-btn" onclick="selectMethod('mp', this)" id="btn-mp" style="opacity:0.5;cursor:default;" disabled>
+              <div class="method-icon" style="background:rgba(0,158,227,0.15);border-color:rgba(0,158,227,0.2);">
+                <img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-5 w-auto" alt="Mercado Pago" style="opacity:0.5">
+              </div>
+              <div class="relative z-10">
+                <p class="text-gray-400 font-black text-sm">Mercado Pago</p>
+                <p class="text-gray-600 text-[10px] uppercase tracking-widest">Cartão de Crédito/Débito</p>
+              </div>
+              <span class="relative z-10 ml-auto text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.08)">Em breve</span>
+            </button>
 
-  const dataBR = new Date(entry.timestamp).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+            <!-- PayPal -->
+            <button class="method-btn" onclick="selectMethod('paypal', this)" id="btn-paypal" style="opacity:0.5;cursor:default;" disabled>
+              <div class="method-icon" style="background:rgba(0,48,135,0.2);border-color:rgba(0,48,135,0.3);">
+                <img src="https://cdn.centralcart.io/public/gateway-icons/icon-paypal.svg" class="h-5 w-auto" alt="PayPal" style="opacity:0.5">
+              </div>
+              <div class="relative z-10">
+                <p class="text-gray-400 font-black text-sm">PayPal</p>
+                <p class="text-gray-600 text-[10px] uppercase tracking-widest">Cartão Internacional</p>
+              </div>
+              <span class="relative z-10 ml-auto text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.08)">Em breve</span>
+            </button>
+          </div>
 
-  const embed = {
-    embeds: [{
-      title: "💸 Novo Pedido PIX — Adapta Capital",
-      color: 0x00ff6a,
-      thumbnail: entry.avatar ? { url: entry.avatar } : undefined,
-      fields: [
-        { name: "👤 Jogador",       value: `\`${entry.discord_tag || "—"}\``,        inline: true  },
-        { name: "🆔 Discord ID",    value: `\`${entry.discord_id}\``,                inline: true  },
-        { name: "🎮 ID no Servidor",value: `\`${entry.player_id}\``,                 inline: true  },
-        { name: "💰 Valor",         value: `**R$ ${entry.valor_brl.toFixed(2)}**`,   inline: true  },
-        { name: "📋 Status",        value: `\`${entry.status}\``,                    inline: true  },
-        { name: "🕐 Horário",       value: dataBR,                                   inline: true  },
-        { name: "📦 Log ID",        value: `\`#${entry.id}\``,                       inline: false },
-        { name: "📲 Payload PIX",   value: `\`\`\`${entry.payload_pix.substring(0, 200)}\`\`\``, inline: false },
-      ],
-      footer: { text: "Adapta Capital · GTA RP" },
-      timestamp: entry.timestamp,
-    }],
-  };
+          <!-- ── Seção PIX ── -->
+          <div id="sec-pix" class="pay-section active">
+            <div class="notice mb-4">
+              <i data-lucide="info" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:rgba(255,200,0,0.8)"></i>
+              <span>Após clicar em <strong>Gerar PIX</strong>, um QR Code e código Copia e Cola serão gerados. Pague pelo app do seu banco e o saldo será creditado automaticamente.</span>
+            </div>
+            <div id="pix-area" class="hidden fade-in">
+              <div class="flex flex-col items-center gap-4 p-6 rounded-2xl" style="background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.12);">
+                <p style="font-family:'Orbitron',sans-serif" class="text-[10px] font-black uppercase tracking-widest" style="color:var(--neon)">Escaneie o QR Code</p>
+                <div id="qrcode"></div>
+                <div class="w-full">
+                  <p class="text-gray-500 text-[9px] uppercase tracking-widest mb-2">Código Copia e Cola</p>
+                  <div class="flex gap-2">
+                    <textarea id="pix-text" class="field text-xs font-mono" rows="3" readonly style="resize:none;font-size:0.65rem;line-height:1.4"></textarea>
+                    <button onclick="copyPix()" class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-lg" style="background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2)" title="Copiar">📋</button>
+                  </div>
+                </div>
+                <p id="log-status" class="text-[10px] text-gray-600 font-bold uppercase tracking-widest"></p>
+              </div>
+            </div>
+          </div>
 
-  try {
-    await fetch(webhookUrl, {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify(embed),
-    });
-    console.log(`[Webhook] Notificação enviada para Discord — #${entry.id}`);
-  } catch (err) {
-    console.error("[Webhook Error]", err.message);
-  }
-}
+          <!-- ── Seção Mercado Pago ── -->
+          <div id="sec-mp" class="pay-section">
+            <div class="flex flex-col items-center gap-4 p-8 rounded-2xl text-center" style="background:rgba(0,158,227,0.05);border:1px solid rgba(0,158,227,0.15);">
+              <img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-8 opacity-60">
+              <div>
+                <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm tracking-widest mb-1">Em Breve</p>
+                <p class="text-gray-500 text-xs">Pagamento via Mercado Pago estará disponível em breve. Por enquanto utilize o PIX.</p>
+              </div>
+              <div class="badge" style="background:rgba(0,158,227,0.1);border-color:rgba(0,158,227,0.2);color:rgba(0,158,227,0.8);">
+                <span class="w-1.5 h-1.5 rounded-full" style="background:rgba(0,158,227,0.8)"></span> Em desenvolvimento
+              </div>
+            </div>
+          </div>
 
-// ── Log de pagamento ──────────────────────────────────────────────────────────
-app.post("/api/log-payment", async (req, res) => {
-  const { discord_id, discord_tag, avatar, valor, player_id, payload_pix } = req.body;
-  if (!discord_id || !valor || !player_id) {
-    return res.status(400).json({ error: "Campos obrigatórios ausentes" });
-  }
-  const entry = {
-    id:          Date.now(),
-    timestamp:   new Date().toISOString(),
-    status:      "AGUARDANDO",
-    discord_id,
-    discord_tag,
-    avatar,
-    valor_brl:   parseFloat(valor),
-    player_id,
-    payload_pix,
-  };
-  writeLog(entry);
-  console.log(`[PIX] ${discord_tag} | R$ ${valor} | ID: ${player_id}`);
+          <!-- ── Seção PayPal ── -->
+          <div id="sec-paypal" class="pay-section">
+            <div class="flex flex-col items-center gap-4 p-8 rounded-2xl text-center" style="background:rgba(0,48,135,0.08);border:1px solid rgba(0,48,135,0.2);">
+              <img src="https://cdn.centralcart.io/public/gateway-icons/icon-paypal.svg" class="h-8 opacity-60">
+              <div>
+                <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm tracking-widest mb-1">Em Breve</p>
+                <p class="text-gray-500 text-xs">Pagamento via PayPal estará disponível em breve. Por enquanto utilize o PIX.</p>
+              </div>
+              <div class="badge" style="background:rgba(0,48,135,0.15);border-color:rgba(0,48,135,0.3);color:rgba(100,140,255,0.8);">
+                <span class="w-1.5 h-1.5 rounded-full" style="background:rgba(100,140,255,0.8)"></span> Em desenvolvimento
+              </div>
+            </div>
+          </div>
+        </div>
 
-  // Dispara notificação no Discord (assíncrono, não bloqueia resposta)
-  notifyDiscord(entry).catch(() => {});
+        <!-- ── TERMOS E CONDIÇÕES ── -->
+        <div class="glass p-6">
+          <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
+            <i data-lucide="file-text" class="w-4 h-4" style="color:var(--neon)"></i> Termos e Condições
+          </h3>
 
-  res.json({ ok: true, log_id: entry.id });
-});
+          <div class="terms-wrap" id="terms-wrap" onclick="toggleTerms()">
+            <input type="checkbox" id="terms-cb">
+            <div class="custom-cb" id="custom-cb">
+              <svg id="check-icon" class="w-3 h-3 text-black hidden" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 18 4 13"/></svg>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm text-gray-300 font-semibold leading-snug">
+                Li e concordo com os <a href="/termos" target="_blank" onclick="event.stopPropagation()" class="font-black underline underline-offset-2 transition-colors" style="color:var(--neon)">Termos e Condições de Compra</a> da Adapta Capital.
+              </p>
+              <p class="text-[10px] text-gray-600 mt-1 uppercase tracking-widest">Inclui política de reembolso, uso dos itens e regras do servidor.</p>
+            </div>
+          </div>
 
-// ── Admin ─────────────────────────────────────────────────────────────────────
-app.get("/api/admin/logs", (req, res) => {
-  if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
-  res.json(readLogs());
-});
+          <div id="terms-error" class="hidden mt-3 text-red-400 text-xs font-bold flex items-center gap-2">
+            <i data-lucide="alert-triangle" class="w-3 h-3"></i> Você precisa aceitar os termos para continuar.
+          </div>
+        </div>
 
-app.patch("/api/admin/logs/:id", async (req, res) => {
-  if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
-  const logs = readLogs();
-  const idx = logs.findIndex(l => l.id === parseInt(req.params.id));
-  if (idx === -1) return res.status(404).json({ error: "Não encontrado" });
+        <!-- ── BOTÃO FINALIZAR ── -->
+        <button class="btn-pay" id="btn-pay" onclick="handlePayment()">
+          <span id="btn-pay-content">
+            <i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>
+            Finalizar Compra · <span id="btn-total"></span>
+          </span>
+        </button>
 
-  const oldStatus = logs[idx].status;
-  logs[idx].status = req.body.status || oldStatus;
-  fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
+        <p class="text-center text-[10px] text-gray-700 uppercase tracking-widest flex items-center justify-center gap-2">
+          <i data-lucide="shield-check" class="w-3 h-3"></i>
+          Transação protegida por criptografia SSL
+        </p>
+      </div>
 
-  // Notifica Discord quando status muda para PAGO
-  if (req.body.status === "PAGO" && oldStatus !== "PAGO") {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (webhookUrl) {
-      const entry = logs[idx];
-      const embed = {
-        embeds: [{
-          title: "✅ Pagamento Confirmado — Adapta Capital",
-          color: 0x00ff6a,
-          thumbnail: entry.avatar ? { url: entry.avatar } : undefined,
-          fields: [
-            { name: "👤 Jogador",        value: `\`${entry.discord_tag || "—"}\``,      inline: true },
-            { name: "🎮 ID no Servidor", value: `\`${entry.player_id}\``,                inline: true },
-            { name: "💰 Valor",          value: `**R$ ${entry.valor_brl.toFixed(2)}**`, inline: true },
-            { name: "📦 Log ID",         value: `\`#${entry.id}\``,                     inline: true },
-          ],
-          footer: { text: "Adapta Capital · GTA RP" },
-          timestamp: new Date().toISOString(),
-        }],
-      };
-      fetch(webhookUrl, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(embed),
-      }).catch(err => console.error("[Webhook PAGO Error]", err.message));
+      <!-- RIGHT COLUMN — Resumo -->
+      <div class="lg:col-span-5">
+        <div class="glass p-6 sticky top-6">
+          <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
+            <i data-lucide="shopping-cart" class="w-4 h-4" style="color:var(--neon)"></i> Resumo do Pedido
+          </h3>
+
+          <!-- Produto -->
+          <div class="flex items-center gap-4 mb-6 pb-5" style="border-bottom:1px solid rgba(255,255,255,0.05)">
+            <div class="w-20 h-20 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(0,255,106,0.05);border:1px solid rgba(0,255,106,0.1)">
+              <img id="order-img" src="" class="w-16 h-16 object-contain" onerror="this.style.display='none'">
+            </div>
+            <div class="flex-1">
+              <p class="text-white font-black text-base" id="order-name"></p>
+              <p class="text-gray-500 text-xs mt-1" id="order-qty-label"></p>
+              <div class="tag mt-2">Adapta Coins</div>
+            </div>
+            <p style="color:var(--neon);font-family:'Orbitron',sans-serif" class="font-black text-sm" id="order-price"></p>
+          </div>
+
+          <!-- Valores -->
+          <div class="space-y-0">
+            <div class="order-row">
+              <span class="text-gray-500 text-sm">Subtotal</span>
+              <span class="text-white font-bold text-sm" id="sum-sub"></span>
+            </div>
+            <div class="order-row">
+              <span class="text-gray-500 text-sm">Taxa de processamento</span>
+              <span style="color:var(--neon)" class="font-bold text-sm" id="sum-fee">Grátis</span>
+            </div>
+            <div class="order-row" style="border-top:1px solid rgba(0,255,106,0.12);padding-top:16px;margin-top:8px">
+              <span class="text-white font-black text-base uppercase tracking-widest" style="font-family:'Orbitron',sans-serif">Total</span>
+              <span style="color:var(--neon);font-family:'Orbitron',sans-serif" class="font-black text-xl" id="sum-total"></span>
+            </div>
+          </div>
+
+          <!-- Cupom -->
+          <div class="mt-6 pt-5" style="border-top:1px solid rgba(255,255,255,0.05)">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-600 mb-3">Cupom de Desconto</p>
+            <div class="flex gap-2">
+              <input class="field flex-1" id="coupon-input" placeholder="CÓDIGO" style="text-transform:uppercase">
+              <button onclick="applyCoupon()" class="px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all" style="background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2);color:var(--neon)">OK</button>
+            </div>
+            <p id="coupon-msg" class="hidden text-xs mt-2 font-bold"></p>
+          </div>
+
+          <!-- Garantias -->
+          <div class="mt-6 pt-5 space-y-3" style="border-top:1px solid rgba(255,255,255,0.05)">
+            <div class="flex items-center gap-3 text-[10px] text-gray-600 font-bold uppercase tracking-wider">
+              <i data-lucide="zap" class="w-3 h-3 flex-shrink-0" style="color:var(--neon)"></i> Entrega imediata após confirmação
+            </div>
+            <div class="flex items-center gap-3 text-[10px] text-gray-600 font-bold uppercase tracking-wider">
+              <i data-lucide="shield" class="w-3 h-3 flex-shrink-0" style="color:var(--neon)"></i> Pagamento 100% seguro
+            </div>
+            <div class="flex items-center gap-3 text-[10px] text-gray-600 font-bold uppercase tracking-wider">
+              <i data-lucide="headphones" class="w-3 h-3 flex-shrink-0" style="color:var(--neon)"></i> Suporte via Discord
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="relative z-10 py-12 text-center text-[9px] font-bold uppercase tracking-[0.5em] text-gray-800">
+    Adapta Capital &copy; 2026 — Digital Asset Management
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    const params     = new URLSearchParams(window.location.search);
+    const productVal = parseFloat(params.get('product')) || 25;
+    const qty        = parseInt(params.get('qty'))        || 1;
+    const total      = parseFloat(params.get('total'))    || productVal * qty;
+
+    let pixPayload  = '';
+    let discordUser = {};
+    let currentMethod = 'pix';
+    let termsAccepted = false;
+
+    // ── Auth Discord ──
+    function saveCartBeforeAuth() {
+      localStorage.setItem('ac_cart', JSON.stringify({ product: productVal, qty, total }));
     }
-  }
 
-  res.json(logs[idx]);
-});
+    (function init() {
+      const p = new URLSearchParams(window.location.search);
 
+      // Restaura carrinho salvo antes do OAuth
+      const saved = localStorage.getItem('ac_cart');
+      if (saved) {
+        try {
+          const cart = JSON.parse(saved);
+          if (!p.get('product') && cart.product) {
+            // Redireciona com os params corretos na URL
+            const newUrl = '/checkout?product=' + cart.product + '&qty=' + cart.qty + '&total=' + cart.total + (p.toString() ? '&' + p.toString() : '');
+            localStorage.removeItem('ac_cart');
+            window.location.replace(newUrl);
+            return;
+          }
+        } catch(e) {}
+        localStorage.removeItem('ac_cart');
+      }
 
-// ── Start ─────────────────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`✅ ADAPTA CAPITAL rodando na porta ${PORT}`));
+      if (p.get('auth') === 'error') {
+        document.getElementById('auth-error').classList.remove('hidden');
+        return;
+      }
+      if (p.get('auth') === 'ok') {
+        discordUser = { id: p.get('id'), username: p.get('username'), tag: p.get('tag'), avatar: p.get('avatar') };
+        window.history.replaceState({}, '', '/checkout?product=' + productVal + '&qty=' + qty + '&total=' + total);
+        showUser();
+      }
+    })();
+
+    function showUser() {
+      document.getElementById('auth-block').classList.add('hidden');
+      document.getElementById('user-block').classList.remove('hidden');
+      document.getElementById('user-name').innerText = discordUser.username || '';
+      document.getElementById('user-tag').innerText  = discordUser.tag || '';
+      document.getElementById('user-avatar').src     = discordUser.avatar || '';
+    }
+
+    // ── Preenche resumo ──
+    (function fillOrder() {
+      document.getElementById('order-img').src          = productVal + '.png';
+      document.getElementById('order-name').innerText   = productVal + ' Coins Adapta';
+      document.getElementById('order-qty-label').innerText = qty + 'x · R$ ' + productVal.toFixed(2).replace('.',',') + ' cada';
+      document.getElementById('order-price').innerText  = 'R$ ' + total.toFixed(2).replace('.',',');
+      document.getElementById('sum-sub').innerText      = 'R$ ' + total.toFixed(2).replace('.',',');
+      document.getElementById('sum-total').innerText    = 'R$ ' + total.toFixed(2).replace('.',',');
+      document.getElementById('btn-total').innerText    = 'R$ ' + total.toFixed(2).replace('.',',');
+    })();
+
+    // ── Método de pagamento ──
+    function selectMethod(method, btn) {
+      // Bloqueia MP e PayPal
+      if (method === 'mp' || method === 'paypal') return;
+      currentMethod = method;
+      document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.pay-section').forEach(s => s.classList.remove('active'));
+      document.getElementById('sec-' + method).classList.add('active');
+      const feeEl = document.getElementById('sum-fee');
+      feeEl.innerText = 'Grátis'; feeEl.style.color = 'var(--neon)';
+      lucide.createIcons();
+    }
+
+    // ── Termos ──
+    function toggleTerms() {
+      termsAccepted = !termsAccepted;
+      document.getElementById('terms-cb').checked = termsAccepted;
+      const cb  = document.getElementById('custom-cb');
+      const ico = document.getElementById('check-icon');
+      const wrap = document.getElementById('terms-wrap');
+      if (termsAccepted) {
+        cb.classList.add('checked');
+        ico.classList.remove('hidden');
+        wrap.classList.add('accepted');
+        document.getElementById('terms-error').classList.add('hidden');
+      } else {
+        cb.classList.remove('checked');
+        ico.classList.add('hidden');
+        wrap.classList.remove('accepted');
+      }
+    }
+
+    // ── Cupom ──
+    function applyCoupon() {
+      const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+      const msg  = document.getElementById('coupon-msg');
+      msg.classList.remove('hidden');
+      if (!code) { msg.className = 'text-xs mt-2 font-bold text-red-400'; msg.innerText = 'Digite um cupom válido.'; return; }
+      msg.className = 'text-xs mt-2 font-bold text-red-400';
+      msg.innerText = 'Cupom inválido ou expirado.';
+    }
+
+    // ── Validações gerais ──
+    function validate() {
+      const playerId = document.getElementById('player-id').value.trim();
+      const nick     = document.getElementById('nick-input')?.value.trim();
+      const identity = discordUser.id ? discordUser.tag : nick;
+
+      // Identificação obrigatória
+      if (!identity) {
+        const nickInput = document.getElementById('nick-input');
+        nickInput.style.borderColor = 'rgba(255,60,60,0.6)';
+        nickInput.style.background  = 'rgba(255,60,60,0.04)';
+        nickInput.placeholder = '⚠ Informe seu Nickname ou conecte o Discord';
+        nickInput.scrollIntoView({ behavior:'smooth', block:'center' });
+        nickInput.focus();
+        setTimeout(() => {
+          nickInput.style.borderColor = '';
+          nickInput.style.background  = '';
+          nickInput.placeholder = 'Continuar com seu Nickname no jogo';
+        }, 3000);
+        return false;
+      }
+
+      // ID do jogo obrigatório
+      if (!playerId) {
+        const pidField = document.getElementById('player-id');
+        pidField.style.borderColor = 'rgba(255,60,60,0.6)';
+        pidField.style.background  = 'rgba(255,60,60,0.04)';
+        pidField.placeholder = '⚠ ID obrigatório';
+        pidField.scrollIntoView({ behavior:'smooth', block:'center' });
+        pidField.focus();
+        setTimeout(() => {
+          pidField.style.borderColor = '';
+          pidField.style.background  = '';
+          pidField.placeholder = 'Digite seu ID no GTA RP (ex: 1234)';
+        }, 3000);
+        return false;
+      }
+
+      // Termos obrigatórios
+      if (!termsAccepted) {
+        document.getElementById('terms-error').classList.remove('hidden');
+        const tw = document.getElementById('terms-wrap');
+        tw.style.borderColor = 'rgba(255,60,60,0.5)';
+        tw.style.background  = 'rgba(255,60,60,0.04)';
+        tw.scrollIntoView({ behavior:'smooth', block:'center' });
+        setTimeout(() => { tw.style.borderColor = ''; tw.style.background = ''; }, 2500);
+        return false;
+      }
+
+      document.getElementById('terms-error').classList.add('hidden');
+      return true;
+    }
+
+    // ── Handler principal ──
+    function handlePayment() {
+      if (!validate()) return;
+      if (currentMethod === 'pix') generatePix();
+      // MP e PayPal em breve — não executam nada por ora
+    }
+
+    // ── CRC16 PIX ──
+    function crc16(data) {
+      let crc = 0xFFFF;
+      for (let i = 0; i < data.length; i++) {
+        crc ^= data.charCodeAt(i) << 8;
+        for (let j = 0; j < 8; j++) crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+      }
+      return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+    }
+
+    // ── Gera PIX ──
+    async function generatePix() {
+      const playerId = document.getElementById('player-id').value.trim();
+      const nick     = document.getElementById('nick-input')?.value.trim();
+      const identity = discordUser.id ? discordUser.tag : nick;
+
+      const f = (id, v) => id + v.length.toString().padStart(2,'0') + v;
+      const cnpj   = '66621726000150';
+      const nome   = 'GABRIEL CARDOSO MARCHIOLI';
+      const cidade = 'PRAIA GRANDE';
+
+      let base = '000201'
+        + f('26', '0014BR.GOV.BCB.PIX' + f('01', cnpj))
+        + '520400005303986'
+        + f('54', total.toFixed(2))
+        + '5802BR'
+        + f('59', nome)
+        + f('60', cidade)
+        + f('62', f('05', 'ID' + playerId))
+        + '6304';
+
+      pixPayload = base + crc16(base);
+
+      document.getElementById('qrcode').innerHTML = '';
+      new QRCode(document.getElementById('qrcode'), { text: pixPayload, width: 240, height: 240 });
+      document.getElementById('pix-text').value = pixPayload;
+      document.getElementById('pix-area').classList.remove('hidden');
+      document.getElementById('pix-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      try {
+        const res = await fetch('/api/log-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            discord_id:  discordUser.id  || 'nick:' + nick,
+            discord_tag: discordUser.tag || nick,
+            avatar:      discordUser.avatar || '',
+            valor:       total,
+            player_id:   playerId,
+            payload_pix: pixPayload,
+            metodo:      'PIX',
+          }),
+        });
+        const data = await res.json();
+        if (data.ok) document.getElementById('log-status').innerText = '✓ Pedido registrado — #' + data.log_id;
+      } catch {
+        document.getElementById('log-status').innerText = '⚠ Não foi possível registrar o pedido.';
+      }
+    }
+
+    // ── Mercado Pago ──
+    function payMercadoPago() {
+      const card = document.getElementById('mp-card').value.replace(/\s/g,'');
+      const exp  = document.getElementById('mp-expiry').value;
+      const cvv  = document.getElementById('mp-cvv').value;
+      const name = document.getElementById('mp-name').value.trim();
+      const cpf  = document.getElementById('mp-cpf').value.replace(/\D/g,'');
+
+      if (card.length < 16) { alert('Número do cartão inválido.'); return; }
+      if (exp.length < 5)   { alert('Data de validade inválida.'); return; }
+      if (cvv.length < 3)   { alert('CVV inválido.'); return; }
+      if (!name)             { alert('Informe o nome no cartão.'); return; }
+      if (cpf.length < 11)  { alert('CPF inválido.'); return; }
+
+      // Aqui você integrará com a SDK do Mercado Pago (mp.js)
+      // Por ora exibe mensagem de redirecionamento
+      alert('🔒 Redirecionando para o Mercado Pago...\n\nIntegre sua Public Key do MP no server.js para ativar os pagamentos por cartão.');
+    }
+
+    // ── PayPal ──
+    function payPayPal() {
+      // Integrar PayPal SDK — substitua YOUR_CLIENT_ID
+      alert('🔒 Redirecionando para o PayPal...\n\nAdicione seu PayPal Client ID no server.js para ativar os pagamentos internacionais.');
+    }
+
+    function copyPix() {
+      navigator.clipboard.writeText(pixPayload).then(() => {
+        const btn = document.querySelector('[onclick="copyPix()"]');
+        btn.innerText = '✅';
+        setTimeout(() => btn.innerText = '📋', 2000);
+      });
+    }
+
+    // ── Máscaras de cartão ──
+    function formatCard(el) {
+      let v = el.value.replace(/\D/g,'').substring(0,16);
+      el.value = v.replace(/(.{4})/g,'$1 ').trim();
+    }
+    function formatExpiry(el) {
+      let v = el.value.replace(/\D/g,'').substring(0,4);
+      if (v.length >= 3) v = v.substring(0,2) + '/' + v.substring(2);
+      el.value = v;
+    }
+    function formatCPF(el) {
+      let v = el.value.replace(/\D/g,'').substring(0,11);
+      v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+      el.value = v;
+    }
+  </script>
+</body>
+</html>
