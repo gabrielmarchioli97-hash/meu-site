@@ -204,12 +204,18 @@
           <div id="sec-pix" class="pay-section active">
             <div class="notice mb-4">
               <i data-lucide="info" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:rgba(255,200,0,0.8)"></i>
-              <span>Após clicar em <strong>Gerar PIX</strong>, um QR Code e código Copia e Cola serão gerados. Pague pelo app do seu banco e o saldo será creditado automaticamente.</span>
+              <span>Clique em <strong>Finalizar Compra</strong> para gerar o QR Code. Após pagar, clique em <strong>Já Paguei</strong> para confirmar.</span>
             </div>
+
+            <!-- QR Code — aparece ao finalizar -->
             <div id="pix-area" class="hidden fade-in">
-              <div class="flex flex-col items-center gap-4 p-6 rounded-2xl" style="background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.12);">
-                <p style="font-family:'Orbitron',sans-serif" class="text-[10px] font-black uppercase tracking-widest" style="color:var(--neon)">Escaneie o QR Code</p>
+              <div class="flex flex-col items-center gap-5 p-6 rounded-2xl" style="background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.12);">
+
+                <p style="font-family:'Orbitron',sans-serif;color:var(--neon)" class="text-[10px] font-black uppercase tracking-widest">Escaneie o QR Code</p>
+
                 <div id="qrcode"></div>
+
+                <!-- Copia e Cola -->
                 <div class="w-full">
                   <p class="text-gray-500 text-[9px] uppercase tracking-widest mb-2">Código Copia e Cola</p>
                   <div class="flex gap-2">
@@ -217,7 +223,19 @@
                     <button onclick="copyPix()" class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-lg" style="background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2)" title="Copiar">📋</button>
                   </div>
                 </div>
-                <p id="log-status" class="text-[10px] text-gray-600 font-bold uppercase tracking-widest"></p>
+
+                <!-- Divisor -->
+                <div style="width:100%;height:1px;background:rgba(255,255,255,0.06)"></div>
+
+                <!-- Botão Já Paguei -->
+                <button id="btn-confirm" onclick="confirmPayment()"
+                  class="w-full h-14 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-300"
+                  style="background:rgba(0,255,106,0.12);border:2px solid rgba(0,255,106,0.4);color:var(--neon);">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 18 4 13"/></svg>
+                  Já Paguei — Confirmar Pagamento
+                </button>
+
+                <p id="log-status" class="text-[10px] text-gray-600 font-bold uppercase tracking-widest text-center"></p>
               </div>
             </div>
           </div>
@@ -279,7 +297,7 @@
         <button class="btn-pay" id="btn-pay" onclick="handlePayment()">
           <span id="btn-pay-content">
             <i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>
-            Finalizar Compra · <span id="btn-total"></span>
+            Gerar QR Code PIX · <span id="btn-total"></span>
           </span>
         </button>
 
@@ -552,10 +570,14 @@
     }
 
     // ── Handler principal ──
+    let pixGenerated = false;
     function handlePayment() {
-      if (paymentDone) return;
+      if (pixGenerated) return;
       if (!validate()) return;
-      if (currentMethod === 'pix') generatePix();
+      if (currentMethod === 'pix') {
+        pixGenerated = true;
+        generatePix();
+      }
     }
 
     // ── CRC16 PIX ──
@@ -568,11 +590,9 @@
       return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
     }
 
-    // ── Gera PIX ──
-    async function generatePix() {
+    // ── Gera PIX — apenas mostra o QR, não loga ainda ──
+    function generatePix() {
       const playerId = document.getElementById('player-id').value.trim();
-      const nick     = document.getElementById('nick-input')?.value.trim();
-      const identity = discordUser.id ? discordUser.tag : nick;
 
       const f = (id, v) => id + v.length.toString().padStart(2,'0') + v;
       const cnpj   = '66621726000150';
@@ -595,14 +615,32 @@
       new QRCode(document.getElementById('qrcode'), { text: pixPayload, width: 240, height: 240 });
       document.getElementById('pix-text').value = pixPayload;
       document.getElementById('pix-area').classList.remove('hidden');
-      document.getElementById('pix-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-      // Lock button immediately
-      paymentDone = true;
+      // Troca botão para "Já Paguei" e desabilita o Finalizar
       const btnPay = document.getElementById('btn-pay');
       btnPay.disabled = true;
-      btnPay.style.opacity = '0.5';
+      btnPay.style.opacity = '0.4';
       btnPay.style.cursor = 'not-allowed';
+
+      // Scroll suave até o QR
+      setTimeout(() => {
+        document.getElementById('pix-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+
+    // ── Confirma pagamento — dispara log e Discord ──
+    async function confirmPayment() {
+      if (paymentDone) return;
+
+      const playerId = document.getElementById('player-id').value.trim();
+      const nick     = document.getElementById('nick-input')?.value.trim();
+
+      const btnConfirm = document.getElementById('btn-confirm');
+      btnConfirm.disabled = true;
+      btnConfirm.style.opacity = '0.5';
+      btnConfirm.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> Registrando...';
+
+      paymentDone = true;
 
       try {
         const res = await fetch('/api/log-payment', {
@@ -621,10 +659,16 @@
         const data = await res.json();
         if (data.ok) {
           document.getElementById('log-status').innerText = '✓ Pedido registrado — #' + data.log_id;
-          setTimeout(() => showSuccess(), 1200);
+          setTimeout(() => showSuccess(), 800);
+        } else {
+          throw new Error('Falha no servidor');
         }
       } catch {
-        document.getElementById('log-status').innerText = '⚠ Não foi possível registrar o pedido.';
+        document.getElementById('log-status').innerText = '⚠ Erro ao registrar. Tente novamente ou fale com o suporte.';
+        paymentDone = false;
+        btnConfirm.disabled = false;
+        btnConfirm.style.opacity = '1';
+        btnConfirm.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 18 4 13"/></svg> Já Paguei — Confirmar Pagamento';
       }
     }
 
@@ -733,9 +777,9 @@
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
           Falar com Suporte
         </a>
-        <a href="/produto" class="block text-center text-xs font-bold uppercase tracking-widest transition-colors" style="color:rgba(255,255,255,0.2)">
+        <button onclick="window.location.href='/produto'" class="w-full text-center text-xs font-bold uppercase tracking-widest transition-colors py-3" style="color:rgba(255,255,255,0.25);background:none;border:none;cursor:pointer;">
           ← Voltar à Loja
-        </a>
+        </button>
       </div>
 
     </div>
