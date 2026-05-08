@@ -30,8 +30,6 @@
             0%, 100% { filter: drop-shadow(0 0 5px #00ff6a) drop-shadow(0 0 10px #00ff6a); transform: scale(1); }
             50%       { filter: drop-shadow(0 0 15px #00ff6a) drop-shadow(0 0 25px #00ff6a); transform: scale(1.05); }
         }
-        .shop-card { transition: all 0.3s ease; cursor: pointer; }
-        .shop-card:hover { transform: scale(1.05); border-color: #00ff6a !important; box-shadow: 0 0 20px rgba(0,255,106,0.2); }
     </style>
     <script>
         tailwind.config = {
@@ -44,7 +42,7 @@
 </head>
 <body class="bg-brand-black text-gray-300 font-rajdhani antialiased overflow-x-hidden">
     <div class="comet-line"><div class="comet"></div></div>
-
+    
     <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="header">
         <div class="container mx-auto px-4 h-20 flex items-center justify-between">
             <a href="#inicio" class="flex items-center space-x-3">
@@ -53,7 +51,7 @@
             </a>
             <nav class="hidden md:flex items-center space-x-8">
                 <a href="#inicio"     class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Início</a>
-                <a href="#loja"       class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Loja</a>
+                <a href="loja.html"   class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Loja</a>
                 <a href="#duvidas"    class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Dúvidas</a>
                 <a href="regras.html" class="text-silver hover:text-neon-green font-semibold uppercase text-xs tracking-widest transition-colors">Regras</a>
             </nav>
@@ -61,7 +59,7 @@
         </div>
         <div id="mobile-menu" class="hidden md:hidden bg-black/95 text-center py-6 border-b border-white/5">
             <a href="#inicio"     class="block py-3 text-silver">Início</a>
-            <a href="#loja"       class="block py-3 text-silver">Loja</a>
+            <a href="loja.html"   class="block py-3 text-silver">Loja</a>
             <a href="#duvidas"    class="block py-3 text-silver">Dúvidas</a>
             <a href="regras.html" class="block py-3 text-silver">Regras</a>
         </div>
@@ -94,11 +92,11 @@
                     </div>
                     <div>
                         <h3 class="font-orbitron text-xl font-bold text-white mb-2">Compra de Veículos (via Coins)</h3>
-                        <p class="text-sm">Adquira veículos importados e de luxo via Coins para se destacar nas ruas de Adapta Capital. Temos uma vasta seleção de modelos.</p>
+                        <p class="text-sm">Adquira veículos importados e de luxo via Coins para se destacar nas ruas. Temos uma vasta seleção de modelos.</p>
                     </div>
                     <div>
                         <h3 class="font-orbitron text-xl font-bold text-white mb-2">Compra de Itens (via Coins)</h3>
-                        <p class="text-sm">Utilize suas Coins para itens de personalização, utilitários e recursos extras para facilitar sua progressão no Roleplay.</p>
+                        <p class="text-sm">Utilize suas Coins para itens de personalização, utilitários e recursos extras para facilitar sua progressão.</p>
                     </div>
                 </div>
                 <div class="text-center max-w-3xl mx-auto mb-16 bg-white/5 p-6 rounded-lg border border-neon-green/20">
@@ -106,28 +104,8 @@
                     <p class="text-sm leading-relaxed">Você pode adquirir a moeda COINS diretamente através deste site. Com as Coins em sua conta, visite nossa loja vip física localizada no Píer dentro do jogo, onde você poderá visualizar os itens antes de efetuar a compra do seu produto com as Coins.</p>
                 </div>
 
-                <!-- Cards clicáveis → vão para o checkout -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="shop-card border border-white/10 rounded-lg overflow-hidden" onclick="window.location.href='/checkout'">
-                        <img src="BRONZE.png" alt='Bronze' class="w-full" />
-                        <div class="py-3 font-orbitron text-sm font-bold tracking-widest" style="color:#00ff6a">COMPRAR</div>
-                    </div>
-                    <div class="shop-card border border-white/10 rounded-lg overflow-hidden" onclick="window.location.href='/checkout'">
-                        <img src="PRATA.png" alt='Prata' class="w-full" />
-                        <div class="py-3 font-orbitron text-sm font-bold tracking-widest" style="color:#00ff6a">COMPRAR</div>
-                    </div>
-                    <div class="shop-card border border-white/10 rounded-lg overflow-hidden" onclick="window.location.href='/checkout'">
-                        <img src="OURO.png" alt='Ouro' class="w-full" />
-                        <div class="py-3 font-orbitron text-sm font-bold tracking-widest" style="color:#00ff6a">COMPRAR</div>
-                    </div>
-                    <div class="shop-card border border-white/10 rounded-lg overflow-hidden" onclick="window.location.href='/checkout'">
-                        <img src="DIAMANTE.png" alt='Diamante' class="w-full" />
-                        <div class="py-3 font-orbitron text-sm font-bold tracking-widest" style="color:#00ff6a">COMPRAR</div>
-                    </div>
-                </div>
-
                 <div class="mt-10">
-                    <a href="/checkout" class="inline-block text-black font-orbitron font-black py-4 px-16 rounded uppercase tracking-widest hover:scale-105 transition-transform" style="background:#00ff6a; box-shadow:0 0 20px #00ff6a">
+                    <a href="loja.html" class="inline-block text-black font-orbitron font-black py-4 px-16 rounded uppercase tracking-widest hover:scale-105 transition-transform" style="background:#00ff6a; box-shadow:0 0 20px #00ff6a">
                         Ir para a Loja de Coins →
                     </a>
                 </div>
@@ -150,7 +128,7 @@
             <div class="space-y-4">
                 <p class="font-orbitron font-bold tracking-widest text-lg" style="color:#00ff6a">CNPJ: 66.621.726/0001-50</p>
                 <p class="max-w-4xl mx-auto text-[10px] sm:text-xs leading-relaxed text-gray-500 uppercase tracking-tighter">
-                    Este servidor é uma comunidade independente e não possui qualquer tipo de afiliação, vínculo ou patrocínio com a Rockstar Games ou Take-Two Interactive. Todos os direitos de modificação pertencem aos seus respectivos desenvolvedores.
+                    Este servidor é uma comunidade independente e não possui qualquer tipo de afiliação com a Rockstar Games.
                 </p>
             </div>
             <p class="text-[9px] text-gray-700 tracking-[0.5em] uppercase">© 2026 Adapta Capital - Excelência em Roleplay</p>
@@ -159,12 +137,12 @@
 
     <script>
         const faqData = [
-            { question: "Requisitos de Idade", answer: "A idade mínima exigida é de 16 anos. Além disso, exigimos que todos os jogadores demonstrem maturidade e conhecimento profundo das regras de Roleplay para garantir a qualidade da convivência." },
-            { question: "Status da Whitelist", answer: "Operamos com um sistema de Whitelist ativa que inclui uma entrevista obrigatória. Esse processo é fundamental para uma melhor organização e filtragem de jogadores, garantindo a integridade do Roleplay." },
-            { question: "Capacidade do Servidor", answer: "Nossa infraestrutura de ponta suporta até 256 slots simultâneos, garantindo um ambiente equilibrado e de alta performance para todos os cidadãos." },
-            { question: "Sistema para Streamers", answer: "Valorizamos os criadores de conteúdo. Possuímos um sistema de cargos e benefícios exclusivos para streamers que transmitem o cotidiano da nossa cidade." },
-            { question: "Empregos Iniciais", answer: "Você pode começar sua carreira legal como Caçador, explorando a fauna das florestas próximas, ou como Caminhoneiro, realizando entregas essenciais por todo o mapa." },
-            { question: "Duração da Temporada", answer: "Cada temporada em Adapta Capital tem uma duração planejada de 7 a 8 meses, permitindo que as histórias e a economia se desenvolvam de forma orgânica e recompensadora." }
+            { question: "Requisitos de Idade", answer: "A idade mínima exigida é de 16 anos. Além disso, exigimos maturidade e conhecimento das regras de Roleplay." },
+            { question: "Status da Whitelist", answer: "Operamos com Whitelist ativa que inclui uma entrevista obrigatória." },
+            { question: "Capacidade do Servidor", answer: "Suportamos até 256 slots simultâneos com alta performance." },
+            { question: "Sistema para Streamers", answer: "Possuímos cargos e benefícios exclusivos para criadores de conteúdo." },
+            { question: "Empregos Iniciais", answer: "Comece como Caçador ou Caminhoneiro para evoluir financeiramente." },
+            { question: "Duração da Temporada", answer: "Cada temporada dura em média 7 a 8 meses." }
         ];
         function init() {
             const container = document.getElementById('faq-container');
