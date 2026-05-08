@@ -8,48 +8,50 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
-    :root { --neon:#00ff6a; --neon-dim:rgba(0,255,106,0.1); --bg:#030303; --panel:rgba(10,10,12,0.9); }
-    *{box-sizing:border-box;}
-    body{background:var(--bg);color:#fff;font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
-    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,106,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,106,.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
-    .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
-    .glass{background:var(--panel);border:1px solid rgba(0,255,106,0.07);backdrop-filter:blur(30px);border-radius:1.5rem;}
-    .badge{background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2);color:var(--neon);border-radius:9999px;font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;}
+    :root { --neon: #00ff6a; --bg: #030303; --panel: rgba(10,10,12,0.92); }
+    * { box-sizing: border-box; }
+    body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(0,255,106,.02) 1px,transparent 1px), linear-gradient(90deg,rgba(0,255,106,.02) 1px,transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none; z-index: 0;
+    }
+    .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+    .comet { position: fixed; background: linear-gradient(90deg, transparent, var(--neon)); box-shadow: 0 0 10px var(--neon); animation: comet-fly 14s linear infinite; pointer-events: none; z-index: 2; }
+    @keyframes comet-fly {
+      0%{top:0;left:-200px;width:150px;height:2px} 24%{top:0;left:100%;width:150px;height:2px}
+      25%{top:0;left:100%;width:2px;height:150px} 49%{top:100%;left:100%;width:2px;height:150px}
+      50%{top:100%;left:100%;width:150px;height:2px} 74%{top:100%;left:-200px;width:150px;height:2px}
+      75%{top:100%;left:0;width:2px;height:150px} 100%{top:-200px;left:0;width:2px;height:150px}
+    }
+    .glass { background: var(--panel); border: 1px solid rgba(0,255,106,0.07); backdrop-filter: blur(30px); border-radius: 1.5rem; }
+    .badge { background:rgba(0,255,106,0.1); border:1px solid rgba(0,255,106,0.2); color:var(--neon); border-radius:9999px; font-size:0.6rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; padding:3px 10px; display:inline-flex; align-items:center; gap:6px; }
 
-    /* TOC sidebar */
-    .toc-link{display:block;padding:8px 12px;border-radius:8px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);transition:all 0.2s;text-decoration:none;border-left:2px solid transparent;}
-    .toc-link:hover{color:var(--neon);border-left-color:var(--neon);background:rgba(0,255,106,0.04);}
-    .toc-link.active{color:var(--neon);border-left-color:var(--neon);background:rgba(0,255,106,0.06);}
+    /* Seções */
+    .section-block { border-left: 2px solid rgba(0,255,106,0.2); padding-left: 1.5rem; margin-bottom: 2.5rem; }
+    .section-block h2 { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; color: var(--neon); margin-bottom: 1rem; }
+    .section-block p { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.8; margin-bottom: 0.75rem; }
+    .section-block ul { list-style: none; padding: 0; }
+    .section-block ul li { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.8; padding-left: 1.25rem; position: relative; margin-bottom: 0.5rem; }
+    .section-block ul li::before { content: '▸'; color: var(--neon); position: absolute; left: 0; font-size: 0.7rem; top: 6px; }
+    strong { color: #fff; font-weight: 700; }
 
-    /* Content */
-    .section-title{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:#fff;margin-bottom:1.25rem;padding-bottom:0.875rem;border-bottom:1px solid rgba(0,255,106,0.12);display:flex;align-items:center;gap:12px;}
-    .section-title span{color:var(--neon);font-size:0.75rem;}
-    .prose-content{color:rgba(255,255,255,0.55);font-size:0.925rem;line-height:1.85;font-weight:500;}
-    .prose-content strong{color:rgba(255,255,255,0.85);font-weight:700;}
-    .prose-content p{margin-bottom:1rem;}
-    .prose-content ul{list-style:none;margin-bottom:1rem;space-y:6px;}
-    .prose-content ul li{padding-left:1.5rem;position:relative;margin-bottom:0.5rem;}
-    .prose-content ul li::before{content:'▸';position:absolute;left:0;color:var(--neon);font-size:0.75rem;top:3px;}
-    .prose-content .sub-item{padding-left:2.5rem;}
-    .prose-content .sub-item::before{content:'·';}
+    /* TOC */
+    .toc-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none; transition: all 0.2s; }
+    .toc-item:hover { background: rgba(0,255,106,0.06); color: var(--neon); }
+    .toc-num { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; color: var(--neon); min-width: 20px; }
 
-    .highlight-box{background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.15);border-radius:0.875rem;padding:1.25rem 1.5rem;margin:1.25rem 0;color:rgba(0,255,106,0.8);font-size:0.875rem;font-weight:600;}
-    .warning-box{background:rgba(255,60,60,0.05);border:1px solid rgba(255,60,60,0.2);border-radius:0.875rem;padding:1.25rem 1.5rem;margin:1.25rem 0;color:rgba(255,120,120,0.9);font-size:0.875rem;font-weight:600;}
-
-    section{scroll-margin-top:100px;}
-
-    /* Progress bar */
-    #progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--neon);box-shadow:0 0 8px var(--neon);transition:width 0.1s;z-index:100;}
-
-    /* Back button */
-    .btn-back{background:rgba(0,66,28,0.6);color:var(--neon);border:1px solid rgba(0,255,106,0.2);border-radius:9999px;padding:10px 24px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all 0.3s;text-decoration:none;}
-    .btn-back:hover{background:var(--neon);color:#000;box-shadow:0 0 30px rgba(0,255,106,0.3);}
+    /* Fade in */
+    .fade-in { animation: fadeIn 0.6s ease forwards; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
   </style>
 </head>
 <body>
-  <div id="progress-bar" style="width:0%"></div>
-  <div class="orb" style="width:500px;height:500px;background:rgba(0,255,106,0.03);top:-20%;left:-10%"></div>
-  <div class="orb" style="width:350px;height:350px;background:rgba(0,255,106,0.02);bottom:-10%;right:-5%"></div>
+  <div class="orb" style="width:500px;height:500px;background:rgba(0,255,106,0.04);top:-15%;left:-10%"></div>
+  <div class="orb" style="width:350px;height:350px;background:rgba(0,255,106,0.03);bottom:-10%;right:-5%"></div>
+  <div class="comet"></div>
 
   <!-- Header -->
   <header class="relative z-10 w-full px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
@@ -57,225 +59,134 @@
       <img src="ac.png" alt="AC" class="h-9 w-auto">
       <div>
         <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm tracking-widest">ADAPTA CAPITAL</p>
-        <p class="text-[8px] text-gray-600 tracking-[0.4em] uppercase">Legal Documents</p>
+        <p class="text-[8px] text-gray-600 tracking-[0.4em] uppercase">Termos e Condições</p>
       </div>
     </a>
-    <div class="badge"><i data-lucide="file-text" class="w-3 h-3"></i> Termos Oficiais</div>
+    <div class="badge"><span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span> Documento Legal</div>
   </header>
 
-  <!-- Page title -->
-  <div class="relative z-10 max-w-7xl mx-auto px-6 py-10 mb-4">
-    <p class="text-[10px] font-bold tracking-[0.5em] uppercase text-green-500 mb-3 flex items-center gap-3">
-      <span class="w-8 h-px bg-green-500"></span> Documento Legal
-    </p>
-    <h1 style="font-family:'Orbitron',sans-serif" class="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white mb-4">
-      Termos e <span style="color:var(--neon)">Condições</span>
-    </h1>
-    <p class="text-gray-500 text-sm max-w-xl">Última atualização: Janeiro de 2026 · Ao realizar qualquer compra na loja da Adapta Capital, você concorda integralmente com este documento.</p>
-  </div>
+  <main class="relative z-10 max-w-7xl mx-auto px-6 pb-20 fade-in">
 
-  <!-- Main layout -->
-  <main class="relative z-10 max-w-7xl mx-auto px-6 pb-24">
-    <div class="grid lg:grid-cols-12 gap-8 items-start">
+    <!-- Hero -->
+    <div class="mb-12 pt-4">
+      <p class="text-[10px] font-bold tracking-[0.5em] uppercase text-green-500 mb-3 flex items-center gap-3">
+        <span class="w-8 h-px bg-green-500"></span> Leia com atenção
+      </p>
+      <h1 style="font-family:'Orbitron',sans-serif" class="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white mb-4">
+        Termos e <span style="color:var(--neon)">Condições</span>
+      </h1>
+      <p class="text-gray-500 text-sm max-w-2xl leading-relaxed">
+        Ao realizar qualquer compra em nossa plataforma, o Usuário declara ter lido, compreendido e concordado integralmente com os termos a seguir. Este documento constitui um acordo legal entre o Usuário e a <strong>Adapta Capital Roleplay</strong>.
+      </p>
+      <div class="flex items-center gap-4 mt-4">
+        <span class="text-[10px] text-gray-600 uppercase tracking-widest">Última atualização: 07 de maio de 2026</span>
+      </div>
+    </div>
 
-      <!-- Sidebar TOC -->
-      <aside class="lg:col-span-3 hidden lg:block sticky top-24">
-        <div class="glass p-5">
-          <p style="font-family:'Orbitron',sans-serif" class="text-[9px] font-black uppercase tracking-widest text-green-500 mb-4">Índice</p>
-          <nav class="space-y-1" id="toc">
-            <a href="#intro"         class="toc-link active">Introdução</a>
-            <a href="#s1"            class="toc-link">1. Objeto</a>
-            <a href="#s2"            class="toc-link">2. Modificações</a>
-            <a href="#s3"            class="toc-link">3. Privacidade</a>
-            <a href="#s4"            class="toc-link">4. Obrigações</a>
-            <a href="#s5"            class="toc-link">5. Uso Indevido</a>
-            <a href="#s6"            class="toc-link">6. Sanções</a>
-            <a href="#s7"            class="toc-link">7. Reembolso</a>
-            <a href="#s8"            class="toc-link">8. Assinaturas</a>
+    <div class="grid lg:grid-cols-12 gap-8">
+
+      <!-- Sumário -->
+      <div class="lg:col-span-3">
+        <div class="glass p-5 sticky top-6">
+          <p style="font-family:'Orbitron',sans-serif" class="text-[9px] font-black uppercase tracking-[0.3em] text-green-500 mb-4">Sumário</p>
+          <nav class="space-y-1">
+            <a href="#s1"  class="toc-item"><span class="toc-num">01</span> Objeto</a>
+            <a href="#s2"  class="toc-item"><span class="toc-num">02</span> Modificações</a>
+            <a href="#s3"  class="toc-item"><span class="toc-num">03</span> Privacidade</a>
+            <a href="#s4"  class="toc-item"><span class="toc-num">04</span> Obrigações</a>
+            <a href="#s5"  class="toc-item"><span class="toc-num">05</span> Uso Indevido</a>
+            <a href="#s6"  class="toc-item"><span class="toc-num">06</span> Sanções</a>
+            <a href="#s7"  class="toc-item"><span class="toc-num">07</span> Reembolso</a>
+            <a href="#s8"  class="toc-item"><span class="toc-num">08</span> Assinaturas</a>
           </nav>
-          <div class="mt-6 pt-4" style="border-top:1px solid rgba(255,255,255,0.05)">
-            <a href="/checkout" class="btn-back text-center w-full justify-center">
-              <i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar
+          <div class="mt-6 pt-5 border-t border-white/5">
+            <a href="/checkout" class="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-gray-600 hover:text-green-400 transition-colors">
+              <i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar ao Checkout
             </a>
           </div>
         </div>
-      </aside>
+      </div>
 
-      <!-- Content -->
-      <div class="lg:col-span-9 space-y-6">
+      <!-- Conteúdo -->
+      <div class="lg:col-span-9 glass p-8 md:p-12">
 
-        <!-- Intro -->
-        <section id="intro" class="glass p-8">
-          <div class="highlight-box flex items-start gap-3 mb-6">
-            <i data-lucide="info" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
-            <div>
-              <p class="font-black mb-1">Bem-vindo à Adapta Capital</p>
-              <p class="text-sm opacity-80">Ao realizar qualquer compra em nossa loja virtual, você declara ser maior de idade (ou estar representado por seu responsável legal) e concordar integralmente com estes Termos. Caso não concorde, não finalize a compra.</p>
-            </div>
-          </div>
-          <div class="prose-content">
-            <p>Estes Termos constituem um acordo legal entre você (<strong>Usuário</strong>) e a <strong>Adapta Capital</strong>, regendo a aquisição de benefícios virtuais oferecidos em nosso servidor de GTA RP. Recomendamos a leitura atenta deste documento antes de prosseguir com qualquer transação.</p>
-            <p>Os serviços abrangem a venda de moedas virtuais (<strong>Adapta Coins</strong>), itens de jogo, VIPs, assinaturas e outros produtos digitais disponibilizados em nossa loja online.</p>
-          </div>
-        </section>
+        <div id="s1" class="section-block">
+          <h2>1. Objeto</h2>
+          <p><strong>1.1.</strong> Os serviços abrangidos por estes Termos consistem na venda de benefícios virtuais para uso no servidor <strong>Adapta Capital Roleplay</strong>, tais como vantagens de jogo (VIPs), itens virtuais, moedas do jogo (Coins), assinaturas e outros produtos/serviços digitais disponibilizados em nossa loja online.</p>
+          <p><strong>1.2.</strong> O Usuário é inteiramente responsável pela veracidade e exatidão dos dados fornecidos no momento da compra. Informações incorretas ou incompletas podem resultar em atraso ou impossibilidade na entrega dos benefícios.</p>
+          <p><strong>1.3.</strong> Ao efetuar compras em nossa loja, o Usuário adquire direitos de uso sobre os benefícios virtuais escolhidos, mediante o pagamento do valor correspondente e aceitação integral destes Termos.</p>
+          <p><strong>1.4. Entrega dos benefícios:</strong> a disponibilização dos itens virtuais é automática e imediata após a confirmação do pagamento. Em casos que exijam configuração manual, a entrega poderá ser realizada pela equipe em prazo acordado.</p>
+          <p><strong>1.5. Validade dos benefícios:</strong> cada benefício possui validade definida. Itens temporários expiram na data informada. Benefícios "permanentes" vigoram até o próximo wipe total do servidor. Em caso de wipe ou encerramento, todos os itens serão perdidos, sem direito a reembolso, pois essa condição é inerente à natureza do serviço.</p>
+          <p><strong>1.6. Ajustes de balanceamento:</strong> atributos e características dos itens adquiridos poderão ser ajustados periodicamente pela equipe, sem aviso prévio, visando manter o equilíbrio e a jogabilidade. Tais ajustes não garantem reembolso ou troca.</p>
+          <p><strong>1.7. Natureza dos produtos virtuais:</strong> todos os produtos adquiridos são bens intangíveis, de uso exclusivo dentro do jogo, sem valor monetário no mundo real. Não podem ser convertidos em dinheiro, nem transferidos para outros servidores.</p>
+        </div>
 
-        <!-- Seção 1 -->
-        <section id="s1" class="glass p-8">
-          <h2 class="section-title"><span>01</span> Objeto</h2>
-          <div class="prose-content">
-            <p>Os serviços abrangidos por estes Termos consistem na venda de benefícios virtuais para uso no servidor <strong>Adapta Capital RP</strong>, tais como Adapta Coins, itens virtuais, VIPs, assinaturas e outros produtos digitais disponibilizados em nossa loja.</p>
-            <p>O Usuário é inteiramente responsável pela veracidade e exatidão dos dados fornecidos no momento da compra. Informações incorretas podem resultar em atraso ou impossibilidade na entrega dos benefícios.</p>
-            <ul>
-              <li><strong>Entrega imediata:</strong> a disponibilização dos itens é automática após confirmação do pagamento. Em casos excepcionais que exijam configuração manual, a equipe realizará a entrega dentro de prazo acordado.</li>
-              <li><strong>Validade dos benefícios:</strong> cada item possui validade definida. Benefícios temporários (ex.: VIP mensal) expiram na data informada; permanentes vigoram até o próximo wipe do servidor.</li>
-              <li><strong>Wipe/reinício:</strong> em caso de reset total da temporada, todos os itens — inclusive os permanentes — serão perdidos sem direito a reembolso, pois essa condição é inerente à natureza do serviço.</li>
-              <li><strong>Ajustes de balanceamento:</strong> atributos e características dos itens podem ser ajustados pela equipe sem aviso prévio para manutenção do equilíbrio do jogo, sem gerar direito a reembolso.</li>
-              <li><strong>Natureza virtual:</strong> todos os produtos são bens intangíveis, de uso exclusivo dentro do servidor, sem valor monetário no mundo real. Não podem ser convertidos em dinheiro ou transferidos para outros servidores.</li>
-            </ul>
-          </div>
-        </section>
+        <div id="s2" class="section-block">
+          <h2>2. Modificações dos Termos</h2>
+          <p><strong>2.1.</strong> A <strong>Adapta Capital</strong> reserva-se o direito de alterar estes Termos a qualquer tempo, por motivos de adequação legal ou melhoria dos serviços. As alterações entrarão em vigor imediatamente após publicação. Caso não concorde, o Usuário deverá manifestar sua discordância por escrito via Discord oficial em até 24 horas. A continuidade de uso dos serviços representa aceite das novas condições.</p>
+          <p><strong>2.2.</strong> Alterações nestes Termos não afetarão retroativamente transações já concluídas. As novas disposições aplicar-se-ão apenas às compras futuras.</p>
+        </div>
 
-        <!-- Seção 2 -->
-        <section id="s2" class="glass p-8">
-          <h2 class="section-title"><span>02</span> Modificações dos Termos</h2>
-          <div class="prose-content">
-            <p>A Adapta Capital reserva-se o direito de alterar estes Termos a qualquer tempo, seja por adequação legal ou melhoria dos serviços. As alterações entrarão em vigor imediatamente após publicação na plataforma.</p>
-            <ul>
-              <li>Caso não concorde com as novas condições, o Usuário deverá manifestar sua discordância por escrito (via Discord oficial) em até <strong>24 horas</strong> após a publicação das mudanças.</li>
-              <li>A continuidade de uso dos serviços ou realização de novas compras sem manifestação dentro desse prazo será interpretada como aceite tácito às novas condições.</li>
-              <li>Alterações nos Termos não afetarão retroativamente transações já concluídas antes da publicação das mudanças.</li>
-            </ul>
-          </div>
-        </section>
+        <div id="s3" class="section-block">
+          <h2>3. Privacidade e Segurança da Informação</h2>
+          <p><strong>3.1.</strong> A <strong>Adapta Capital</strong> valoriza a privacidade de seus Usuários e empregará medidas de segurança adequadas para proteger as informações coletadas. Dados serão utilizados somente para execução dos serviços, conforme a legislação aplicável (LGPD). A plataforma não se responsabiliza por ataques ilícitos de terceiros fora de seu controle.</p>
+          <p><strong>3.2.</strong> O Usuário autoriza o compartilhamento de informações estritamente necessárias com parceiros envolvidos no processamento do pagamento (como MercadoPago, PayPal e instituições financeiras), resguardadas as obrigações de confidencialidade. Em hipótese alguma os dados serão vendidos a terceiros.</p>
+          <p><strong>3.3.</strong> Para dúvidas sobre privacidade ou exercício de direitos previstos na LGPD, o Usuário poderá contatar nossa equipe através do Discord oficial.</p>
+        </div>
 
-        <!-- Seção 3 -->
-        <section id="s3" class="glass p-8">
-          <h2 class="section-title"><span>03</span> Privacidade e Segurança</h2>
-          <div class="prose-content">
-            <p>A Adapta Capital valoriza a privacidade de seus Usuários e adota medidas de segurança adequadas para proteger as informações pessoais coletadas, em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD)</strong>.</p>
-            <ul>
-              <li>Dados sensíveis são armazenados de forma segura e utilizados apenas para execução dos serviços.</li>
-              <li>A Adapta Capital não vende ou compartilha dados pessoais com terceiros para finalidades alheias à prestação de serviço.</li>
-              <li>Em caso de incidente de segurança, os usuários afetados serão notificados conforme exigido em lei.</li>
-              <li>O Usuário autoriza o compartilhamento de dados estritamente necessários com parceiros de pagamento (<strong>Mercado Pago, PayPal</strong>) para processamento das transações.</li>
-            </ul>
-            <p>Em caso de dúvidas sobre privacidade ou exercício de direitos previstos na LGPD, entre em contato pelo Discord oficial da Adapta Capital.</p>
-          </div>
-        </section>
+        <div id="s4" class="section-block">
+          <h2>4. Obrigações do Usuário</h2>
+          <p><strong>4.1.</strong> Para realizar compras, o Usuário deverá fornecer todas as informações solicitadas de forma completa e precisa, mantendo seus dados cadastrais atualizados.</p>
+          <p><strong>4.2.</strong> O Usuário assume plena responsabilidade pela veracidade dos dados fornecidos, comprometendo-se a não utilizar identidade falsa ou dados de terceiros sem autorização.</p>
+          <p><strong>4.3.</strong> O Usuário compromete-se a guardar em sigilo suas credenciais de acesso. Qualquer atividade realizada por sua conta será de sua exclusiva responsabilidade. Em caso de suspeita de acesso não autorizado, o Usuário deverá notificar imediatamente a equipe da Adapta Capital.</p>
+        </div>
 
-        <!-- Seção 4 -->
-        <section id="s4" class="glass p-8">
-          <h2 class="section-title"><span>04</span> Obrigações do Usuário</h2>
-          <div class="prose-content">
-            <p>Para realizar compras na loja virtual, o Usuário deverá possuir um cadastro válido, fornecendo informações completas, precisas e atualizadas.</p>
-            <ul>
-              <li>O Usuário assume plena responsabilidade pela veracidade dos dados fornecidos, comprometendo-se a não utilizar identidade falsa ou dados de terceiros.</li>
-              <li>É obrigação do Usuário manter suas credenciais de acesso (conta Discord, ID do jogo) em sigilo. Qualquer atividade realizada através da conta do Usuário é de sua exclusiva responsabilidade.</li>
-              <li>Em caso de suspeita de acesso não autorizado à conta, o Usuário deverá notificar imediatamente a equipe via Discord.</li>
-              <li>Informações inconsistentes poderão resultar na suspensão da entrega do produto até esclarecimento ou cancelamento da compra.</li>
-            </ul>
-          </div>
-        </section>
+        <div id="s5" class="section-block">
+          <h2>5. Uso Indevido e Violações</h2>
+          <p><strong>5.1.</strong> É estritamente proibido o uso de hacks, cheats, bots, mods não autorizados, engenharia reversa, ataques (DDoS, exploits) ou quaisquer meios ilícitos que visem fraudar ou interferir no funcionamento do servidor ou da loja virtual.</p>
+          <p><strong>5.2.</strong> Em caso de uso indevido detectado, a Adapta Capital poderá adotar as medidas cabíveis descritas na Seção 6. O infrator poderá ser responsabilizado civil e penalmente pelos atos ilícitos praticados.</p>
+        </div>
 
-        <!-- Seção 5 -->
-        <section id="s5" class="glass p-8">
-          <h2 class="section-title"><span>05</span> Uso Indevido e Violações</h2>
-          <div class="prose-content">
-            <div class="warning-box flex items-start gap-3">
-              <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 mt-0.5" style="color:rgba(255,120,120,0.9)"></i>
-              <p>É estritamente proibido qualquer uso de hacks, cheats, bots, exploits ou meios ilícitos que visem fraudar o servidor ou a loja virtual.</p>
-            </div>
-            <p>Isso inclui, mas não se limita a:</p>
-            <ul>
-              <li>Utilização de softwares maliciosos, scripts ou bots não autorizados.</li>
-              <li>Engenharia reversa, ataques DDoS ou exploits do sistema.</li>
-              <li>Tentativas de fraude em pagamentos ou uso de dados de terceiros sem autorização.</li>
-              <li>Qualquer artifício para obter vantagem indevida sobre outros jogadores.</li>
-            </ul>
-            <p>Infrações poderão resultar em responsabilização civil e penal, além das sanções internas descritas na seção seguinte.</p>
-          </div>
-        </section>
+        <div id="s6" class="section-block">
+          <h2>6. Sanções</h2>
+          <p><strong>6.1.</strong> O não cumprimento destes Termos poderá sujeitar o Usuário às seguintes sanções, conforme a gravidade da conduta:</p>
+          <ul>
+            <li>Advertência formal;</li>
+            <li>Suspensão temporária da conta e dos benefícios;</li>
+            <li>Banimento temporário ou permanente da plataforma;</li>
+            <li>Medidas judiciais cabíveis para reparação de danos.</li>
+          </ul>
+          <p class="mt-3"><strong>Situações que podem resultar em sanção:</strong></p>
+          <ul>
+            <li>Descumprimento de qualquer cláusula destes Termos;</li>
+            <li>Infração às regras internas do servidor Adapta Capital;</li>
+            <li>Práticas fraudulentas ou uso de softwares maliciosos;</li>
+            <li>Inconsistências nas informações fornecidas no cadastro ou compra;</li>
+            <li>Realização de chargeback após recebimento e uso dos itens adquiridos.</li>
+          </ul>
+          <p><strong>6.2.</strong> Em caso de banimento, o Usuário perderá o acesso aos benefícios adquiridos, sem direito a reembolso. A Adapta Capital reserva-se o direito de recusar novas inscrições do mesmo indivíduo enquanto perdurarem sanções graves.</p>
+        </div>
 
-        <!-- Seção 6 -->
-        <section id="s6" class="glass p-8">
-          <h2 class="section-title"><span>06</span> Sanções</h2>
-          <div class="prose-content">
-            <p>O não cumprimento destes Termos poderá sujeitar o Usuário às seguintes sanções, conforme a gravidade da conduta:</p>
-            <ul>
-              <li>Advertência formal</li>
-              <li>Suspensão temporária da conta</li>
-              <li>Banimento temporário ou permanente</li>
-              <li>Perda de acesso a todos os benefícios adquiridos (sem reembolso)</li>
-              <li>Medidas judiciais cabíveis</li>
-            </ul>
-            <p>Em especial, o Usuário poderá ser sancionado nas seguintes situações:</p>
-            <ul>
-              <li>Descumprimento de qualquer cláusula destes Termos.</li>
-              <li>Infração das regras internas do servidor (roleplay, conduta, fair-play).</li>
-              <li>Práticas fraudulentas identificadas no cadastro ou no pagamento.</li>
-              <li class="warning-box" style="padding:0.75rem 1rem;list-style:none;border-radius:0.75rem;margin-top:0.5rem">
-                <strong>Chargeback indevido:</strong> solicitação de estorno junto à operadora financeira após ter recebido e utilizado os itens adquiridos. Esta conduta é considerada <strong>má-fé grave</strong> e resulta em banimento permanente imediato.
-              </li>
-            </ul>
-          </div>
-        </section>
+        <div id="s7" class="section-block">
+          <h2>7. Cancelamento e Política de Reembolso</h2>
+          <p><strong>7.1. Direito de arrependimento:</strong> em conformidade com o artigo 49 do Código de Defesa do Consumidor, o Usuário pode solicitar cancelamento com reembolso integral em até 7 (sete) dias da compra, desde que não tenha acessado ou usufruído dos benefícios virtuais. Se o item já foi entregue e utilizado, o reembolso ficará inviabilizado.</p>
+          <p><strong>7.2. Transações finais:</strong> fora da hipótese de arrependimento legal acima, todas as vendas são definitivas e não reembolsáveis. Problemas técnicos comprovados ou falhas de entrega poderão ser analisados caso a caso pela administração, sem obrigação de reembolso.</p>
+          <p><strong>7.3. Banimentos:</strong> não haverá reembolso em caso de banimento por infração das regras ou destes Termos. Os valores pagos por benefícios em vigência serão perdidos sem direito a devolução.</p>
+          <p><strong>7.4. Chargebacks indevidos:</strong> o procedimento de chargeback não deve ser utilizado como meio de reembolso para itens virtuais já entregues. Tal ato será considerado abuso de direito e resultará em banimento imediato. A Adapta Capital tomará medidas para se defender junto à instituição de pagamento, apresentando comprovantes da entrega e da aceitação destes Termos.</p>
+        </div>
 
-        <!-- Seção 7 -->
-        <section id="s7" class="glass p-8">
-          <h2 class="section-title"><span>07</span> Cancelamento e Reembolso</h2>
-          <div class="prose-content">
-            <div class="highlight-box flex items-start gap-3">
-              <i data-lucide="info" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
-              <div>
-                <p class="font-black mb-1">Direito de Arrependimento (CDC, Art. 49)</p>
-                <p class="text-sm opacity-80">O Usuário pode solicitar cancelamento com reembolso integral em até <strong>7 dias</strong> da compra, desde que os benefícios não tenham sido acessados ou utilizados.</p>
-              </div>
-            </div>
-            <ul>
-              <li>Se os itens já tiverem sido resgatados e utilizados no jogo, o reembolso fica inviabilizado, pois o conteúdo digital já foi consumido.</li>
-              <li>Fora do prazo de 7 dias, todas as vendas são consideradas definitivas e não reembolsáveis.</li>
-              <li>Problemas técnicos comprovados do servidor ou falhas na entrega serão analisados caso a caso pela administração.</li>
-              <li><strong>Banimentos por infração:</strong> não haverá reembolso em caso de banimento por violação das regras.</li>
-            </ul>
-
-            <p class="mt-4"><strong>Sobre chargebacks:</strong> o procedimento de estorno junto à operadora não deve ser usado como meio de reembolso para itens já entregues. Tal ato configura abuso de direito e descumprimento contratual, sujeitando o Usuário a banimento imediato e medidas jurídicas. Sempre nos contate primeiro pelo Discord para resolução amigável.</p>
-          </div>
-        </section>
-
-        <!-- Seção 8 -->
-        <section id="s8" class="glass p-8">
-          <h2 class="section-title"><span>08</span> Assinaturas Recorrentes</h2>
-          <div class="prose-content">
-            <p>Certos benefícios, como o <strong>VIP Mensal</strong>, funcionam na modalidade de assinatura recorrente com cobranças automáticas mensais.</p>
-            <ul>
-              <li>É responsabilidade exclusiva do Usuário cancelar a assinatura caso não deseje renová-la.</li>
-              <li>O cancelamento deve ser solicitado com pelo menos <strong>5 dias de antecedência</strong> da data de renovação, via Discord ou canais de suporte oficiais.</li>
-              <li>Cobranças já efetuadas por falta de cancelamento prévio não são reembolsáveis, pois o serviço estava reservado para o Usuário.</li>
-              <li>A Adapta Capital pode descontinuar ou ajustar planos recorrentes, comunicando os assinantes com antecedência razoável.</li>
-            </ul>
-          </div>
-        </section>
+        <div id="s8" class="section-block">
+          <h2>8. Assinaturas Recorrentes (VIP Mensal)</h2>
+          <p><strong>8.1.</strong> Certos benefícios, como o plano VIP Mensal, funcionam na modalidade de assinatura recorrente com cobranças automáticas mensais. Ao contratar, o Usuário autoriza cobranças sucessivas até o cancelamento.</p>
+          <p><strong>8.2. Cancelamento:</strong> é responsabilidade do Usuário cancelar sua assinatura com pelo menos 5 (cinco) dias de antecedência da data de renovação, via Discord ou canais de suporte.</p>
+          <p><strong>8.3.</strong> Caso o cancelamento não seja solicitado dentro do prazo, o próximo pagamento será capturado automaticamente. Não haverá reembolso do valor cobrado para o ciclo já iniciado.</p>
+          <p><strong>8.4.</strong> A Adapta Capital reserva-se o direito de descontinuar planos de assinatura, informando os assinantes com antecedência razoável e garantindo opção de cancelamento ou migração sem penalidades.</p>
+        </div>
 
         <!-- Aceite final -->
-        <div class="glass p-8" style="border-color:rgba(0,255,106,0.15)">
-          <div class="flex items-start gap-4">
-            <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2)">
-              <i data-lucide="check-circle" class="w-6 h-6" style="color:var(--neon)"></i>
-            </div>
-            <div>
-              <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm uppercase tracking-widest mb-2">Aceite dos Termos</p>
-              <p class="text-gray-500 text-sm leading-relaxed">Ao prosseguir com qualquer compra na loja Adapta Capital, o Usuário declara que leu, entendeu e concordou integralmente com todos os termos e condições aqui descritos. A utilização contínua da plataforma representa a aceitação tácita destes Termos e de eventuais atualizações.</p>
-              <p class="text-gray-600 text-xs mt-3">Em caso de dúvidas, entre em contato via nosso Discord oficial. Agradecemos por fazer parte da comunidade Adapta Capital!</p>
-            </div>
-          </div>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <a href="/checkout" class="btn-back">
-              <i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar ao Checkout
-            </a>
-            <a href="/produto" class="btn-back" style="background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.08);">
-              <i data-lucide="store" class="w-3 h-3"></i> Ir à Loja
-            </a>
-          </div>
+        <div class="mt-8 p-6 rounded-2xl" style="background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.15)">
+          <p style="font-family:'Orbitron',sans-serif" class="text-[9px] font-black uppercase tracking-[0.3em] text-green-500 mb-3">Declaração de Aceite</p>
+          <p class="text-gray-400 text-sm leading-relaxed">Ao prosseguir com qualquer compra na loja Adapta Capital, o Usuário declara que <strong>leu, entendeu e concordou integralmente</strong> com todos os termos e condições acima descritos. Em caso de dúvidas, estamos à disposição via <a href="https://discord.gg/utxY9y7vZ" target="_blank" class="text-green-400 hover:underline">Discord oficial</a>.</p>
         </div>
 
       </div>
@@ -283,32 +194,9 @@
   </main>
 
   <footer class="relative z-10 py-12 text-center text-[9px] font-bold uppercase tracking-[0.5em] text-gray-800">
-    Adapta Capital &copy; 2026 — Legal Documents v1.0
+    Adapta Capital &copy; 2026 — Todos os direitos reservados
   </footer>
 
-  <script>
-    lucide.createIcons();
-
-    // Progress bar de leitura
-    window.addEventListener('scroll', () => {
-      const docH  = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const pct   = (window.scrollY / docH) * 100;
-      document.getElementById('progress-bar').style.width = pct + '%';
-    });
-
-    // TOC ativo
-    const sections = document.querySelectorAll('section[id]');
-    const tocLinks = document.querySelectorAll('.toc-link');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          tocLinks.forEach(l => l.classList.remove('active'));
-          const active = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { rootMargin: '-20% 0px -70% 0px' });
-    sections.forEach(s => observer.observe(s));
-  </script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
