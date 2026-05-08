@@ -57,11 +57,19 @@ app.get("/termos", (req, res) => {
 
 // ── Auth Discord ──────────────────────────────────────────────────────────────
 app.get("/auth/discord", (req, res) => {
+  // Salva carrinho no state para sobreviver ao redirect do OAuth
+  const state = JSON.stringify({
+    product: req.query.product || "",
+    qty:     req.query.qty     || "1",
+    total:   req.query.total   || "",
+  });
+
   const params = new URLSearchParams({
     client_id:     DISCORD_CLIENT_ID,
     redirect_uri:  REDIRECT_URI,
     response_type: "code",
     scope:         "identify",
+    state:         Buffer.from(state).toString("base64"),
   });
   res.redirect(`https://discord.com/oauth2/authorize?${params}`);
 });
@@ -69,7 +77,12 @@ app.get("/auth/discord", (req, res) => {
 // ── Callback Discord ──────────────────────────────────────────────────────────
 app.get("/callback", async (req, res) => {
   const { code, error } = req.query;
-  if (error || !code) return res.redirect("/checkout?auth=error");
+  const state = req.query.state || "";
+  let cart = { product: "", qty: "1", total: "" };
+  try { cart = JSON.parse(Buffer.from(state, "base64").toString()); } catch(e) {}
+  const cartQuery = cart.product ? `&product=${cart.product}&qty=${cart.qty}&total=${cart.total}` : "";
+
+  if (error || !code) return res.redirect("/checkout?auth=error" + cartQuery);
 
   try {
     const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
@@ -108,7 +121,7 @@ app.get("/callback", async (req, res) => {
       avatar,
     });
 
-    res.redirect(`/checkout?${params}`);
+    res.redirect(`/checkout?${params}${cartQuery}`);
   } catch (err) {
     console.error("[OAuth2 Error]", err);
     res.redirect("/checkout?auth=error");
