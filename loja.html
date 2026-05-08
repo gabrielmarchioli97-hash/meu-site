@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADAPTA CAPITAL — ASSET STORE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --neon: #00ff6a;
+      --neon-dim: rgba(0,255,106,0.15);
+      --neon-glow: rgba(0,255,106,0.4);
+      --bg: #030303;
+      --panel: rgba(10,10,12,0.9);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,106,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,106,.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scan line */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon), transparent);
+      animation: scan 8s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes scan { to { top: 110%; } }
+
+    .glass {
+      background: var(--panel);
+      border: 1px solid rgba(0,255,106,0.08);
+      backdrop-filter: blur(30px);
+    }
+
+    /* Product cards */
+    .prod-card {
+      background: rgba(10,10,12,0.8);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      position: relative;
+    }
+    .prod-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--neon-dim) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .prod-card:hover {
+      border-color: rgba(0,255,106,0.3);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px var(--neon-glow);
+    }
+    .prod-card:hover::before { opacity: 1; }
+    .prod-card.selected {
+      border-color: var(--neon);
+      box-shadow: 0 0 40px var(--neon-glow), inset 0 0 20px rgba(0,255,106,0.05);
+    }
+
+    /* Qty control */
+    .qty-wrap {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      padding: 6px;
+    }
+    .qty-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .qty-btn:hover { background: rgba(0,255,106,0.1); color: var(--neon); }
+
+    /* CTA button */
+    .btn-cta {
+      background: rgba(0,66,28,0.8);
+      color: var(--neon);
+      border: 1px solid rgba(0,255,106,0.25);
+      border-radius: 9999px;
+      width: 100%;
+      height: 72px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--neon);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .btn-cta:hover::before { transform: scaleX(1); }
+    .btn-cta:hover { color: #000; box-shadow: 0 0 50px var(--neon-glow); transform: translateY(-4px); }
+    .btn-cta span { position: relative; z-index: 1; }
+
+    /* Badge */
+    .badge-neon {
+      background: rgba(0,255,106,0.1);
+      border: 1px solid rgba(0,255,106,0.2);
+      color: var(--neon);
+      border-radius: 9999px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+    }
+
+    .info-block {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 1rem;
+      padding: 1rem 1.25rem;
+      transition: all 0.3s;
+    }
+    .info-block:hover {
+      background: rgba(0,255,106,0.03);
+      border-color: rgba(0,255,106,0.12);
+    }
+
+    /* Glow orb */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Comet animation */
+    .comet {
+      position: fixed;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon));
+      box-shadow: 0 0 12px var(--neon);
+      animation: comet-fly 12s linear infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+    @keyframes comet-fly {
+      0%   { top:0; left:-200px; width:150px; height:2px; }
+      24%  { top:0; left:100%; width:150px; height:2px; }
+      25%  { top:0; left:100%; width:2px; height:150px; }
+      49%  { top:100%; left:100%; width:2px; height:150px; }
+      50%  { top:100%; left:100%; width:150px; height:2px; }
+      74%  { top:100%; left:-200px; width:150px; height:2px; }
+      75%  { top:100%; left:0; width:2px; height:150px; }
+      99%  { top:-200px; left:0; width:2px; height:150px; }
+      100% { top:0; left:0; width:2px; height:150px; }
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    /* Fade in animation */
+    .fade-in { animation: fadeIn 0.6s ease forwards; }
+    .fade-in-delay { animation: fadeIn 0.6s ease 0.2s forwards; opacity: 0; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient orbs -->
+  <div class="orb" style="width:500px;height:500px;background:rgba(0,255,106,0.04);top:-20%;left:-10%"></div>
+  <div class="orb" style="width:400px;height:400px;background:rgba(0,255,106,0.03);bottom:-10%;right:-5%"></div>
+  <div class="comet"></div>
+
+  <!-- Header -->
+  <header class="relative z-10 w-full px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
+    <a href="/" class="flex items-center gap-3">
+      <img src="ac.png" alt="AC" class="h-9 w-auto">
+      <div>
+        <p class="font-orbitron text-white font-black text-sm tracking-widest" style="font-family:'Orbitron',sans-serif">ADAPTA CAPITAL</p>
+        <p class="text-[8px] text-gray-600 tracking-[0.4em] uppercase">Asset Store</p>
+      </div>
+    </a>
+    <div class="flex items-center gap-2 badge-neon">
+      <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+      Sistema Online
+    </div>
+  </header>
+
+  <!-- SELETOR DE PRODUTO -->
+  <div id="view-store" class="relative z-10 max-w-7xl mx-auto px-6 py-8">
+    <div class="mb-12 fade-in">
+      <p class="text-[10px] font-bold tracking-[0.5em] uppercase text-green-500 mb-3 flex items-center gap-3">
+        <span class="w-8 h-px bg-green-500"></span> Selecione seu pacote
+      </p>
+      <h2 style="font-family:'Orbitron',sans-serif" class="text-4xl font-black uppercase text-white tracking-tighter">Moedas <span style="color:var(--neon)">Coin</span></h2>
+    </div>
+
+    <!-- Grid de produtos -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12 fade-in-delay" id="prod-grid">
+      <!-- Gerado por JS -->
+    </div>
+
+    <!-- Detalhe do produto selecionado -->
+    <div id="prod-detail" class="glass rounded-3xl p-8 lg:p-12 fade-in-delay" style="display:none">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="flex flex-col items-center">
+          <img id="sel-img" src="" class="w-64 object-contain drop-shadow-[0_0_60px_rgba(0,255,106,0.3)] transition-all duration-500">
+        </div>
+        <div class="space-y-8">
+          <div>
+            <p class="text-[10px] tracking-[0.4em] uppercase text-gray-500 mb-2">Pacote selecionado</p>
+            <h3 id="sel-name" style="font-family:'Orbitron',sans-serif" class="text-4xl font-black text-white uppercase tracking-tighter"></h3>
+            <p id="sel-unit" class="text-gray-500 text-sm mt-1"></p>
+          </div>
+          <div>
+            <p id="sel-price" class="text-6xl font-light text-white tracking-tighter"></p>
+            <p class="text-[10px] text-green-500 font-bold uppercase tracking-widest mt-2 italic">Liquidação automática via PIX</p>
+          </div>
+
+          <!-- Qty -->
+          <div class="flex items-center justify-between">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-600">Volume</p>
+            <div class="qty-wrap">
+              <button class="qty-btn" onclick="changeQty(-1)"><i data-lucide="minus" class="w-4 h-4"></i></button>
+              <input type="number" id="qty-input" value="1" min="1" class="bg-transparent text-2xl font-black w-16 text-center focus:outline-none" readonly>
+              <button class="qty-btn" onclick="changeQty(1)"><i data-lucide="plus" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="glass rounded-2xl p-4 flex items-center justify-between">
+            <p class="text-sm text-gray-400 uppercase tracking-widest">Total</p>
+            <p id="sel-total" style="font-family:'Orbitron',sans-serif" class="text-2xl font-black" style="color:var(--neon)"></p>
+          </div>
+
+          <button class="btn-cta" onclick="goCheckout()">
+            <span><i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>Comprar Agora</span>
+          </button>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="info-block">
+              <p class="text-green-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-1"><i data-lucide="package" class="w-3 h-3"></i> Entrega Imediata</p>
+              <p class="text-[10px] text-gray-600 uppercase leading-tight">Crédito instantâneo após validação.</p>
+            </div>
+            <div class="info-block">
+              <p class="text-green-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-1"><i data-lucide="shield-check" class="w-3 h-3"></i> Segurança Total</p>
+              <p class="text-[10px] text-gray-600 uppercase leading-tight">Transação criptografada.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="relative z-10 py-12 text-center text-[9px] font-bold uppercase tracking-[0.5em] text-gray-800">
+    Adapta Capital &copy; 2026 — Digital Asset Management
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    const products = [
+      { value: 25,  label: '25 Coins',  img: '25.png'  },
+      { value: 50,  label: '50 Coins',  img: '50.png'  },
+      { value: 100, label: '100 Coins', img: '100.png' },
+      { value: 200, label: '200 Coins', img: '200.png' },
+      { value: 300, label: '300 Coins', img: '300.png' },
+      { value: 500, label: '500 Coins', img: '500.png' },
+    ];
+
+    let selectedVal = null;
+    let qty = 1;
+
+    function renderGrid() {
+      const grid = document.getElementById('prod-grid');
+      grid.innerHTML = products.map(p => `
+        <div class="prod-card p-5 text-center" onclick="selectProduct(${p.value})">
+          <img src="${p.img}" class="w-full object-contain mb-4 h-28" onerror="this.style.display='none'">
+          <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-lg">R$ ${p.value}</p>
+          <p class="text-gray-600 text-[9px] uppercase tracking-widest mt-1">${p.label}</p>
+        </div>
+      `).join('');
+    }
+
+    function selectProduct(val) {
+      selectedVal = val;
+      qty = 1;
+      document.getElementById('qty-input').value = 1;
+
+      // Highlight card
+      document.querySelectorAll('.prod-card').forEach(c => c.classList.remove('selected'));
+      const cards = document.querySelectorAll('.prod-card');
+      const idx = products.findIndex(p => p.value === val);
+      if (cards[idx]) cards[idx].classList.add('selected');
+
+      const prod = products.find(p => p.value === val);
+      document.getElementById('sel-img').src = prod.img;
+      document.getElementById('sel-name').innerText = prod.label;
+      document.getElementById('sel-unit').innerText = `R$ ${val},00 por unidade`;
+      updateDetail();
+
+      const detail = document.getElementById('prod-detail');
+      detail.style.display = 'block';
+      detail.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      lucide.createIcons();
+    }
+
+    function updateDetail() {
+      if (!selectedVal) return;
+      const total = selectedVal * qty;
+      document.getElementById('sel-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+      document.getElementById('sel-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    function changeQty(v) {
+      qty = Math.max(1, qty + v);
+      document.getElementById('qty-input').value = qty;
+      updateDetail();
+    }
+
+    function goCheckout() {
+      if (!selectedVal) { alert('Selecione um pacote!'); return; }
+      const total = selectedVal * qty;
+      window.location.href = `/checkout?product=${selectedVal}&qty=${qty}&total=${total}`;
+    }
+
+    renderGrid();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
