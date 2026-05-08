@@ -117,7 +117,7 @@ app.get("/callback", async (req, res) => {
 
 // ── Notificação Discord Webhook ───────────────────────────────────────────────
 async function notifyDiscord(entry) {
-  const webhookUrl = process.env.DISCORD_WEBHOOK_URL || "https://discord.com/api/webhooks/1502138867841634304/5zn1WXybJuhtDpSRm5sidhUupCTO8kjgSQr6Ikt-TbVvgwEjIgduweSy6SSPTG_KSe56";
+  const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
   if (!webhookUrl) return;
 
   const dataBR = new Date(entry.timestamp).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
@@ -198,7 +198,7 @@ app.patch("/api/admin/logs/:id", async (req, res) => {
 
   // Notifica Discord quando status muda para PAGO
   if (req.body.status === "PAGO" && oldStatus !== "PAGO") {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL || "https://discord.com/api/webhooks/1502138867841634304/5zn1WXybJuhtDpSRm5sidhUupCTO8kjgSQr6Ikt-TbVvgwEjIgduweSy6SSPTG_KSe56";
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
     if (webhookUrl) {
       const entry = logs[idx];
       const embed = {
