@@ -115,8 +115,47 @@ app.get("/callback", async (req, res) => {
   }
 });
 
+// ── Notificação Discord Webhook ───────────────────────────────────────────────
+async function notifyDiscord(entry) {
+  const webhookUrl = process.env.DISCORD_WEBHOOK_URL || "https://discord.com/api/webhooks/1502138867841634304/5zn1WXybJuhtDpSRm5sidhUupCTO8kjgSQr6Ikt-TbVvgwEjIgduweSy6SSPTG_KSe56";
+  if (!webhookUrl) return;
+
+  const dataBR = new Date(entry.timestamp).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+
+  const embed = {
+    embeds: [{
+      title: "💸 Novo Pedido PIX — Adapta Capital",
+      color: 0x00ff6a,
+      thumbnail: entry.avatar ? { url: entry.avatar } : undefined,
+      fields: [
+        { name: "👤 Jogador",       value: `\`${entry.discord_tag || "—"}\``,        inline: true  },
+        { name: "🆔 Discord ID",    value: `\`${entry.discord_id}\``,                inline: true  },
+        { name: "🎮 ID no Servidor",value: `\`${entry.player_id}\``,                 inline: true  },
+        { name: "💰 Valor",         value: `**R$ ${entry.valor_brl.toFixed(2)}**`,   inline: true  },
+        { name: "📋 Status",        value: `\`${entry.status}\``,                    inline: true  },
+        { name: "🕐 Horário",       value: dataBR,                                   inline: true  },
+        { name: "📦 Log ID",        value: `\`#${entry.id}\``,                       inline: false },
+        { name: "📲 Payload PIX",   value: `\`\`\`${entry.payload_pix.substring(0, 200)}\`\`\``, inline: false },
+      ],
+      footer: { text: "Adapta Capital · GTA RP" },
+      timestamp: entry.timestamp,
+    }],
+  };
+
+  try {
+    await fetch(webhookUrl, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify(embed),
+    });
+    console.log(`[Webhook] Notificação enviada para Discord — #${entry.id}`);
+  } catch (err) {
+    console.error("[Webhook Error]", err.message);
+  }
+}
+
 // ── Log de pagamento ──────────────────────────────────────────────────────────
-app.post("/api/log-payment", (req, res) => {
+app.post("/api/log-payment", async (req, res) => {
   const { discord_id, discord_tag, avatar, valor, player_id, payload_pix } = req.body;
   if (!discord_id || !valor || !player_id) {
     return res.status(400).json({ error: "Campos obrigatórios ausentes" });
@@ -134,6 +173,10 @@ app.post("/api/log-payment", (req, res) => {
   };
   writeLog(entry);
   console.log(`[PIX] ${discord_tag} | R$ ${valor} | ID: ${player_id}`);
+
+  // Dispara notificação no Discord (assíncrono, não bloqueia resposta)
+  notifyDiscord(entry).catch(() => {});
+
   res.json({ ok: true, log_id: entry.id });
 });
 
@@ -143,15 +186,47 @@ app.get("/api/admin/logs", (req, res) => {
   res.json(readLogs());
 });
 
-app.patch("/api/admin/logs/:id", (req, res) => {
+app.patch("/api/admin/logs/:id", async (req, res) => {
   if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
   const logs = readLogs();
   const idx = logs.findIndex(l => l.id === parseInt(req.params.id));
   if (idx === -1) return res.status(404).json({ error: "Não encontrado" });
-  logs[idx].status = req.body.status || logs[idx].status;
+
+  const oldStatus = logs[idx].status;
+  logs[idx].status = req.body.status || oldStatus;
   fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
+
+  // Notifica Discord quando status muda para PAGO
+  if (req.body.status === "PAGO" && oldStatus !== "PAGO") {
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL || "https://discord.com/api/webhooks/1502138867841634304/5zn1WXybJuhtDpSRm5sidhUupCTO8kjgSQr6Ikt-TbVvgwEjIgduweSy6SSPTG_KSe56";
+    if (webhookUrl) {
+      const entry = logs[idx];
+      const embed = {
+        embeds: [{
+          title: "✅ Pagamento Confirmado — Adapta Capital",
+          color: 0x00ff6a,
+          thumbnail: entry.avatar ? { url: entry.avatar } : undefined,
+          fields: [
+            { name: "👤 Jogador",        value: `\`${entry.discord_tag || "—"}\``,      inline: true },
+            { name: "🎮 ID no Servidor", value: `\`${entry.player_id}\``,                inline: true },
+            { name: "💰 Valor",          value: `**R$ ${entry.valor_brl.toFixed(2)}**`, inline: true },
+            { name: "📦 Log ID",         value: `\`#${entry.id}\``,                     inline: true },
+          ],
+          footer: { text: "Adapta Capital · GTA RP" },
+          timestamp: new Date().toISOString(),
+        }],
+      };
+      fetch(webhookUrl, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(embed),
+      }).catch(err => console.error("[Webhook PAGO Error]", err.message));
+    }
+  }
+
   res.json(logs[idx]);
 });
+
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 8080;
