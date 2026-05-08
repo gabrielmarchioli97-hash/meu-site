@@ -43,8 +43,16 @@ function writeLog(entry) {
 }
 
 // ── Checkout ──────────────────────────────────────────────────────────────────
+app.get("/produto", (req, res) => {
+  res.sendFile(path.join(__dirname, "produto.html"));
+});
+
 app.get("/checkout", (req, res) => {
   res.sendFile(path.join(__dirname, "checkout.html"));
+});
+
+app.get("/termos", (req, res) => {
+  res.sendFile(path.join(__dirname, "termos.html"));
 });
 
 // ── Auth Discord ──────────────────────────────────────────────────────────────
