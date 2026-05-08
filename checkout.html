@@ -17,67 +17,51 @@
     .comet{position:fixed;background:linear-gradient(90deg,transparent,var(--neon));box-shadow:0 0 10px var(--neon);animation:comet-fly 12s linear infinite;pointer-events:none;z-index:2;}
     @keyframes comet-fly{0%{top:0;left:-200px;width:150px;height:2px}24%{top:0;left:100%;width:150px;height:2px}25%{top:0;left:100%;width:2px;height:150px}49%{top:100%;left:100%;width:2px;height:150px}50%{top:100%;left:100%;width:150px;height:2px}74%{top:100%;left:-200px;width:150px;height:2px}75%{top:100%;left:0;width:2px;height:150px}100%{top:-200px;left:0;width:2px;height:150px}}
     .glass{background:var(--panel);border:1px solid rgba(0,255,106,0.07);backdrop-filter:blur(30px);border-radius:1.5rem;}
-
-    /* Payment method buttons */
-    .method-btn{background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.06);border-radius:1rem;padding:1rem 1.2rem;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all 0.3s;width:100%;text-align:left;position:relative;overflow:hidden;}
-    .method-btn::before{content:'';position:absolute;inset:0;background:rgba(0,255,106,0.04);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
-    .method-btn:hover{border-color:rgba(0,255,106,0.25);}
-    .method-btn:hover::before{transform:scaleX(1);}
-    .method-btn.active{border-color:var(--neon);background:rgba(0,255,106,0.05);box-shadow:0 0 24px rgba(0,255,106,0.1);}
-    .method-btn.active::before{transform:scaleX(1);}
-    .method-radio{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s;margin-left:auto;}
-    .method-btn.active .method-radio{border-color:var(--neon);}
-    .method-radio-dot{width:8px;height:8px;border-radius:50%;background:var(--neon);transform:scale(0);transition:transform 0.3s;}
-    .method-btn.active .method-radio-dot{transform:scale(1);}
-    .method-icon{width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;}
-
+    .method-btn{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:1rem;padding:1rem;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all 0.3s;width:100%;text-align:left;}
+    .method-btn:hover{border-color:rgba(0,255,106,0.2);background:rgba(0,255,106,0.03);}
+    .method-btn.active{border-color:var(--neon);background:rgba(0,255,106,0.06);box-shadow:0 0 20px rgba(0,255,106,0.1);}
+    .method-icon{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .field{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:14px 16px;width:100%;color:#fff;font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:600;outline:none;transition:border-color 0.3s;}
-    .field:focus{border-color:rgba(0,255,106,0.4);background:rgba(0,255,106,0.02);}
-    .field::placeholder{color:rgba(255,255,255,0.18);font-weight:400;}
+    .field:focus{border-color:rgba(0,255,106,0.4);}
+    .field::placeholder{color:rgba(255,255,255,0.2);font-weight:400;}
+    .btn-discord{background:#5865F2;border:none;border-radius:0.75rem;width:100%;height:52px;color:#fff;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.3s;text-decoration:none;}
+    .btn-discord:hover{box-shadow:0 0 30px rgba(88,101,242,0.4);transform:translateY(-2px);}
 
-    .btn-discord{background:#5865F2;border:none;border-radius:0.75rem;width:100%;height:54px;color:#fff;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.3s;}
-    .btn-discord:hover{box-shadow:0 0 30px rgba(88,101,242,0.5);transform:translateY(-2px);}
+    /* PIX button */
+    .btn-pay-pix{background:rgba(0,66,28,0.9);color:var(--neon);border:1px solid rgba(0,255,106,0.25);border-radius:9999px;width:100%;height:64px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.4s;position:relative;overflow:hidden;}
+    .btn-pay-pix::before{content:'';position:absolute;inset:0;background:var(--neon);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
+    .btn-pay-pix:hover::before{transform:scaleX(1);}
+    .btn-pay-pix:hover{color:#000;box-shadow:0 0 50px var(--neon-glow);transform:translateY(-3px);}
+    .btn-pay-pix span{position:relative;z-index:1;}
 
-    .btn-pay{background:rgba(0,66,28,0.9);color:var(--neon);border:1px solid rgba(0,255,106,0.25);border-radius:9999px;width:100%;height:68px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:0.85rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.4s;position:relative;overflow:hidden;}
-    .btn-pay::before{content:'';position:absolute;inset:0;background:var(--neon);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
-    .btn-pay:hover::before{transform:scaleX(1);}
-    .btn-pay:hover{color:#000;box-shadow:0 0 50px var(--neon-glow);transform:translateY(-3px);}
-    .btn-pay:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
-    .btn-pay:disabled::before{display:none;}
-    .btn-pay span{position:relative;z-index:1;}
+    /* MP button — azul */
+    .btn-pay-mp{background:rgba(0,107,205,0.8);color:#fff;border:1px solid rgba(0,148,255,0.3);border-radius:9999px;width:100%;height:64px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.4s;position:relative;overflow:hidden;}
+    .btn-pay-mp::before{content:'';position:absolute;inset:0;background:#009EE3;transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
+    .btn-pay-mp:hover::before{transform:scaleX(1);}
+    .btn-pay-mp:hover{box-shadow:0 0 40px rgba(0,148,255,0.4);transform:translateY(-3px);}
+    .btn-pay-mp span{position:relative;z-index:1;}
+
+    /* "Já Paguei" button — laranja vibrante */
+    .btn-paid{background:linear-gradient(135deg,#ff6b00,#ff9500);color:#000;border:none;border-radius:9999px;width:100%;height:64px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.4s;box-shadow:0 0 30px rgba(255,107,0,0.3);animation:pulse-orange 2s ease-in-out infinite;}
+    @keyframes pulse-orange{0%,100%{box-shadow:0 0 20px rgba(255,107,0,0.3);}50%{box-shadow:0 0 50px rgba(255,149,0,0.6);}}
+    .btn-paid:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 0 60px rgba(255,107,0,0.5);}
 
     .badge{background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2);color:var(--neon);border-radius:9999px;font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;}
+    .tag{background:rgba(0,255,106,0.08);border:1px solid rgba(0,255,106,0.15);color:var(--neon);border-radius:6px;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:2px 8px;}
     .order-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
     .order-row:last-child{border-bottom:none;}
-    .tag{background:rgba(0,255,106,0.08);border:1px solid rgba(0,255,106,0.15);color:var(--neon);border-radius:6px;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:2px 8px;}
     #qrcode img{margin:0 auto;border:12px solid #fff;border-radius:8px;}
-    .or-div{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,0.2);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;}
-    .or-div::before,.or-div::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06);}
     .user-card{background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.15);border-radius:1rem;padding:1rem;display:flex;align-items:center;gap:12px;}
     .fade-in{animation:fadeIn 0.5s ease forwards;}
     @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .or-div{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,0.2);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;}
+    .or-div::before,.or-div::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06);}
+
+    /* Success banner */
+    .success-banner{background:rgba(0,255,106,0.08);border:1px solid rgba(0,255,106,0.3);border-radius:1rem;padding:1.5rem;text-align:center;}
+    .error-banner{background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.3);border-radius:1rem;padding:1.5rem;text-align:center;}
+
     input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
-
-    /* Payment sections */
-    .pay-section{display:none;}
-    .pay-section.active{display:block;animation:fadeIn 0.4s ease forwards;}
-
-    /* Terms checkbox */
-    .terms-wrap{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:1rem 1.2rem;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:all 0.3s;}
-    .terms-wrap:hover{border-color:rgba(0,255,106,0.2);background:rgba(0,255,106,0.02);}
-    .terms-wrap.accepted{border-color:rgba(0,255,106,0.3);background:rgba(0,255,106,0.04);}
-    .custom-cb{width:20px;height:20px;border-radius:5px;border:2px solid rgba(255,255,255,0.15);background:transparent;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.3s;}
-    .custom-cb.checked{background:var(--neon);border-color:var(--neon);}
-    #terms-cb{display:none;}
-
-    /* MP / PayPal card form */
-    .card-field{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:0.65rem;padding:13px 14px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:0.95rem;font-weight:600;outline:none;transition:border-color 0.3s;width:100%;}
-    .card-field:focus{border-color:rgba(0,255,106,0.35);}
-    .card-field::placeholder{color:rgba(255,255,255,0.18);font-weight:400;}
-    .card-label{font-size:0.65rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:5px;display:block;}
-
-    /* Info notice */
-    .notice{background:rgba(255,200,0,0.05);border:1px solid rgba(255,200,0,0.15);border-radius:0.75rem;padding:0.875rem 1rem;font-size:0.75rem;color:rgba(255,200,0,0.8);display:flex;align-items:flex-start;gap:10px;}
   </style>
 </head>
 <body>
@@ -108,309 +92,263 @@
     </div>
   </div>
 
-  <!-- Main -->
+  <!-- MP Success/Failure banner -->
+  <div class="relative z-10 max-w-7xl mx-auto px-6 mb-6" id="mp-banner" style="display:none"></div>
+
   <main class="relative z-10 max-w-7xl mx-auto px-6 pb-20">
     <div class="grid lg:grid-cols-12 gap-8">
 
-      <!-- LEFT COLUMN -->
+      <!-- LEFT -->
       <div class="lg:col-span-7 space-y-6">
 
-        <!-- ── IDENTIFICAÇÃO ── -->
+        <!-- IDENTIFICAÇÃO -->
         <div class="glass p-6">
           <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
             <i data-lucide="user" class="w-4 h-4" style="color:var(--neon)"></i> Identificação
           </h3>
-
-          <!-- Não logado -->
           <div id="auth-block">
             <p class="text-gray-500 text-sm mb-4">Conecte-se ao Discord para associar o pagamento à sua conta automaticamente.</p>
-            <a id="discord-auth-btn" href="/auth/discord" class="btn-discord">
+            <a href="/auth/discord" class="btn-discord">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
               Entrar com Discord
             </a>
             <div class="or-div my-4">ou</div>
-            <input class="field" id="nick-input" placeholder="Continuar com seu Nickname no jogo" />
+            <input class="field" id="nick-input" placeholder="Continue apenas com seu Nickname no jogo">
             <p id="auth-error" class="hidden text-red-400 text-xs font-bold mt-2">⚠️ Falha na autenticação Discord. Tente novamente.</p>
           </div>
-
-          <!-- Logado -->
           <div id="user-block" class="hidden">
             <div class="user-card">
-              <img id="user-avatar" src="" class="w-12 h-12 rounded-full border-2 border-green-500/30" alt="">
+              <img id="user-avatar" src="" class="w-11 h-11 rounded-full border-2" style="border-color:var(--neon)" alt="">
               <div>
-                <p id="user-name" class="text-white font-black text-base"></p>
-                <p id="user-tag" class="text-gray-500 text-xs font-bold"></p>
+                <p class="text-[9px] text-gray-500 uppercase tracking-widest">Autenticado via Discord</p>
+                <p id="user-name" style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm uppercase"></p>
+                <p id="user-tag" class="text-gray-500 text-xs"></p>
               </div>
-              <div class="ml-auto tag">Discord ✓</div>
+              <span class="tag ml-auto">✓ Verificado</span>
             </div>
           </div>
         </div>
 
-        <!-- ── ID DO JOGO ── -->
+        <!-- ID DO JOGO -->
         <div class="glass p-6">
           <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
-            <i data-lucide="gamepad-2" class="w-4 h-4" style="color:var(--neon)"></i> ID no Servidor
+            <i data-lucide="gamepad-2" class="w-4 h-4" style="color:var(--neon)"></i> ID na Cidade
           </h3>
-          <input class="field" id="player-id" placeholder="Digite seu ID no GTA RP (ex: 1234)" type="number" min="1"/>
-          <p class="text-gray-600 text-xs mt-2">Seu ID aparece no HUD enquanto está conectado ao servidor.</p>
+          <input class="field" id="player-id" placeholder="Digite seu ID do jogo (ex: 12345)">
+          <p class="text-gray-600 text-[10px] uppercase tracking-widest mt-2">Necessário para o crédito automático das moedas.</p>
         </div>
 
-        <!-- ── MÉTODO DE PAGAMENTO ── -->
+        <!-- FORMA DE PAGAMENTO -->
         <div class="glass p-6">
           <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
-            <i data-lucide="credit-card" class="w-4 h-4" style="color:var(--neon)"></i> Método de Pagamento
+            <i data-lucide="credit-card" class="w-4 h-4" style="color:var(--neon)"></i> Forma de Pagamento
           </h3>
-
-          <div class="space-y-3 mb-6">
-
+          <div class="space-y-3">
             <!-- PIX -->
-            <button class="method-btn active" onclick="selectMethod('pix', this)" id="btn-pix">
-              <div class="method-icon">
-                <img src="https://cdn.centralcart.io/public/gateway-icons/icon-pix.svg" class="h-6 w-auto" alt="PIX">
-              </div>
-              <div class="relative z-10">
-                <p class="text-white font-black text-sm">PIX</p>
-                <p class="text-gray-500 text-[10px] uppercase tracking-widest">Instantâneo · Sem taxas</p>
-              </div>
-              <div class="method-radio relative z-10 ml-auto"><div class="method-radio-dot"></div></div>
-            </button>
-
-            <!-- Mercado Pago -->
-            <button class="method-btn" onclick="selectMethod('mp', this)" id="btn-mp" style="opacity:0.5;cursor:default;" disabled>
-              <div class="method-icon" style="background:rgba(0,158,227,0.15);border-color:rgba(0,158,227,0.2);">
-                <img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-5 w-auto" alt="Mercado Pago" style="opacity:0.5">
-              </div>
-              <div class="relative z-10">
-                <p class="text-gray-400 font-black text-sm">Mercado Pago</p>
-                <p class="text-gray-600 text-[10px] uppercase tracking-widest">Cartão de Crédito/Débito</p>
-              </div>
-              <span class="relative z-10 ml-auto text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.08)">Em breve</span>
-            </button>
-
-            <!-- PayPal -->
-            <button class="method-btn" onclick="selectMethod('paypal', this)" id="btn-paypal" style="opacity:0.5;cursor:default;" disabled>
-              <div class="method-icon" style="background:rgba(0,48,135,0.2);border-color:rgba(0,48,135,0.3);">
-                <img src="https://cdn.centralcart.io/public/gateway-icons/icon-paypal.svg" class="h-5 w-auto" alt="PayPal" style="opacity:0.5">
-              </div>
-              <div class="relative z-10">
-                <p class="text-gray-400 font-black text-sm">PayPal</p>
-                <p class="text-gray-600 text-[10px] uppercase tracking-widest">Cartão Internacional</p>
-              </div>
-              <span class="relative z-10 ml-auto text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.08)">Em breve</span>
-            </button>
-          </div>
-
-          <!-- ── Seção PIX ── -->
-          <div id="sec-pix" class="pay-section active">
-            <div class="notice mb-4">
-              <i data-lucide="info" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:rgba(255,200,0,0.8)"></i>
-              <span>Clique em <strong>Finalizar Compra</strong> para gerar o QR Code. Após pagar, clique em <strong>Já Paguei</strong> para confirmar.</span>
-            </div>
-
-            <!-- QR Code — aparece ao finalizar -->
-            <div id="pix-area" class="hidden fade-in">
-              <div class="flex flex-col items-center gap-5 p-6 rounded-2xl" style="background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.12);">
-
-                <p style="font-family:'Orbitron',sans-serif;color:var(--neon)" class="text-[10px] font-black uppercase tracking-widest">Escaneie o QR Code</p>
-
-                <div id="qrcode"></div>
-
-                <!-- Copia e Cola -->
-                <div class="w-full">
-                  <p class="text-gray-500 text-[9px] uppercase tracking-widest mb-2">Código Copia e Cola</p>
-                  <div class="flex gap-2">
-                    <textarea id="pix-text" class="field text-xs font-mono" rows="3" readonly style="resize:none;font-size:0.65rem;line-height:1.4"></textarea>
-                    <button onclick="copyPix()" class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-lg" style="background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2)" title="Copiar">📋</button>
-                  </div>
+            <button class="method-btn active" onclick="selectMethod('pix', this)">
+              <div class="method-icon"><img src="https://cdn.centralcart.io/public/gateway-icons/icon-pix.svg" class="h-6"></div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-0.5">
+                  <span class="text-sm font-bold text-white">PIX</span>
+                  <span class="tag">⚡ Mais rápido</span>
                 </div>
-
-                <!-- Divisor -->
-                <div style="width:100%;height:1px;background:rgba(255,255,255,0.06)"></div>
-
-                <!-- Botão Já Paguei -->
-                <button id="btn-confirm" onclick="confirmPayment()"
-                  class="w-full h-14 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-300"
-                  style="background:rgba(0,255,106,0.12);border:2px solid rgba(0,255,106,0.4);color:var(--neon);">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 18 4 13"/></svg>
-                  Já Paguei — Confirmar Pagamento
-                </button>
-
-                <p id="log-status" class="text-[10px] text-gray-600 font-bold uppercase tracking-widest text-center"></p>
+                <p class="text-[10px] text-gray-500 uppercase tracking-wide">Aprovação imediata</p>
               </div>
-            </div>
-          </div>
-
-          <!-- ── Seção Mercado Pago ── -->
-          <div id="sec-mp" class="pay-section">
-            <div class="flex flex-col items-center gap-4 p-8 rounded-2xl text-center" style="background:rgba(0,158,227,0.05);border:1px solid rgba(0,158,227,0.15);">
-              <img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-8 opacity-60">
-              <div>
-                <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm tracking-widest mb-1">Em Breve</p>
-                <p class="text-gray-500 text-xs">Pagamento via Mercado Pago estará disponível em breve. Por enquanto utilize o PIX.</p>
+              <div id="radio-pix" class="w-4 h-4 rounded-full border-2 flex items-center justify-center" style="border-color:var(--neon)">
+                <div class="w-2 h-2 rounded-full" style="background:var(--neon)"></div>
               </div>
-              <div class="badge" style="background:rgba(0,158,227,0.1);border-color:rgba(0,158,227,0.2);color:rgba(0,158,227,0.8);">
-                <span class="w-1.5 h-1.5 rounded-full" style="background:rgba(0,158,227,0.8)"></span> Em desenvolvimento
+            </button>
+            <!-- Mercado Pago -->
+            <button class="method-btn" onclick="selectMethod('mp', this)">
+              <div class="method-icon"><img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-6"></div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-0.5">
+                  <span class="text-sm font-bold text-white">Mercado Pago</span>
+                  <span class="tag" style="color:#009EE3;border-color:rgba(0,158,227,0.3);background:rgba(0,158,227,0.08)">💳 Cartão</span>
+                </div>
+                <p class="text-[10px] text-gray-500 uppercase tracking-wide">Crédito, débito e mais</p>
               </div>
-            </div>
-          </div>
-
-          <!-- ── Seção PayPal ── -->
-          <div id="sec-paypal" class="pay-section">
-            <div class="flex flex-col items-center gap-4 p-8 rounded-2xl text-center" style="background:rgba(0,48,135,0.08);border:1px solid rgba(0,48,135,0.2);">
-              <img src="https://cdn.centralcart.io/public/gateway-icons/icon-paypal.svg" class="h-8 opacity-60">
-              <div>
-                <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm tracking-widest mb-1">Em Breve</p>
-                <p class="text-gray-500 text-xs">Pagamento via PayPal estará disponível em breve. Por enquanto utilize o PIX.</p>
+              <div id="radio-mp" class="w-4 h-4 rounded-full border-2 border-gray-600 flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-transparent"></div>
               </div>
-              <div class="badge" style="background:rgba(0,48,135,0.15);border-color:rgba(0,48,135,0.3);color:rgba(100,140,255,0.8);">
-                <span class="w-1.5 h-1.5 rounded-full" style="background:rgba(100,140,255,0.8)"></span> Em desenvolvimento
-              </div>
-            </div>
+            </button>
           </div>
         </div>
 
-        <!-- ── TERMOS E CONDIÇÕES ── -->
-        <div class="glass p-6">
-          <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
-            <i data-lucide="file-text" class="w-4 h-4" style="color:var(--neon)"></i> Termos e Condições
-          </h3>
+        <!-- TERMOS -->
+        <div class="glass p-6 space-y-4">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="terms-cb" class="w-4 h-4 mt-1 accent-green-500 flex-shrink-0">
+            <span class="text-gray-400 text-sm leading-relaxed">Li e aceito os <a href="/termos" target="_blank" class="font-bold hover:underline transition-colors" style="color:var(--neon)">Termos e Condições</a> da Adapta Capital. Entendo que os benefícios virtuais são entregues digitalmente e estou ciente da política de reembolso.</span>
+          </label>
 
-          <div class="terms-wrap" id="terms-wrap" onclick="toggleTerms()">
-            <input type="checkbox" id="terms-cb">
-            <div class="custom-cb" id="custom-cb">
-              <svg id="check-icon" class="w-3 h-3 text-black hidden" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 18 4 13"/></svg>
-            </div>
-            <div class="flex-1">
-              <p class="text-sm text-gray-300 font-semibold leading-snug">
-                Li e concordo com os <a href="/termos" target="_blank" onclick="event.stopPropagation()" class="font-black underline underline-offset-2 transition-colors" style="color:var(--neon)">Termos e Condições de Compra</a> da Adapta Capital.
-              </p>
-              <p class="text-[10px] text-gray-600 mt-1 uppercase tracking-widest">Inclui política de reembolso, uso dos itens e regras do servidor.</p>
-            </div>
+          <!-- Botão dinâmico por método -->
+          <div id="pay-pix-section">
+            <button class="btn-pay-pix" onclick="generatePix()">
+              <span><i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>Gerar PIX — <span id="btn-total-pix">R$ 0,00</span></span>
+            </button>
           </div>
 
-          <div id="terms-error" class="hidden mt-3 text-red-400 text-xs font-bold flex items-center gap-2">
-            <i data-lucide="alert-triangle" class="w-3 h-3"></i> Você precisa aceitar os termos para continuar.
+          <div id="pay-mp-section" style="display:none">
+            <button class="btn-pay-mp" onclick="goMercadoPago()" id="btn-mp">
+              <span>
+                <img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-5 inline mr-2">
+                Pagar com Mercado Pago — <span id="btn-total-mp">R$ 0,00</span>
+              </span>
+            </button>
           </div>
         </div>
 
-        <!-- ── BOTÃO FINALIZAR ── -->
-        <button class="btn-pay" id="btn-pay" onclick="handlePayment()">
-          <span id="btn-pay-content">
-            <i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>
-            Gerar QR Code PIX · <span id="btn-total"></span>
-          </span>
-        </button>
+        <!-- QR Code PIX -->
+        <div id="pix-area" class="hidden glass p-8 text-center fade-in">
+          <p style="font-family:'Orbitron',sans-serif" class="text-[9px] tracking-[0.4em] uppercase text-gray-500 mb-6">Escaneie o QR Code ou use o Copia e Cola</p>
+          <div id="qrcode" class="mb-6"></div>
 
-        <p class="text-center text-[10px] text-gray-700 uppercase tracking-widest flex items-center justify-center gap-2">
-          <i data-lucide="shield-check" class="w-3 h-3"></i>
-          Transação protegida por criptografia SSL
-        </p>
+          <div class="bg-black/40 border border-white/5 rounded-xl p-4 mb-6 text-left">
+            <p class="text-[9px] text-gray-600 uppercase tracking-widest mb-2">PIX Copia e Cola</p>
+            <div class="flex items-start gap-2">
+              <p id="pix-text" class="font-mono text-xs text-green-400 break-all flex-1 select-all"></p>
+              <button onclick="copyPix()" class="shrink-0 p-1 text-gray-500 hover:text-green-400 transition-colors text-lg">📋</button>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <p class="text-[9px] text-gray-600 uppercase tracking-widest mb-1">Favorecido</p>
+            <p class="font-bold text-white text-lg">GABRIEL CARDOSO MARCHIOLI</p>
+            <p class="font-bold text-sm" style="color:var(--neon)">CNPJ: 66.621.726/0001-50</p>
+          </div>
+
+          <!-- BOTÃO JÁ PAGUEI — destaque laranja -->
+          <button class="btn-paid mb-4" onclick="confirmPayment()">
+            <i data-lucide="check-circle" class="w-6 h-6"></i>
+            <span>✅ Já Realizei o Pagamento!</span>
+          </button>
+
+          <a href="https://discord.gg/utxY9y7vZ" target="_blank"
+             class="inline-block w-full py-4 rounded-2xl font-black text-black text-[10px] uppercase tracking-widest transition-all hover:opacity-90"
+             style="background:var(--neon);font-family:'Orbitron',sans-serif">
+            Validar no Suporte Discord →
+          </a>
+          <p id="log-status" class="text-[9px] text-gray-700 uppercase tracking-widest mt-3"></p>
+        </div>
+
+        <!-- Confirmação de pagamento -->
+        <div id="confirm-area" class="hidden glass p-8 fade-in">
+          <div class="success-banner">
+            <div class="text-4xl mb-3">🎉</div>
+            <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-lg uppercase tracking-tight mb-2">Pagamento Registrado!</p>
+            <p class="text-gray-400 text-sm">Sua solicitação foi enviada. Nossa equipe irá creditar as moedas na sua conta em breve.</p>
+            <a href="https://discord.gg/utxY9y7vZ" target="_blank"
+               class="inline-block mt-4 px-8 py-3 rounded-2xl font-black text-black text-[10px] uppercase tracking-widest"
+               style="background:var(--neon);font-family:'Orbitron',sans-serif">
+              Acompanhar no Discord
+            </a>
+          </div>
+        </div>
+
       </div>
 
-      <!-- RIGHT COLUMN — Resumo -->
+      <!-- RIGHT — RESUMO -->
       <div class="lg:col-span-5">
         <div class="glass p-6 sticky top-6">
-          <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white mb-5 flex items-center gap-3">
-            <i data-lucide="shopping-cart" class="w-4 h-4" style="color:var(--neon)"></i> Resumo do Pedido
-          </h3>
+          <div class="flex items-center justify-between mb-6">
+            <h3 style="font-family:'Orbitron',sans-serif" class="text-sm font-black uppercase tracking-widest text-white">Resumo</h3>
+            <div class="badge"><i data-lucide="lock" class="w-3 h-3"></i> Seguro</div>
+          </div>
 
-          <!-- Produto -->
-          <div class="flex items-center gap-4 mb-6 pb-5" style="border-bottom:1px solid rgba(255,255,255,0.05)">
-            <div class="w-20 h-20 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(0,255,106,0.05);border:1px solid rgba(0,255,106,0.1)">
-              <img id="order-img" src="" class="w-16 h-16 object-contain" onerror="this.style.display='none'">
+          <div class="flex items-center gap-4 mb-6 pb-6 border-b border-white/5">
+            <div class="w-20 h-20 rounded-xl overflow-hidden bg-black/30 border border-white/5 flex items-center justify-center">
+              <img id="order-img" src="" class="w-full object-contain" onerror="this.style.display='none'">
             </div>
             <div class="flex-1">
-              <p class="text-white font-black text-base" id="order-name"></p>
-              <p class="text-gray-500 text-xs mt-1" id="order-qty-label"></p>
-              <div class="tag mt-2">Adapta Coins</div>
+              <p id="order-name" style="font-family:'Orbitron',sans-serif" class="text-white font-black text-base uppercase tracking-tighter"></p>
+              <p id="order-qty-label" class="text-gray-500 text-sm mt-0.5"></p>
             </div>
-            <p style="color:var(--neon);font-family:'Orbitron',sans-serif" class="font-black text-sm" id="order-price"></p>
+            <p id="order-price" class="font-black text-white text-lg"></p>
           </div>
 
-          <!-- Valores -->
-          <div class="space-y-0">
+          <!-- Totais -->
+          <div class="space-y-1 mb-6">
             <div class="order-row">
               <span class="text-gray-500 text-sm">Subtotal</span>
-              <span class="text-white font-bold text-sm" id="sum-sub"></span>
+              <span id="sum-sub" class="text-white font-bold">R$ 0,00</span>
             </div>
             <div class="order-row">
-              <span class="text-gray-500 text-sm">Taxa de processamento</span>
-              <span style="color:var(--neon)" class="font-bold text-sm" id="sum-fee">Grátis</span>
+              <span class="text-gray-500 text-sm">Desconto</span>
+              <span id="sum-disc" class="text-white font-bold">R$ 0,00</span>
             </div>
-            <div class="order-row" style="border-top:1px solid rgba(0,255,106,0.12);padding-top:16px;margin-top:8px">
-              <span class="text-white font-black text-base uppercase tracking-widest" style="font-family:'Orbitron',sans-serif">Total</span>
-              <span style="color:var(--neon);font-family:'Orbitron',sans-serif" class="font-black text-xl" id="sum-total"></span>
+            <div class="order-row pt-2">
+              <span style="font-family:'Orbitron',sans-serif" class="text-white font-black text-sm uppercase tracking-widest">Total</span>
+              <span id="sum-total" style="color:var(--neon);font-family:'Orbitron',sans-serif" class="font-black text-xl">R$ 0,00</span>
             </div>
           </div>
 
-          <!-- Cupom -->
-          <div class="mt-6 pt-5" style="border-top:1px solid rgba(255,255,255,0.05)">
-            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-600 mb-3">Cupom de Desconto</p>
-            <div class="flex gap-2">
-              <input class="field flex-1" id="coupon-input" placeholder="CÓDIGO" style="text-transform:uppercase">
-              <button onclick="applyCoupon()" class="px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all" style="background:rgba(0,255,106,0.1);border:1px solid rgba(0,255,106,0.2);color:var(--neon)">OK</button>
+          <!-- Métodos aceitos -->
+          <div class="pb-5 mb-5 border-b border-white/5">
+            <p class="text-[9px] text-gray-600 uppercase tracking-widest mb-3">Formas aceitas</p>
+            <div class="flex items-center gap-4 opacity-60">
+              <img src="https://cdn.centralcart.io/public/gateway-icons/icon-pix.svg" class="h-5">
+              <img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-5">
             </div>
-            <p id="coupon-msg" class="hidden text-xs mt-2 font-bold"></p>
           </div>
 
           <!-- Garantias -->
-          <div class="mt-6 pt-5 space-y-3" style="border-top:1px solid rgba(255,255,255,0.05)">
-            <div class="flex items-center gap-3 text-[10px] text-gray-600 font-bold uppercase tracking-wider">
-              <i data-lucide="zap" class="w-3 h-3 flex-shrink-0" style="color:var(--neon)"></i> Entrega imediata após confirmação
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-gray-600">
+              <i data-lucide="package" class="w-4 h-4" style="color:var(--neon)"></i> Entrega imediata após pagamento
             </div>
-            <div class="flex items-center gap-3 text-[10px] text-gray-600 font-bold uppercase tracking-wider">
-              <i data-lucide="shield" class="w-3 h-3 flex-shrink-0" style="color:var(--neon)"></i> Pagamento 100% seguro
+            <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-gray-600">
+              <i data-lucide="shield-check" class="w-4 h-4" style="color:var(--neon)"></i> Transação criptografada
             </div>
-            <div class="flex items-center gap-3 text-[10px] text-gray-600 font-bold uppercase tracking-wider">
-              <i data-lucide="headphones" class="w-3 h-3 flex-shrink-0" style="color:var(--neon)"></i> Suporte via Discord
+            <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-gray-600">
+              <i data-lucide="headset" class="w-4 h-4" style="color:var(--neon)"></i> Suporte via Discord 24h
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </main>
-
-  <footer class="relative z-10 py-12 text-center text-[9px] font-bold uppercase tracking-[0.5em] text-gray-800">
-    Adapta Capital &copy; 2026 — Digital Asset Management
-  </footer>
 
   <script>
     lucide.createIcons();
 
+    // ── Parâmetros ─────────────────────────────────────────────────────────────
     const params     = new URLSearchParams(window.location.search);
     const productVal = parseFloat(params.get('product')) || 25;
-    const qty        = parseInt(params.get('qty'))        || 1;
-    const subtotal   = parseFloat(params.get('total'))    || productVal * qty;
-    let   total      = subtotal;
+    const qty        = parseInt(params.get('qty'))       || 1;
+    const total      = parseFloat(params.get('total'))   || productVal * qty;
+    const fmt        = v => 'R$ ' + v.toFixed(2).replace('.', ',');
 
-    let pixPayload   = '';
-    let discordUser  = {};
-    let currentMethod = 'pix';
-    let termsAccepted = false;
-    let paymentDone  = false;
+    let pixPayload  = '';
+    let discordUser = {};
+    let activeMethod = 'pix';
 
-    // ── Aponta botão Discord com params do carrinho na URL ──
-    (function setDiscordBtn() {
-      const p = new URLSearchParams(window.location.search);
-      const product = p.get('product') || productVal;
-      const q       = p.get('qty')     || qty;
-      const t       = p.get('total')   || subtotal;
-      const btn = document.getElementById('discord-auth-btn');
-      if (btn) btn.href = '/auth/discord?product=' + product + '&qty=' + q + '&total=' + t;
-    })();
-
+    // ── Auth Discord ───────────────────────────────────────────────────────────
     (function init() {
       const p = new URLSearchParams(window.location.search);
 
-      if (p.get('auth') === 'error') {
-        document.getElementById('auth-error').classList.remove('hidden');
-        return;
+      // MP callback
+      const mp = p.get('mp');
+      if (mp === 'success') {
+        document.getElementById('mp-banner').style.display = 'block';
+        document.getElementById('mp-banner').innerHTML = `
+          <div class="success-banner">
+            <div class="text-4xl mb-2">🎉</div>
+            <p style="font-family:'Orbitron',sans-serif" class="text-white font-black text-lg uppercase mb-1">Pagamento Aprovado!</p>
+            <p class="text-gray-400 text-sm">Seu pagamento via Mercado Pago foi confirmado. As moedas serão creditadas em breve!</p>
+            <a href="https://discord.gg/utxY9y7vZ" target="_blank" class="inline-block mt-4 px-8 py-3 rounded-2xl font-black text-black text-xs uppercase tracking-widest" style="background:var(--neon)">Acompanhar no Discord</a>
+          </div>`;
+      } else if (mp === 'failure') {
+        document.getElementById('mp-banner').style.display = 'block';
+        document.getElementById('mp-banner').innerHTML = `<div class="error-banner"><p class="text-red-400 font-black uppercase" style="font-family:'Orbitron',sans-serif">❌ Pagamento não aprovado</p><p class="text-gray-500 text-sm mt-1">Tente novamente ou escolha outra forma de pagamento.</p></div>`;
       }
 
+      if (p.get('auth') === 'error') {
+        document.getElementById('auth-error').classList.remove('hidden');
+      }
       if (p.get('auth') === 'ok') {
         discordUser = { id: p.get('id'), username: p.get('username'), tag: p.get('tag'), avatar: p.get('avatar') };
-        window.history.replaceState({}, '', '/checkout?product=' + productVal + '&qty=' + qty + '&total=' + subtotal);
+        window.history.replaceState({}, '', `/checkout?product=${productVal}&qty=${qty}&total=${total}`);
         showUser();
       }
     })();
@@ -423,164 +361,50 @@
       document.getElementById('user-avatar').src     = discordUser.avatar || '';
     }
 
-    // ── Preenche resumo ──
+    // ── Resumo ─────────────────────────────────────────────────────────────────
     (function fillOrder() {
       document.getElementById('order-img').src          = productVal + '.png';
-      document.getElementById('order-name').innerText   = productVal + ' Coins Adapta';
-      document.getElementById('order-qty-label').innerText = qty + 'x · R$ ' + productVal.toFixed(2).replace('.',',') + ' cada';
-      document.getElementById('order-price').innerText  = 'R$ ' + subtotal.toFixed(2).replace('.',',');
-      document.getElementById('sum-sub').innerText      = 'R$ ' + subtotal.toFixed(2).replace('.',',');
-      document.getElementById('sum-total').innerText    = 'R$ ' + total.toFixed(2).replace('.',',');
-      document.getElementById('btn-total').innerText    = 'R$ ' + total.toFixed(2).replace('.',',');
+      document.getElementById('order-name').innerText   = productVal + ' Coins';
+      document.getElementById('order-qty-label').innerText = qty + 'x  ×  ' + fmt(productVal);
+      document.getElementById('order-price').innerText  = fmt(total);
+      document.getElementById('sum-sub').innerText      = fmt(total);
+      document.getElementById('sum-total').innerText    = fmt(total);
+      document.getElementById('btn-total-pix').innerText = fmt(total);
+      document.getElementById('btn-total-mp').innerText  = fmt(total);
     })();
 
-    // ── Método de pagamento ──
+    // ── Método de pagamento ────────────────────────────────────────────────────
     function selectMethod(method, btn) {
-      // Bloqueia MP e PayPal
-      if (method === 'mp' || method === 'paypal') return;
-      currentMethod = method;
+      activeMethod = method;
       document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      document.querySelectorAll('.pay-section').forEach(s => s.classList.remove('active'));
-      document.getElementById('sec-' + method).classList.add('active');
-      const feeEl = document.getElementById('sum-fee');
-      feeEl.innerText = 'Grátis'; feeEl.style.color = 'var(--neon)';
-      lucide.createIcons();
+
+      // Radios
+      document.getElementById('radio-pix').innerHTML = method === 'pix'
+        ? `<div class="w-2 h-2 rounded-full" style="background:var(--neon)"></div>` : '';
+      document.getElementById('radio-mp').innerHTML = method === 'mp'
+        ? `<div class="w-2 h-2 rounded-full bg-blue-400"></div>` : '';
+
+      document.getElementById('pay-pix-section').style.display = method === 'pix' ? 'block' : 'none';
+      document.getElementById('pay-mp-section').style.display  = method === 'mp'  ? 'block' : 'none';
+
+      // Esconde QR se trocar de método
+      document.getElementById('pix-area').classList.add('hidden');
     }
 
-    // ── Termos ──
-    function toggleTerms() {
-      termsAccepted = !termsAccepted;
-      document.getElementById('terms-cb').checked = termsAccepted;
-      const cb  = document.getElementById('custom-cb');
-      const ico = document.getElementById('check-icon');
-      const wrap = document.getElementById('terms-wrap');
-      if (termsAccepted) {
-        cb.classList.add('checked');
-        ico.classList.remove('hidden');
-        wrap.classList.add('accepted');
-        document.getElementById('terms-error').classList.add('hidden');
-      } else {
-        cb.classList.remove('checked');
-        ico.classList.add('hidden');
-        wrap.classList.remove('accepted');
-      }
-    }
-
-    // ── Cupom ──
-    let couponApplied = false;
-
-    function applyCoupon() {
-      const code = document.getElementById('coupon-input').value.trim().toUpperCase();
-      const msg  = document.getElementById('coupon-msg');
-      msg.classList.remove('hidden');
-
-      if (!code) {
-        msg.className = 'text-xs mt-2 font-bold text-red-400';
-        msg.innerText = 'Digite um cupom válido.';
-        return;
-      }
-
-      if (couponApplied) {
-        msg.className = 'text-xs mt-2 font-bold text-yellow-400';
-        msg.innerText = '✓ Cupom já aplicado.';
-        return;
-      }
-
-      if (code === 'ADAPTA1') {
-        couponApplied = true;
-        const desconto = subtotal * 0.10;
-        total = parseFloat((subtotal - desconto).toFixed(2));
-
-        // Atualiza UI
-        document.getElementById('sum-total').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
-        document.getElementById('btn-total').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
-        document.getElementById('coupon-input').disabled = true;
-
-        // Mostra linha de desconto se não existir
-        let discRow = document.getElementById('sum-discount-row');
-        if (!discRow) {
-          const feeRow = document.querySelector('#sum-fee').closest('.order-row');
-          discRow = document.createElement('div');
-          discRow.className = 'order-row';
-          discRow.id = 'sum-discount-row';
-          discRow.innerHTML = '<span class="text-gray-500 text-sm">Desconto (10%)</span><span class="font-bold text-sm" style="color:#ff6b6b">- R$ ' + desconto.toFixed(2).replace('.', ',') + '</span>';
-          feeRow.insertAdjacentElement('afterend', discRow);
-        }
-
-        msg.className = 'text-xs mt-2 font-bold text-green-400';
-        msg.innerText = '✓ Cupom ADAPTA1 aplicado — 10% de desconto!';
-      } else {
-        msg.className = 'text-xs mt-2 font-bold text-red-400';
-        msg.innerText = 'Cupom inválido ou expirado.';
-      }
-    }
-
-    // ── Validações gerais ──
+    // ── Validação comum ────────────────────────────────────────────────────────
     function validate() {
       const playerId = document.getElementById('player-id').value.trim();
-      const nick     = document.getElementById('nick-input')?.value.trim();
+      const nick     = document.getElementById('nick-input').value.trim();
+      const terms    = document.getElementById('terms-cb').checked;
       const identity = discordUser.id ? discordUser.tag : nick;
-
-      // Identificação obrigatória
-      if (!identity) {
-        const nickInput = document.getElementById('nick-input');
-        nickInput.style.borderColor = 'rgba(255,60,60,0.6)';
-        nickInput.style.background  = 'rgba(255,60,60,0.04)';
-        nickInput.placeholder = '⚠ Informe seu Nickname ou conecte o Discord';
-        nickInput.scrollIntoView({ behavior:'smooth', block:'center' });
-        nickInput.focus();
-        setTimeout(() => {
-          nickInput.style.borderColor = '';
-          nickInput.style.background  = '';
-          nickInput.placeholder = 'Continuar com seu Nickname no jogo';
-        }, 3000);
-        return false;
-      }
-
-      // ID do jogo obrigatório
-      if (!playerId) {
-        const pidField = document.getElementById('player-id');
-        pidField.style.borderColor = 'rgba(255,60,60,0.6)';
-        pidField.style.background  = 'rgba(255,60,60,0.04)';
-        pidField.placeholder = '⚠ ID obrigatório';
-        pidField.scrollIntoView({ behavior:'smooth', block:'center' });
-        pidField.focus();
-        setTimeout(() => {
-          pidField.style.borderColor = '';
-          pidField.style.background  = '';
-          pidField.placeholder = 'Digite seu ID no GTA RP (ex: 1234)';
-        }, 3000);
-        return false;
-      }
-
-      // Termos obrigatórios
-      if (!termsAccepted) {
-        document.getElementById('terms-error').classList.remove('hidden');
-        const tw = document.getElementById('terms-wrap');
-        tw.style.borderColor = 'rgba(255,60,60,0.5)';
-        tw.style.background  = 'rgba(255,60,60,0.04)';
-        tw.scrollIntoView({ behavior:'smooth', block:'center' });
-        setTimeout(() => { tw.style.borderColor = ''; tw.style.background = ''; }, 2500);
-        return false;
-      }
-
-      document.getElementById('terms-error').classList.add('hidden');
-      return true;
+      if (!identity) { alert('Conecte-se ao Discord ou informe seu Nickname!'); return null; }
+      if (!playerId)  { alert('Informe seu ID do jogo!'); return null; }
+      if (!terms)     { alert('Aceite os Termos e Condições para continuar!'); return null; }
+      return { playerId, identity };
     }
 
-    // ── Handler principal ──
-    let pixGenerated = false;
-    function handlePayment() {
-      if (pixGenerated) return;
-      if (!validate()) return;
-      if (currentMethod === 'pix') {
-        pixGenerated = true;
-        generatePix();
-      }
-    }
-
-    // ── CRC16 PIX ──
+    // ── Gera PIX ───────────────────────────────────────────────────────────────
     function crc16(data) {
       let crc = 0xFFFF;
       for (let i = 0; i < data.length; i++) {
@@ -590,200 +414,90 @@
       return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
     }
 
-    // ── Gera PIX — apenas mostra o QR, não loga ainda ──
-    function generatePix() {
-      const playerId = document.getElementById('player-id').value.trim();
+    async function generatePix() {
+      const v = validate();
+      if (!v) return;
 
-      const f = (id, v) => id + v.length.toString().padStart(2,'0') + v;
-      const cnpj   = '66621726000150';
-      const nome   = 'GABRIEL CARDOSO MARCHIOLI';
-      const cidade = 'PRAIA GRANDE';
-
+      const f = (id, val) => id + val.length.toString().padStart(2,'0') + val;
       let base = '000201'
-        + f('26', '0014BR.GOV.BCB.PIX' + f('01', cnpj))
+        + f('26', '0014BR.GOV.BCB.PIX' + f('01', '66621726000150'))
         + '520400005303986'
         + f('54', total.toFixed(2))
         + '5802BR'
-        + f('59', nome)
-        + f('60', cidade)
-        + f('62', f('05', 'ID' + playerId))
+        + f('59', 'GABRIEL CARDOSO MARCHIOLI')
+        + f('60', 'PRAIA GRANDE')
+        + f('62', f('05', 'ID' + v.playerId))
         + '6304';
-
       pixPayload = base + crc16(base);
 
       document.getElementById('qrcode').innerHTML = '';
       new QRCode(document.getElementById('qrcode'), { text: pixPayload, width: 240, height: 240 });
-      document.getElementById('pix-text').value = pixPayload;
+      document.getElementById('pix-text').innerText = pixPayload;
       document.getElementById('pix-area').classList.remove('hidden');
-
-      // Troca botão para "Já Paguei" e desabilita o Finalizar
-      const btnPay = document.getElementById('btn-pay');
-      btnPay.disabled = true;
-      btnPay.style.opacity = '0.4';
-      btnPay.style.cursor = 'not-allowed';
-
-      // Scroll suave até o QR
-      setTimeout(() => {
-        document.getElementById('pix-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-    }
-
-    // ── Confirma pagamento — dispara log e Discord ──
-    async function confirmPayment() {
-      if (paymentDone) return;
-
-      const playerId = document.getElementById('player-id').value.trim();
-      const nick     = document.getElementById('nick-input')?.value.trim();
-
-      const btnConfirm = document.getElementById('btn-confirm');
-      btnConfirm.disabled = true;
-      btnConfirm.style.opacity = '0.5';
-      btnConfirm.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> Registrando...';
-
-      paymentDone = true;
+      document.getElementById('pix-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      lucide.createIcons();
 
       try {
         const res = await fetch('/api/log-payment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            discord_id:  discordUser.id  || 'nick:' + nick,
-            discord_tag: discordUser.tag || nick,
-            avatar:      discordUser.avatar || '',
-            valor:       total,
-            player_id:   playerId,
-            payload_pix: pixPayload,
-            metodo:      'PIX',
+            discord_id: discordUser.id || 'nick:' + v.identity,
+            discord_tag: v.identity, avatar: discordUser.avatar || '',
+            valor: total, player_id: v.playerId, payload_pix: pixPayload,
           }),
         });
         const data = await res.json();
-        if (data.ok) {
-          document.getElementById('log-status').innerText = '✓ Pedido registrado — #' + data.log_id;
-          setTimeout(() => showSuccess(), 800);
+        if (data.ok) document.getElementById('log-status').innerText = '✓ Log #' + data.log_id + ' registrado';
+      } catch { document.getElementById('log-status').innerText = '⚠ Falha ao registrar log.'; }
+    }
+
+    // ── Mercado Pago ───────────────────────────────────────────────────────────
+    async function goMercadoPago() {
+      const v = validate();
+      if (!v) return;
+
+      const btn = document.getElementById('btn-mp');
+      btn.disabled = true;
+      btn.querySelector('span').innerHTML = '⏳ Gerando link...';
+
+      try {
+        const res = await fetch('/api/mp/criar-preferencia', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            valor:       total,
+            product:     productVal,
+            qty,
+            player_id:   v.playerId,
+            discord_id:  discordUser.id  || '',
+            discord_tag: discordUser.tag || v.identity,
+          }),
+        });
+        const data = await res.json();
+        if (data.init_point) {
+          window.location.href = data.init_point;
         } else {
-          throw new Error('Falha no servidor');
+          throw new Error('Link não gerado');
         }
-      } catch {
-        document.getElementById('log-status').innerText = '⚠ Erro ao registrar. Tente novamente ou fale com o suporte.';
-        paymentDone = false;
-        btnConfirm.disabled = false;
-        btnConfirm.style.opacity = '1';
-        btnConfirm.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 18 4 13"/></svg> Já Paguei — Confirmar Pagamento';
+      } catch (e) {
+        alert('Erro ao conectar com Mercado Pago. Tente novamente.');
+        btn.disabled = false;
+        btn.querySelector('span').innerHTML = '<img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-5 inline mr-2">Pagar com Mercado Pago — ' + fmt(total);
       }
     }
 
-    // ── Mercado Pago ──
-    function payMercadoPago() {
-      const card = document.getElementById('mp-card').value.replace(/\s/g,'');
-      const exp  = document.getElementById('mp-expiry').value;
-      const cvv  = document.getElementById('mp-cvv').value;
-      const name = document.getElementById('mp-name').value.trim();
-      const cpf  = document.getElementById('mp-cpf').value.replace(/\D/g,'');
-
-      if (card.length < 16) { alert('Número do cartão inválido.'); return; }
-      if (exp.length < 5)   { alert('Data de validade inválida.'); return; }
-      if (cvv.length < 3)   { alert('CVV inválido.'); return; }
-      if (!name)             { alert('Informe o nome no cartão.'); return; }
-      if (cpf.length < 11)  { alert('CPF inválido.'); return; }
-
-      // Aqui você integrará com a SDK do Mercado Pago (mp.js)
-      // Por ora exibe mensagem de redirecionamento
-      alert('🔒 Redirecionando para o Mercado Pago...\n\nIntegre sua Public Key do MP no server.js para ativar os pagamentos por cartão.');
-    }
-
-    // ── PayPal ──
-    function payPayPal() {
-      // Integrar PayPal SDK — substitua YOUR_CLIENT_ID
-      alert('🔒 Redirecionando para o PayPal...\n\nAdicione seu PayPal Client ID no server.js para ativar os pagamentos internacionais.');
+    // ── Já Paguei ──────────────────────────────────────────────────────────────
+    function confirmPayment() {
+      document.getElementById('pix-area').classList.add('hidden');
+      document.getElementById('confirm-area').classList.remove('hidden');
+      document.getElementById('confirm-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function copyPix() {
       navigator.clipboard.writeText(pixPayload).then(() => {
         const btn = document.querySelector('[onclick="copyPix()"]');
-        btn.innerText = '✅';
-        setTimeout(() => btn.innerText = '📋', 2000);
+        btn.innerText = '✅'; setTimeout(() => btn.innerText = '📋', 2000);
       });
     }
-
-    // ── Máscaras de cartão ──
-    function formatCard(el) {
-      let v = el.value.replace(/\D/g,'').substring(0,16);
-      el.value = v.replace(/(.{4})/g,'$1 ').trim();
-    }
-    function formatExpiry(el) {
-      let v = el.value.replace(/\D/g,'').substring(0,4);
-      if (v.length >= 3) v = v.substring(0,2) + '/' + v.substring(2);
-      el.value = v;
-    }
-    function formatCPF(el) {
-      let v = el.value.replace(/\D/g,'').substring(0,11);
-      v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
-      el.value = v;
-    }
-
-    // ── Tela de Sucesso ──
-    function showSuccess() {
-      const screen = document.getElementById('success-screen');
-      screen.style.cssText = 'display:flex!important;position:fixed;inset:0;z-index:50;align-items:center;justify-content:center;padding:1.5rem;background:rgba(3,3,3,0.97);backdrop-filter:blur(20px);';
-      document.body.style.overflow = 'hidden';
-    }
   </script>
-
-  <!-- ── TELA DE SUCESSO ── -->
-  <div id="success-screen" class="fixed inset-0 z-50 flex items-center justify-center px-6" style="display:none!important;background:rgba(3,3,3,0.97);backdrop-filter:blur(20px);">
-    <div class="max-w-lg w-full text-center space-y-8">
-
-      <!-- Ícone animado -->
-      <div class="relative mx-auto w-32 h-32">
-        <div class="absolute inset-0 rounded-full animate-ping" style="background:rgba(0,255,106,0.15)"></div>
-        <div class="absolute inset-2 rounded-full animate-ping" style="background:rgba(0,255,106,0.1);animation-delay:0.3s"></div>
-        <div class="relative w-32 h-32 rounded-full flex items-center justify-center" style="background:rgba(0,255,106,0.08);border:2px solid rgba(0,255,106,0.4)">
-          <svg class="w-16 h-16" style="color:var(--neon)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <polyline points="20 6 9 18 4 13" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Texto principal -->
-      <div class="space-y-3">
-        <p class="text-[10px] font-bold tracking-[0.5em] uppercase" style="color:var(--neon)">Pedido Confirmado</p>
-        <h2 style="font-family:'Orbitron',sans-serif" class="text-3xl font-black text-white uppercase tracking-tighter">Obrigado pela<br>sua compra!</h2>
-        <p class="text-gray-400 text-sm leading-relaxed max-w-sm mx-auto">
-          Seu pagamento via PIX foi registrado com sucesso. O crédito será adicionado instantaneamente à sua <strong class="text-white">carteira virtual Adapta Capital</strong>.
-        </p>
-      </div>
-
-      <!-- Info box -->
-      <div class="rounded-2xl p-5 text-left space-y-3" style="background:rgba(0,255,106,0.04);border:1px solid rgba(0,255,106,0.12)">
-        <div class="flex items-start gap-3">
-          <svg class="w-4 h-4 mt-0.5 flex-shrink-0" style="color:var(--neon)" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <p class="text-sm text-gray-400 leading-relaxed">
-            Após o pagamento ser reconhecido pelo banco, <strong class="text-white">o saldo cai automaticamente</strong> em sua carteira. Isso normalmente ocorre em segundos.
-          </p>
-        </div>
-        <div class="flex items-start gap-3" style="border-top:1px solid rgba(255,255,255,0.05);padding-top:12px">
-          <svg class="w-4 h-4 mt-0.5 flex-shrink-0" style="color:rgba(255,200,0,0.8)" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <p class="text-sm leading-relaxed" style="color:rgba(255,200,0,0.7)">
-            Caso o saldo não apareça em até <strong style="color:rgba(255,200,0,1)">10 minutos</strong>, entre em contato com nosso suporte.
-          </p>
-        </div>
-      </div>
-
-      <!-- Botão suporte -->
-      <div class="space-y-3">
-        <a href="https://discord.com/channels/1491207309916110999/1491207310964691154" target="_blank"
-           class="flex items-center justify-center gap-3 w-full h-14 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all duration-300 hover:scale-105"
-           style="background:#5865F2;color:#fff;box-shadow:0 0 30px rgba(88,101,242,0.3)">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-          Falar com Suporte
-        </a>
-        <button onclick="window.location.href='/produto'" class="w-full text-center text-xs font-bold uppercase tracking-widest transition-colors py-3" style="color:rgba(255,255,255,0.25);background:none;border:none;cursor:pointer;">
-          ← Voltar à Loja
-        </button>
-      </div>
-
-    </div>
-  </div>
-
 </body>
 </html>
