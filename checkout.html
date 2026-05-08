@@ -360,6 +360,33 @@
   <script>
     lucide.createIcons();
 
+    // ── Roda ANTES de tudo — redireciona se voltou do Discord sem params do carrinho ──
+    (function earlyInit() {
+      const p = new URLSearchParams(window.location.search);
+      const auth = p.get('auth');
+      if (!auth) return; // página normal, sem OAuth
+
+      const saved = localStorage.getItem('ac_cart');
+      if (!saved) return; // nada salvo
+
+      let cart;
+      try { cart = JSON.parse(saved); } catch(e) { return; }
+      if (!cart.product) return;
+
+      // Chegou do Discord (auth=ok ou auth=error) sem product na URL — restaura
+      if (!p.get('product')) {
+        localStorage.removeItem('ac_cart');
+        const base = '/checkout?product=' + cart.product + '&qty=' + cart.qty + '&total=' + cart.total;
+        const rest = p.toString(); // contém auth, id, username etc
+        window.location.replace(base + '&' + rest);
+        // Impede qualquer outro código de rodar
+        throw new Error('__redirecting__');
+      }
+
+      // product já está na URL (redirect bem-sucedido), limpa o storage
+      localStorage.removeItem('ac_cart');
+    })();
+
     const params     = new URLSearchParams(window.location.search);
     const productVal = parseFloat(params.get('product')) || 25;
     const qty        = parseInt(params.get('qty'))        || 1;
@@ -372,50 +399,39 @@
     let termsAccepted = false;
     let paymentDone  = false;
 
-    // ── Auth Discord ──
+    // ── Salva carrinho ao clicar no Discord ──
     function saveCartBeforeAuth() {
-      const currentParams = new URLSearchParams(window.location.search);
+      const p = new URLSearchParams(window.location.search);
       localStorage.setItem('ac_cart', JSON.stringify({
-        product: currentParams.get('product') || productVal,
-        qty:     currentParams.get('qty')     || qty,
-        total:   currentParams.get('total')   || total,
+        product: p.get('product') || productVal,
+        qty:     p.get('qty')     || qty,
+        total:   p.get('total')   || subtotal,
       }));
     }
 
+    // ── Também salva automaticamente se tem produto na URL (proteção extra) ──
+    (function autoSaveCart() {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('product') && !p.get('auth')) {
+        localStorage.setItem('ac_cart', JSON.stringify({
+          product: p.get('product'),
+          qty:     p.get('qty') || 1,
+          total:   p.get('total') || (parseFloat(p.get('product')) * parseInt(p.get('qty') || 1)),
+        }));
+      }
+    })();
+
     (function init() {
       const p = new URLSearchParams(window.location.search);
-      const saved = localStorage.getItem('ac_cart');
 
       if (p.get('auth') === 'error') {
-        // Restaura carrinho mesmo no erro
-        if (saved) {
-          try {
-            const cart = JSON.parse(saved);
-            localStorage.removeItem('ac_cart');
-            window.location.replace('/checkout?product=' + cart.product + '&qty=' + cart.qty + '&total=' + cart.total + '&auth=error');
-            return;
-          } catch(e) {}
-        }
         document.getElementById('auth-error').classList.remove('hidden');
         return;
       }
 
       if (p.get('auth') === 'ok') {
         discordUser = { id: p.get('id'), username: p.get('username'), tag: p.get('tag'), avatar: p.get('avatar') };
-
-        // Restaura produto do localStorage se não vier na URL
-        if (!p.get('product') && saved) {
-          try {
-            const cart = JSON.parse(saved);
-            localStorage.removeItem('ac_cart');
-            const authParams = 'auth=ok&id=' + p.get('id') + '&username=' + encodeURIComponent(p.get('username')) + '&tag=' + encodeURIComponent(p.get('tag')) + '&avatar=' + encodeURIComponent(p.get('avatar'));
-            window.location.replace('/checkout?product=' + cart.product + '&qty=' + cart.qty + '&total=' + cart.total + '&' + authParams);
-            return;
-          } catch(e) {}
-        }
-
-        if (saved) localStorage.removeItem('ac_cart');
-        window.history.replaceState({}, '', '/checkout?product=' + productVal + '&qty=' + qty + '&total=' + total);
+        window.history.replaceState({}, '', '/checkout?product=' + productVal + '&qty=' + qty + '&total=' + subtotal);
         showUser();
       }
     })();
