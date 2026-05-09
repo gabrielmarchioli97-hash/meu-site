@@ -146,7 +146,13 @@
           <div class="space-y-3">
             <!-- PIX -->
             <button class="method-btn active" onclick="selectMethod('pix', this)">
-              <div class="method-icon"><img src="https://cdn.centralcart.io/public/gateway-icons/icon-pix.svg" class="h-6"></div>
+              <div class="method-icon">
+                <svg width="26" height="26" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M112.57 391.19c20.056 0 38.928-7.808 53.12-22l76.693-76.692c5.385-5.384 14.765-5.361 20.14 0l76.989 76.989c14.192 14.191 33.064 22 53.12 22h15.088l-97.138 97.137c-30.43 30.43-79.784 30.43-110.214 0L103.25 391.19h9.32Z" fill="#32BCAD"/>
+                  <path d="M112.57 120.81c20.056 0 38.928 7.808 53.12 22l76.693 76.693c5.569 5.568 14.571 5.568 20.14 0l76.989-76.99c14.192-14.191 33.064-21.999 53.12-21.999h9.088L304.581 23.375c-30.43-30.43-79.784-30.43-110.214 0L97.229 120.81h15.34Z" fill="#32BCAD"/>
+                  <path d="M488.625 194.375 419.19 124.94c-1.759.654-3.655.985-5.558.985h-20.999c-13.758 0-27.02 5.52-36.667 15.168l-76.988 76.989c-7.13 7.13-16.516 10.695-25.903 10.695-9.386 0-18.772-3.565-25.902-10.695l-76.694-76.694c-9.647-9.647-22.91-15.167-36.667-15.167H97.229a39.78 39.78 0 0 0-5.194-.97L23.375 194.375c-30.43 30.43-30.43 79.784 0 110.214l69.263 69.263c1.686-.51 3.452-.782 5.22-.782h15.712c13.757 0 27.02-5.52 36.667-15.168l76.694-76.693c13.826-13.826 37.98-13.826 51.805 0l76.988 76.989c9.647 9.647 22.91 15.168 36.667 15.168h20.999c1.906 0 3.803.33 5.563.985l69.672-69.762c30.43-30.43 30.43-79.784 0-110.214Z" fill="#32BCAD"/>
+                </svg>
+              </div>
               <div class="flex-1">
                 <div class="flex items-center gap-2 mb-0.5">
                   <span class="text-sm font-bold text-white">PIX</span>
@@ -160,7 +166,13 @@
             </button>
             <!-- Mercado Pago -->
             <button class="method-btn" onclick="selectMethod('mp', this)">
-              <div class="method-icon"><img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-6"></div>
+              <div class="method-icon">
+                <svg width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="24" r="24" fill="#009EE3"/>
+                  <path d="M10 24c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M14 28l3-5 3.5 3.5 4-7 3.5 5 2.5-3 3 4.5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
               <div class="flex-1">
                 <div class="flex items-center gap-2 mb-0.5">
                   <span class="text-sm font-bold text-white">Mercado Pago</span>
@@ -192,7 +204,7 @@
           <div id="pay-mp-section" style="display:none">
             <button class="btn-pay-mp" onclick="goMercadoPago()" id="btn-mp">
               <span>
-                <img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-5 inline mr-2">
+                <svg width="20" height="20" viewBox="0 0 48 48" fill="none" class="inline mr-2" style="vertical-align:middle"><circle cx="24" cy="24" r="24" fill="#009EE3"/><path d="M10 24c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M14 28l3-5 3.5 3.5 4-7 3.5 5 2.5-3 3 4.5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Pagar com Mercado Pago — <span id="btn-total-mp">R$ 0,00</span>
               </span>
             </button>
@@ -283,12 +295,11 @@
             </div>
           </div>
 
-          <!-- Métodos aceitos -->
           <div class="pb-5 mb-5 border-b border-white/5">
             <p class="text-[9px] text-gray-600 uppercase tracking-widest mb-3">Formas aceitas</p>
             <div class="flex items-center gap-4 opacity-60">
-              <img src="https://cdn.centralcart.io/public/gateway-icons/icon-pix.svg" class="h-5">
-              <img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-5">
+              <svg width="32" height="22" viewBox="0 0 512 512" fill="none"><path d="M112.57 391.19c20.056 0 38.928-7.808 53.12-22l76.693-76.692c5.385-5.384 14.765-5.361 20.14 0l76.989 76.989c14.192 14.191 33.064 22 53.12 22h15.088l-97.138 97.137c-30.43 30.43-79.784 30.43-110.214 0L103.25 391.19h9.32Z" fill="#32BCAD"/><path d="M112.57 120.81c20.056 0 38.928 7.808 53.12 22l76.693 76.693c5.569 5.568 14.571 5.568 20.14 0l76.989-76.99c14.192-14.191 33.064-21.999 53.12-21.999h9.088L304.581 23.375c-30.43-30.43-79.784-30.43-110.214 0L97.229 120.81h15.34Z" fill="#32BCAD"/><path d="M488.625 194.375 419.19 124.94c-1.759.654-3.655.985-5.558.985h-20.999c-13.758 0-27.02 5.52-36.667 15.168l-76.988 76.989c-7.13 7.13-16.516 10.695-25.903 10.695-9.386 0-18.772-3.565-25.902-10.695l-76.694-76.694c-9.647-9.647-22.91-15.167-36.667-15.167H97.229a39.78 39.78 0 0 0-5.194-.97L23.375 194.375c-30.43 30.43-30.43 79.784 0 110.214l69.263 69.263c1.686-.51 3.452-.782 5.22-.782h15.712c13.757 0 27.02-5.52 36.667-15.168l76.694-76.693c13.826-13.826 37.98-13.826 51.805 0l76.988 76.989c9.647 9.647 22.91 15.168 36.667 15.168h20.999c1.906 0 3.803.33 5.563.985l69.672-69.762c30.43-30.43 30.43-79.784 0-110.214Z" fill="#32BCAD"/></svg>
+              <svg width="32" height="22" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#009EE3"/><path d="M10 24c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M14 28l3-5 3.5 3.5 4-7 3.5 5 2.5-3 3 4.5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
 
@@ -404,51 +415,54 @@
       return { playerId, identity };
     }
 
-    // ── Gera PIX ───────────────────────────────────────────────────────────────
-    function crc16(data) {
-      let crc = 0xFFFF;
-      for (let i = 0; i < data.length; i++) {
-        crc ^= data.charCodeAt(i) << 8;
-        for (let j = 0; j < 8; j++) crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
-      }
-      return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
-    }
-
+    // ── Gera PIX via Mercado Pago (rastreável + automático) ────────────────────
     async function generatePix() {
       const v = validate();
       if (!v) return;
 
-      const f = (id, val) => id + val.length.toString().padStart(2,'0') + val;
-      let base = '000201'
-        + f('26', '0014BR.GOV.BCB.PIX' + f('01', '66621726000150'))
-        + '520400005303986'
-        + f('54', total.toFixed(2))
-        + '5802BR'
-        + f('59', 'GABRIEL CARDOSO MARCHIOLI')
-        + f('60', 'PRAIA GRANDE')
-        + f('62', f('05', 'ID' + v.playerId))
-        + '6304';
-      pixPayload = base + crc16(base);
-
-      document.getElementById('qrcode').innerHTML = '';
-      new QRCode(document.getElementById('qrcode'), { text: pixPayload, width: 240, height: 240 });
-      document.getElementById('pix-text').innerText = pixPayload;
-      document.getElementById('pix-area').classList.remove('hidden');
-      document.getElementById('pix-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      lucide.createIcons();
+      const btn = document.querySelector('.btn-pay-pix');
+      const originalHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span><svg class="inline w-5 h-5 mr-2 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>Gerando PIX...</span>';
 
       try {
-        const res = await fetch('/api/log-payment', {
+        const res = await fetch('/api/pix/criar', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            discord_id: discordUser.id || 'nick:' + v.identity,
-            discord_tag: v.identity, avatar: discordUser.avatar || '',
-            valor: total, player_id: v.playerId, payload_pix: pixPayload,
+            discord_id:  discordUser.id  || 'nick:' + v.identity,
+            discord_tag: v.identity,
+            avatar:      discordUser.avatar || '',
+            valor:       total,
+            player_id:   v.playerId,
           }),
         });
         const data = await res.json();
-        if (data.ok) document.getElementById('log-status').innerText = '✓ Log #' + data.log_id + ' registrado';
-      } catch { document.getElementById('log-status').innerText = '⚠ Falha ao registrar log.'; }
+        if (!data.ok || !data.qr_code) throw new Error(data.error || 'Falha ao gerar PIX');
+
+        pixPayload = data.qr_code;
+
+        // Renderiza QR Code
+        document.getElementById('qrcode').innerHTML = '';
+        if (data.qr_code_base64) {
+          document.getElementById('qrcode').innerHTML =
+            `<img src="data:image/png;base64,${data.qr_code_base64}" style="width:240px;height:240px;border:12px solid #fff;border-radius:8px;margin:0 auto;display:block;">`;
+        } else {
+          new QRCode(document.getElementById('qrcode'), { text: pixPayload, width: 240, height: 240 });
+        }
+
+        document.getElementById('pix-text').innerText = pixPayload;
+        document.getElementById('pix-area').classList.remove('hidden');
+        document.getElementById('pix-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('log-status').innerText = '✓ PIX gerado — pagamento detectado automaticamente pelo Mercado Pago';
+        lucide.createIcons();
+
+      } catch (err) {
+        alert('Erro ao gerar PIX: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        lucide.createIcons();
+      }
     }
 
     // ── Mercado Pago ───────────────────────────────────────────────────────────
@@ -481,7 +495,7 @@
       } catch (e) {
         alert('Erro ao conectar com Mercado Pago. Tente novamente.');
         btn.disabled = false;
-        btn.querySelector('span').innerHTML = '<img src="https://cdn.centralcart.io/public/gateway-icons/icon-mercadopago.svg" class="h-5 inline mr-2">Pagar com Mercado Pago — ' + fmt(total);
+        btn.querySelector('span').innerHTML = '<svg width="20" height="20" viewBox="0 0 48 48" fill="none" class="inline mr-2"><circle cx="24" cy="24" r="24" fill="#009EE3"/><path d="M10 24c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M14 28l3-5 3.5 3.5 4-7 3.5 5 2.5-3 3 4.5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Pagar com Mercado Pago — ' + fmt(total);
       }
     }
 
