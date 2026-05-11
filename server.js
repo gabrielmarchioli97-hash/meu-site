@@ -27,7 +27,47 @@ app.use(express.static(path.join(__dirname)));
 const DISCORD_CLIENT_ID     = process.env.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI          = process.env.REDIRECT_URI;
-const MP_ACCESS_TOKEN       = process.env.MP_ACCESS_TOKEN;
+const mysql = require("mysql2/promise");
+
+// ── Pool de conexão MySQL — VPS da Adapta Capital ─────────────────────────────
+const db = mysql.createPool({
+  host:     process.env.DB_HOST     || "178.83.141.122",
+  port:     parseInt(process.env.DB_PORT || "3306"),
+  user:     process.env.DB_USER     || "root",
+  password: process.env.DB_PASS     || "",
+  database: process.env.DB_NAME     || "skips",
+  waitForConnections: true,
+  connectionLimit:    5,
+  connectTimeout:     10000,
+});
+
+db.getConnection()
+  .then(c => { console.log("✅ MySQL conectado à VPS da Adapta Capital"); c.release(); })
+  .catch(e => console.error("❌ MySQL falhou:", e.message));
+
+// ── Credita coins direto na tabela sks_store_users ────────────────────────────
+async function creditarCoins({ player_id, quantidade, metodo, discord_tag }) {
+  const uid = parseInt(player_id);
+  if (!uid || uid <= 0) throw new Error("player_id inválido: " + player_id);
+
+  // INSERT ... ON DUPLICATE KEY UPDATE — funciona online ou offline
+  const [result] = await db.execute(
+    `INSERT INTO sks_store_users (user_id, coins)
+     VALUES (?, ?)
+     ON DUPLICATE KEY UPDATE coins = coins + VALUES(coins)`,
+    [uid, quantidade]
+  );
+
+  // Registra também em sks_store_logs para histórico
+  await db.execute(
+    `INSERT INTO sks_store_logs (user_id, product, price, purchase_date)
+     VALUES (?, ?, ?, NOW())`,
+    [uid, `${quantidade} Adapta Coins (${metodo})`, quantidade]
+  ).catch(() => {}); // não bloqueia se falhar o log
+
+  console.log(`[MySQL] ✅ ${quantidade} coins → user_id ${uid} via ${metodo} (${discord_tag || "—"})`);
+  return result;
+}
 const LOG_FILE              = path.join(__dirname, "pagamentos.json");
 
 if (!fs.existsSync(LOG_FILE)) fs.writeFileSync(LOG_FILE, JSON.stringify([], null, 2));
@@ -145,7 +185,7 @@ app.post("/api/mp/criar-preferencia", async (req, res) => {
   }
 });
 
-// ── Mercado Pago — Webhook de notificação ─────────────────────────────────────
+// ── Mercado Pago — Webhook (cartão + PIX) ────────────────────────────────────
 app.post("/api/mp/webhook", async (req, res) => {
   const { type, data } = req.body;
   if (type === "payment" && data?.id) {
@@ -154,41 +194,131 @@ app.post("/api/mp/webhook", async (req, res) => {
         headers: { "Authorization": `Bearer ${MP_ACCESS_TOKEN}` },
       });
       const payment = await payRes.json();
+
       if (payment.status === "approved") {
-        const ref = payment.external_reference || "";
+        const ref        = payment.external_reference || "";
         const [discord_id, player_id] = ref.split("_");
-        writeLog({
-          id:          Date.now(),
-          timestamp:   new Date().toISOString(),
-          status:      "CONFIRMADO",
-          metodo:      "MERCADO_PAGO",
-          discord_id,
-          player_id,
-          valor_brl:   payment.transaction_amount,
-          mp_id:       data.id,
-        });
-        console.log(`[MP Webhook] Pagamento aprovado: R$ ${payment.transaction_amount} | ID: ${player_id}`);
+        const quantidade = Math.round(payment.transaction_amount);
+        const metodo     = payment.payment_method_id === "pix" ? "PIX" : "MERCADO_PAGO";
+
+        // Atualiza log existente (se PIX) ou cria novo (se cartão)
+        const logs = readLogs();
+        const idx  = logs.findIndex(l => l.mp_payment_id === data.id || l.external_reference === ref);
+        if (idx !== -1) {
+          logs[idx].status = "CONFIRMADO";
+          fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
+        } else {
+          writeLog({
+            id:        Date.now(),
+            timestamp: new Date().toISOString(),
+            status:    "CONFIRMADO",
+            metodo,
+            discord_id,
+            player_id,
+            valor_brl:  payment.transaction_amount,
+            quantidade,
+            mp_id:      data.id,
+          });
+        }
+
+        // Credita automaticamente no FiveM
+        await creditarCoins({ player_id, quantidade, metodo });
+        console.log(`[MP Webhook] ✅ ${metodo} aprovado | R$ ${payment.transaction_amount} | player ${player_id}`);
       }
     } catch (e) { console.error("[MP Webhook Error]", e); }
   }
   res.sendStatus(200);
 });
 
-// ── Log PIX ───────────────────────────────────────────────────────────────────
-app.post("/api/log-payment", (req, res) => {
-  const { discord_id, discord_tag, avatar, valor, player_id, payload_pix } = req.body;
-  if (!discord_id || !valor || !player_id) return res.status(400).json({ error: "Campos obrigatórios ausentes" });
-  const entry = {
-    id: Date.now(), timestamp: new Date().toISOString(), status: "AGUARDANDO",
-    metodo: "PIX", discord_id, discord_tag, avatar,
-    valor_brl: parseFloat(valor), player_id, payload_pix,
-  };
-  writeLog(entry);
-  console.log(`[PIX] ${discord_tag} | R$ ${valor} | ID: ${player_id}`);
-  res.json({ ok: true, log_id: entry.id });
+// ── PIX via Mercado Pago — Gera QR Code rastreável ───────────────────────────
+// Este endpoint substitui o PIX gerado localmente no frontend.
+// O MP rastreia o pagamento e dispara o webhook automaticamente quando pago.
+app.post("/api/pix/criar", async (req, res) => {
+  const { discord_id, discord_tag, avatar, valor, player_id } = req.body;
+  if (!valor || !player_id) return res.status(400).json({ error: "Campos obrigatórios ausentes" });
+
+  const quantidade = Math.round(parseFloat(valor));
+
+  try {
+    // Cria pagamento PIX na API do MP
+    const mpRes = await fetch("https://api.mercadopago.com/v1/payments", {
+      method: "POST",
+      headers: {
+        "Content-Type":   "application/json",
+        "Authorization":  `Bearer ${MP_ACCESS_TOKEN}`,
+        "X-Idempotency-Key": `pix-${player_id}-${Date.now()}`,
+      },
+      body: JSON.stringify({
+        transaction_amount: parseFloat(valor),
+        description:        `${quantidade} Coins Adapta Capital — ID ${player_id}`,
+        payment_method_id:  "pix",
+        external_reference: `${discord_id || "guest"}_${player_id}_${Date.now()}`,
+        notification_url:   `${process.env.FRONTEND_URL || "https://www.adaptacapital.com.br"}/api/mp/webhook`,
+        payer: {
+          email:      "cliente@adaptacapital.com.br", // MP exige e-mail; pode ser fixo
+          first_name: discord_tag || "Jogador",
+          last_name:  "AC",
+          identification: { type: "CPF", number: "00000000000" }, // placeholder
+        },
+      }),
+    });
+
+    const mpData = await mpRes.json();
+    if (!mpData.id) throw new Error(JSON.stringify(mpData));
+
+    const qr_code       = mpData.point_of_interaction?.transaction_data?.qr_code;
+    const qr_code_base64 = mpData.point_of_interaction?.transaction_data?.qr_code_base64;
+
+    if (!qr_code) throw new Error("MP não retornou QR code PIX");
+
+    // Loga como AGUARDANDO — webhook confirmará automaticamente
+    writeLog({
+      id:          Date.now(),
+      timestamp:   new Date().toISOString(),
+      status:      "AGUARDANDO",
+      metodo:      "PIX",
+      discord_id:  discord_id || "guest",
+      discord_tag: discord_tag || "—",
+      avatar:      avatar || "",
+      valor_brl:   parseFloat(valor),
+      quantidade,
+      player_id,
+      mp_payment_id: mpData.id,
+      external_reference: mpData.external_reference,
+    });
+
+    console.log(`[PIX-MP] Gerado | R$ ${valor} | player ${player_id} | mp_id ${mpData.id}`);
+    res.json({ ok: true, qr_code, qr_code_base64, mp_id: mpData.id });
+
+  } catch (err) {
+    console.error("[PIX-MP Error]", err.message);
+    res.status(500).json({ error: "Erro ao gerar PIX via Mercado Pago" });
+  }
 });
 
-// ── Admin ─────────────────────────────────────────────────────────────────────
+
+
+// ── Admin: confirmar PIX e creditar no FiveM ──────────────────────────────────
+app.post("/api/admin/confirmar/:id", async (req, res) => {
+  if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
+  const logs = readLogs();
+  const idx  = logs.findIndex(l => l.id === parseInt(req.params.id));
+  if (idx === -1) return res.status(404).json({ error: "Não encontrado" });
+
+  const entry = logs[idx];
+  entry.status = "CONFIRMADO";
+  fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
+
+  // Credita no FiveM
+  await creditarCoins({
+    player_id:  entry.player_id,
+    quantidade: entry.quantidade || Math.round(entry.valor_brl),
+    metodo:     entry.metodo,
+  });
+
+  console.log(`[Admin] PIX confirmado manualmente — ID: ${entry.player_id} | ${entry.quantidade} coins`);
+  res.json({ ok: true, entry });
+});
 app.get("/api/admin/logs", (req, res) => {
   if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
   res.json(readLogs());
