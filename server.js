@@ -4,7 +4,7 @@
  */
 
 const express = require("express");
-const cors    = require("var/cors"); // Corrigido para cors de acordo com a tua estrutura padrão
+const cors    = require("cors"); // <-- Corrigido e garantido aqui!
 const path    = require("path");
 const fs      = require("fs");
 require("dotenv").config();
@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
 
-// ── [COMENTADO / DESATIVADO] Redireciona domínio raiz para www ────────────────
+// ── [COMENTADO] Redireciona domínio raiz para www ─────────────────────────────
 // app.use((req, res, next) => {
 //   const host = req.headers.host || "";
 //   if (!host.startsWith("www.") && !host.includes("railway.app") && !host.includes("localhost")) {
@@ -98,7 +98,7 @@ async function creditarCoins({ player_id, quantidade, metodo, discord_tag }) {
     console.error(`[MySQL Error] Falha na tabela sks_store_users:`, err.message);
   }
 
-  // 2ª TABELA: vrp_users (In-game — Agora rodando de forma limpa sem espaços ocultos)
+  // 2ª TABELA: vrp_users (In-game)
   try {
     await db.execute(
       `UPDATE vrp_users SET coins = coins + ? WHERE id = ?`,
@@ -153,6 +153,12 @@ function writeLog(entry) {
 }
 
 // ── Páginas ───────────────────────────────────────────────────────────────────
+// ROTA RAIZ: Entrega a página principal quando o domínio limpo for acessado.
+app.get("/", (req, res) => {
+  // Se o seu arquivo principal da loja na raiz do GitHub se chamar produto.html, mude abaixo para "produto.html"
+  res.sendFile(path.join(__dirname, "index.html")); 
+});
+
 app.get("/produto",  (req, res) => res.sendFile(path.join(__dirname, "produto.html")));
 app.get("/checkout", (req, res) => res.sendFile(path.join(__dirname, "checkout.html")));
 app.get("/termos",   (req, res) => res.sendFile(path.join(__dirname, "termos.html")));
