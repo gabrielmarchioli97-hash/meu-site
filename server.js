@@ -24,9 +24,12 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname)));
 
+// ── Variáveis de Ambiente (Configurações) ─────────────────────────────────────
 const DISCORD_CLIENT_ID     = process.env.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI          = process.env.REDIRECT_URI;
+const MP_ACCESS_TOKEN       = process.env.MP_ACCESS_TOKEN; // <-- Corrigido: Variável adicionada aqui!
+
 const mysql = require("mysql2/promise");
 
 // ── Pool de conexão MySQL — VPS da Adapta Capital ─────────────────────────────
@@ -68,7 +71,8 @@ async function creditarCoins({ player_id, quantidade, metodo, discord_tag }) {
   console.log(`[MySQL] ✅ ${quantidade} coins → user_id ${uid} via ${metodo} (${discord_tag || "—"})`);
   return result;
 }
-const LOG_FILE              = path.join(__dirname, "pagamentos.json");
+
+const LOG_FILE = path.join(__dirname, "pagamentos.json");
 
 if (!fs.existsSync(LOG_FILE)) fs.writeFileSync(LOG_FILE, JSON.stringify([], null, 2));
 
@@ -231,8 +235,6 @@ app.post("/api/mp/webhook", async (req, res) => {
 });
 
 // ── PIX via Mercado Pago — Gera QR Code rastreável ───────────────────────────
-// Este endpoint substitui o PIX gerado localmente no frontend.
-// O MP rastreia o pagamento e dispara o webhook automaticamente quando pago.
 app.post("/api/pix/criar", async (req, res) => {
   const { discord_id, discord_tag, avatar, valor, player_id } = req.body;
   if (!valor || !player_id) return res.status(400).json({ error: "Campos obrigatórios ausentes" });
@@ -296,8 +298,6 @@ app.post("/api/pix/criar", async (req, res) => {
   }
 });
 
-
-
 // ── Admin: confirmar PIX e creditar no FiveM ──────────────────────────────────
 app.post("/api/admin/confirmar/:id", async (req, res) => {
   if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
@@ -319,10 +319,12 @@ app.post("/api/admin/confirmar/:id", async (req, res) => {
   console.log(`[Admin] PIX confirmado manualmente — ID: ${entry.player_id} | ${entry.quantidade} coins`);
   res.json({ ok: true, entry });
 });
+
 app.get("/api/admin/logs", (req, res) => {
   if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
   res.json(readLogs());
 });
+
 app.patch("/api/admin/logs/:id", (req, res) => {
   if (req.query.secret !== process.env.ADMIN_SECRET) return res.status(403).json({ error: "Acesso negado" });
   const logs = readLogs();
