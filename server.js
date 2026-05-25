@@ -28,7 +28,7 @@ const DISCORD_CLIENT_ID     = process.env.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI          = process.env.REDIRECT_URI;
 const MP_ACCESS_TOKEN       = process.env.MP_ACCESS_TOKEN;
-const DISCORD_WEBHOOK_URL   = process.env.DISCORD_WEBHOOK_URL; // Variável de ambiente para os logs do Discord
+const DISCORD_WEBHOOK_URL   = process.env.DISCORD_WEBHOOK_URL;
 
 const mysql = require("mysql2/promise");
 
@@ -48,7 +48,7 @@ db.getConnection()
   .then(c => { console.log("✅ MySQL conectado à VPS da Adapta Capital"); c.release(); })
   .catch(e => console.error("❌ MySQL falhou:", e.message));
 
-// ── Função auxiliar para enviar Embeds para o Discord (Com Diagnóstico) ───────
+// ── Função auxiliar para enviar Embeds para o Discord ────────────────────────
 async function enviarLogDiscord(embed) {
   if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.trim() === "") {
     console.log("[Discord] Webhook não enviado: Variável DISCORD_WEBHOOK_URL vazia ou ausente no Railway.");
@@ -106,3 +106,73 @@ async function creditarCoins({ player_id, quantidade, metodo, discord_tag }) {
   // Registra também em sks_store_logs para histórico
   await db.execute(
     `INSERT INTO sks_store_logs (user_id, product, price, purchase_date)
+     VALUES (?, ?, ?, NOW())`,
+    [uid, `${quantidade} Adapta Coins (${metodo})`, quantidade]
+  ).catch(() => {}); 
+
+  console.log(`[MySQL] 🌍 Duplo Crédito Concluído com sucesso para o ID ${uid}!`);
+
+  // DISPARAR LOG DE PAGAMENTO CONFIRMADO NO DISCORD (VERDE)
+  enviarLogDiscord({
+    title: "✅ PAGAMENTO APROVADO — COINS ENTREGUES",
+    color: 65280, // Verde
+    fields: [
+      { name: "🆔 ID do Jogador", value: `${uid}`, inline: true },
+      { name: "💰 Moedas Enviadas", value: `${quantidade} Coins`, inline: true },
+      { name: "💳 Método de Pago", value: metodo, inline: true },
+      { name: "👤 Comprador", value: discord_tag || "Não Identificado", inline: false }
+    ],
+    timestamp: new Date().toISOString(),
+    footer: { text: "Adapta Capital — Entrega Automática" }
+  });
+
+  return { success: true };
+}
+
+const LOG_FILE = path.join(__dirname, "pagamentos.json");
+
+if (!fs.existsSync(LOG_FILE)) fs.writeFileSync(LOG_FILE, JSON.stringify([], null, 2));
+
+function readLogs() {
+  try { return JSON.parse(fs.readFileSync(LOG_FILE, "utf8")); }
+  catch { return []; }
+}
+function writeLog(entry) {
+  const logs = readLogs();
+  logs.unshift(entry);
+  fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
+}
+
+// ── Páginas ───────────────────────────────────────────────────────────────────
+app.get("/produto",  (req, res) => res.sendFile(path.join(__dirname, "produto.html")));
+app.get("/checkout", (req, res) => res.sendFile(path.join(__dirname, "checkout.html")));
+app.get("/termos",   (req, res) => res.sendFile(path.join(__dirname, "termos.html")));
+
+// ── Auth Discord ──────────────────────────────────────────────────────────────
+app.get("/auth/discord", (req, res) => {
+  const params = new URLSearchParams({
+    client_id:     DISCORD_CLIENT_ID,
+    redirect_uri:  REDIRECT_URI,
+    response_type: "code",
+    scope:         "identify",
+  });
+  res.redirect(`https://discord.com/oauth2/authorize?${params}`);
+});
+
+app.get("/callback", async (req, res) => {
+  const { code, error } = req.query;
+  if (error || !code) return res.redirect("/checkout?auth=error");
+  try {
+    const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        client_id: DISCORD_CLIENT_ID, client_secret: DISCORD_CLIENT_SECRET,
+        grant_type: "authorization_code", code, redirect_uri: REDIRECT_URI,
+      }),
+    });
+    const tokenData = await tokenRes.json();
+    if (!tokenData.access_token) throw new Error("Token inválido");
+    const userRes = await fetch("https://discord.com/api/users/@me", {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
