@@ -28,7 +28,7 @@ const DISCORD_CLIENT_ID     = process.env.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI          = process.env.REDIRECT_URI;
 const MP_ACCESS_TOKEN       = process.env.MP_ACCESS_TOKEN;
-const DISCORD_WEBHOOK_URL   = process.env.DISCORD_WEBHOOK_URL; // Carrega a variável configurada no Railway
+const DISCORD_WEBHOOK_URL   = process.env.DISCORD_WEBHOOK_URL;
 
 const mysql = require("mysql2/promise");
 
@@ -48,7 +48,7 @@ db.getConnection()
   .then(c => { console.log("✅ MySQL conectado à VPS da Adapta Capital"); c.release(); })
   .catch(e => console.error("❌ MySQL falhou:", e.message));
 
-// ── Função auxiliar para enviar Embeds para o Discord (Com Diagnóstico) ───────
+// ── Função auxiliar para enviar Embeds para o Discord ────────────────────────
 async function enviarLogDiscord(embed) {
   if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.trim() === "") {
     console.log("[Discord] Webhook não enviado: Variável DISCORD_WEBHOOK_URL ausente.");
@@ -78,52 +78,61 @@ async function enviarLogDiscord(embed) {
   }
 }
 
-// ── Credita coins em AMBAS as tabelas (sks_store_users e vrp_users) ───────────
+// ── Credita coins em AMBAS as tabelas de forma independente ───────────────────
 async function creditarCoins({ player_id, quantidade, metodo, discord_tag }) {
   const uid = parseInt(player_id);
   if (!uid || uid <= 0) throw new Error("player_id inválido: " + player_id);
 
-  console.log(`[MySQL] Iniciando duplo crédito para o ID ${uid}...`);
+  console.log(`[MySQL] 🟢 Iniciando processamento de crédito para o ID ${uid}...`);
 
-  // 1ª TABELA: sks_store_users (Antiga/Web)
-  await db.execute(
-    `INSERT INTO sks_store_users (user_id, coins)
-     VALUES (?, ?)
-     ON DUPLICATE KEY UPDATE coins = coins + VALUES(coins)`,
-    [uid, quantidade]
-  );
-  console.log(`[MySQL] 1/2: Sucesso na tabela sks_store_users.`);
+  // 1ª TABELA: sks_store_users
+  try {
+    await db.execute(
+      `INSERT INTO sks_store_users (user_id, coins)
+       VALUES (?, ?)
+       ON DUPLICATE KEY UPDATE coins = coins + VALUES(coins)`,
+      [uid, quantidade]
+    );
+    console.log(`[MySQL] 1/3: Sucesso na tabela sks_store_users.`);
+  } catch (err) {
+    console.error(`[MySQL Error] Falha na tabela sks_store_users:`, err.message);
+  }
 
   // 2ª TABELA: vrp_users (In-game)
-  await db.execute(
-    `UPDATE vrp_users 
-     SET coins = coins + ? 
-     WHERE id = ?`,
-    [quantidade, uid]
-  );
-  console.log(`[MySQL] 2/2: Sucesso na tabela vrp_users.`);
+  try {
+    await db.execute(
+      `UPDATE vrp_users SET coins = coins + ? WHERE id = ?`,
+      [quantidade, uid]
+    );
+    console.log(`[MySQL] 2/3: Sucesso na tabela vrp_users.`);
+  } catch (err) {
+    console.error(`[MySQL Error] Falha na tabela vrp_users:`, err.message);
+  }
 
-  // Registra também em sks_store_logs para histórico
-  await db.execute(
-    `INSERT INTO sks_store_logs (user_id, product, price, purchase_date)
-     VALUES (?, ?, ?, NOW())`,
-    [uid, `${quantidade} Adapta Coins (${metodo})`, quantidade]
-  ).catch(() => {}); 
-
-  console.log(`[MySQL] 🌍 Duplo Crédito Concluído com sucesso para o ID ${uid}!`);
+  // 3ª TABELA: sks_store_logs (Histórico)
+  try {
+    await db.execute(
+      `INSERT INTO sks_store_logs (user_id, product, price, purchase_date)
+       VALUES (?, ?, ?, NOW())`,
+      [uid, `${quantidade} Adapta Coins (${metodo})`, quantidade]
+    );
+    console.log(`[MySQL] 3/3: Sucesso na tabela sks_store_logs.`);
+  } catch (err) {
+    console.error(`[MySQL Error] Falha na tabela sks_store_logs:`, err.message);
+  }
 
   // DISPARAR LOG DE PAGAMENTO CONFIRMADO NO DISCORD (VERDE)
   enviarLogDiscord({
-    title: "✅ PAGAMENTO APROVADO — COINS ENTREGUES",
+    title: "✅ PAGAMENTO APROVADO — PROCESSADO",
     color: 65280, 
     fields: [
       { name: "🆔 ID do Jogador", value: `${uid}`, inline: true },
-      { name: "💰 Moedas Enviadas", value: `${quantidade} Coins`, inline: true },
-      { name: "💳 Método de Pago", value: metodo, inline: true },
+      { name: "💰 Moedas Entregues", value: `${quantidade} Coins`, inline: true },
+      { name: "💳 Método", value: metodo, inline: true },
       { name: "👤 Comprador", value: discord_tag || "Não Identificado", inline: false }
     ],
     timestamp: new Date().toISOString(),
-    footer: { text: "Adapta Capital — Entrega Automática" }
+    footer: { text: "Adapta Capital — Sistema de Entrega" }
   });
 
   return { success: true };
@@ -201,6 +210,8 @@ app.post("/api/mp/criar-preferencia", async (req, res) => {
     return res.status(400).json({ error: "Campos obrigatórios ausentes" });
   }
 
+  const apiUrl = req.headers.host ? `https://${req.headers.host}` : (process.env.FRONTEND_URL || "https://www.adaptacapital.com.br");
+
   try {
     const body = {
       items: [{
@@ -222,7 +233,7 @@ app.post("/api/mp/criar-preferencia", async (req, res) => {
       },
       auto_return:        "approved",
       statement_descriptor: "ADAPTA CAPITAL",
-      notification_url:  `${process.env.FRONTEND_URL || "https://www.adaptacapital.com.br"}/api/mp/webhook`,
+      notification_url:  `${apiUrl}/api/mp/webhook`,
     };
 
     const mpRes = await fetch("https://api.mercadopago.com/checkout/preferences", {
@@ -237,7 +248,7 @@ app.post("/api/mp/criar-preferencia", async (req, res) => {
     const mpData = await mpRes.json();
     if (!mpData.id) throw new Error(JSON.stringify(mpData));
 
-    // DISPARAR LOG DE SOLICITAÇÃO (CARTÃO/CHECKOUT) NO DISCORD (AMARELO)
+    // LOG DE CHECKOUT PRO NO DISCORD (AMARELO)
     enviarLogDiscord({
       title: "⏳ NOVO CHECKOUT INICIADO",
       color: 16776960, 
@@ -298,7 +309,7 @@ app.post("/api/mp/webhook", async (req, res) => {
           });
         }
 
-        // Credita automaticamente no banco e dispara o log verde do Discord dentro da função
+        // AGORA EXECUTA O PROCESSO INDEPENDENTE E MANDA O CARD VERDE
         await creditarCoins({ player_id, quantidade, metodo, discord_tag: d_tag });
         console.log(`[MP Webhook] ✅ ${metodo} aprovado | R$ ${payment.transaction_amount} | player ${player_id}`);
       }
@@ -315,6 +326,7 @@ app.post("/api/pix/criar", async (req, res) => {
   if (!valor || !player_id) return res.status(400).json({ error: "Campos obrigatórios ausentes" });
 
   const quantidade = Math.round(parseFloat(valor));
+  const apiUrl = req.headers.host ? `https://${req.headers.host}` : (process.env.FRONTEND_URL || "https://www.adaptacapital.com.br");
 
   try {
     const mpRes = await fetch("https://api.mercadopago.com/v1/payments", {
@@ -329,7 +341,7 @@ app.post("/api/pix/criar", async (req, res) => {
         description:        `${quantidade} Coins Adapta Capital — ID ${player_id}`,
         payment_method_id:  "pix",
         external_reference: `${discord_id || "guest"}_${player_id}_${Date.now()}`,
-        notification_url:   `${process.env.FRONTEND_URL || "https://www.adaptacapital.com.br"}/api/mp/webhook`,
+        notification_url:   `${apiUrl}/api/mp/webhook`,
         payer: {
           email:      "cliente@adaptacapital.com.br",
           first_name: discord_tag || "Jogador",
@@ -362,7 +374,7 @@ app.post("/api/pix/criar", async (req, res) => {
       external_reference: mpData.external_reference,
     });
 
-    // DISPARAR LOG DE SOLICITAÇÃO DE PIX NO DISCORD (LARANJA)
+    // LOG DE SOLICITAÇÃO DE PIX NO DISCORD (LARANJA)
     enviarLogDiscord({
       title: "⏳ SOLICITAÇÃO DE PIX GERADA",
       color: 16753920, 
