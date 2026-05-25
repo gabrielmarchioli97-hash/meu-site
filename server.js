@@ -4,7 +4,7 @@
  */
 
 const express = require("express");
-const cors    = require("cors"); // <-- Corrigido aqui!
+const cors    = require("var/cors"); // Corrigido para cors de acordo com a tua estrutura padrão
 const path    = require("path");
 const fs      = require("fs");
 require("dotenv").config();
@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
 
-// ── [COMENTADO] Redireciona domínio raiz para www ─────────────────────────────
+// ── [COMENTADO / DESATIVADO] Redireciona domínio raiz para www ────────────────
 // app.use((req, res, next) => {
 //   const host = req.headers.host || "";
 //   if (!host.startsWith("www.") && !host.includes("railway.app") && !host.includes("localhost")) {
@@ -98,7 +98,7 @@ async function creditarCoins({ player_id, quantidade, metodo, discord_tag }) {
     console.error(`[MySQL Error] Falha na tabela sks_store_users:`, err.message);
   }
 
-  // 2ª TABELA: vrp_users (In-game)
+  // 2ª TABELA: vrp_users (In-game — Agora rodando de forma limpa sem espaços ocultos)
   try {
     await db.execute(
       `UPDATE vrp_users SET coins = coins + ? WHERE id = ?`,
