@@ -24,11 +24,10 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname)));
 
-// ── Variáveis de Ambiente (Configurações) ─────────────────────────────────────
 const DISCORD_CLIENT_ID     = process.env.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI          = process.env.REDIRECT_URI;
-const MP_ACCESS_TOKEN       = process.env.MP_ACCESS_TOKEN; // <-- Corrigido: Variável adicionada aqui!
+const MP_ACCESS_TOKEN       = process.env.MP_ACCESS_TOKEN;
 
 const mysql = require("mysql2/promise");
 
@@ -48,28 +47,40 @@ db.getConnection()
   .then(c => { console.log("✅ MySQL conectado à VPS da Adapta Capital"); c.release(); })
   .catch(e => console.error("❌ MySQL falhou:", e.message));
 
-// ── Credita coins direto na tabela sks_store_users ────────────────────────────
+// ── Credita coins em AMBAS as tabelas (sks_store_users e vrp_users) ───────────
 async function creditarCoins({ player_id, quantidade, metodo, discord_tag }) {
   const uid = parseInt(player_id);
   if (!uid || uid <= 0) throw new Error("player_id inválido: " + player_id);
 
-  // INSERT ... ON DUPLICATE KEY UPDATE — funciona online ou offline
-  const [result] = await db.execute(
+  console.log(`[MySQL] Iniciando duplo crédito para o ID ${uid}...`);
+
+  // 1ª TABELA: sks_store_users (Antiga/Web)
+  await db.execute(
     `INSERT INTO sks_store_users (user_id, coins)
      VALUES (?, ?)
      ON DUPLICATE KEY UPDATE coins = coins + VALUES(coins)`,
     [uid, quantidade]
   );
+  console.log(`[MySQL] 1/2: Sucesso na tabela sks_store_users.`);
+
+  // 2ª TABELA: vrp_users (In-game)
+  await db.execute(
+    `UPDATE vrp_users 
+     SET coins = coins + ? 
+     WHERE id = ?`,
+    [quantidade, uid]
+  );
+  console.log(`[MySQL] 2/2: Sucesso na tabela vrp_users.`);
 
   // Registra também em sks_store_logs para histórico
   await db.execute(
     `INSERT INTO sks_store_logs (user_id, product, price, purchase_date)
      VALUES (?, ?, ?, NOW())`,
     [uid, `${quantidade} Adapta Coins (${metodo})`, quantidade]
-  ).catch(() => {}); // não bloqueia se falhar o log
+  ).catch(() => {}); 
 
-  console.log(`[MySQL] ✅ ${quantidade} coins → user_id ${uid} via ${metodo} (${discord_tag || "—"})`);
-  return result;
+  console.log(`[MySQL] 🌍 Duplo Crédito Concluído com sucesso para o ID ${uid}!`);
+  return { success: true };
 }
 
 const LOG_FILE = path.join(__dirname, "pagamentos.json");
@@ -205,7 +216,6 @@ app.post("/api/mp/webhook", async (req, res) => {
         const quantidade = Math.round(payment.transaction_amount);
         const metodo     = payment.payment_method_id === "pix" ? "PIX" : "MERCADO_PAGO";
 
-        // Atualiza log existente (se PIX) ou cria novo (se cartão)
         const logs = readLogs();
         const idx  = logs.findIndex(l => l.mp_payment_id === data.id || l.external_reference === ref);
         if (idx !== -1) {
@@ -242,7 +252,6 @@ app.post("/api/pix/criar", async (req, res) => {
   const quantidade = Math.round(parseFloat(valor));
 
   try {
-    // Cria pagamento PIX na API do MP
     const mpRes = await fetch("https://api.mercadopago.com/v1/payments", {
       method: "POST",
       headers: {
@@ -257,10 +266,10 @@ app.post("/api/pix/criar", async (req, res) => {
         external_reference: `${discord_id || "guest"}_${player_id}_${Date.now()}`,
         notification_url:   `${process.env.FRONTEND_URL || "https://www.adaptacapital.com.br"}/api/mp/webhook`,
         payer: {
-          email:      "cliente@adaptacapital.com.br", // MP exige e-mail; pode ser fixo
+          email:      "cliente@adaptacapital.com.br",
           first_name: discord_tag || "Jogador",
           last_name:  "AC",
-          identification: { type: "CPF", number: "00000000000" }, // placeholder
+          identification: { type: "CPF", number: "00000000000" },
         },
       }),
     });
@@ -273,7 +282,6 @@ app.post("/api/pix/criar", async (req, res) => {
 
     if (!qr_code) throw new Error("MP não retornou QR code PIX");
 
-    // Loga como AGUARDANDO — webhook confirmará automaticamente
     writeLog({
       id:          Date.now(),
       timestamp:   new Date().toISOString(),
